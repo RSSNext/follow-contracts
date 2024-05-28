@@ -24,6 +24,13 @@ interface IEntryPoint {
     function createFeed(bytes32 feedId, address account) external;
 
     /**
+     * @notice Returns the feed owner.
+     * @param feedId The feed id.
+     * @return The feed owner.
+     */
+    function getFeedOwner(bytes32 feedId) external view returns (address);
+
+    /**
      * @notice Tips the recipient feed.
      * @param from The address who sends the tip.
      * @param amount The amount of the tip.
