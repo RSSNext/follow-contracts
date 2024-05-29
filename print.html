@@ -90,7 +90,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item "><a href="src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item "><a href="src/interfaces/index.html">❱ interfaces</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li></ol></li><li class="chapter-item "><a href="src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -216,27 +216,38 @@
 $ anvil --help
 $ cast --help
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/9b10b5dde4a39f8d3563aed64242b231d54904d7/src/PowerToken.sol">Git Source</a></p>
-<p><strong>Inherits:</strong>
-ERC20Upgradeable</p>
-<h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
-<h3 id="_pointsbalances"><a class="header" href="#_pointsbalances">_pointsBalances</a></h3>
-<pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _pointsBalances;
-</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contents"><a class="header" href="#contents">Contents</a></h1>
+<ul>
+<li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/0f065ffc1f37b853fe8b78644f52eefdd5a905bc/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
-<p>Initializes the contract.</p>
-<pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_) external initializer;
+<p>Initializes the contract. Setup token name and symbol.
+Also The msg.sender will be the APP_ADMIN_ROLE.</p>
+<pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>name_</code></td><td><code>string</code></td><td>The token name.</td></tr>
-<tr><td><code>symbol_</code></td><td><code>string</code></td><td>The token symbol.</td></tr>
+<tr><td><code>name_</code></td><td><code>string</code></td><td>The name of the token.</td></tr>
+<tr><td><code>symbol_</code></td><td><code>string</code></td><td>The symbol of the token.</td></tr>
+</tbody></table>
+</div>
+<h3 id="tip"><a class="header" href="#tip">tip</a></h3>
+<p>Tips with tokens. The caller must have the APP_ADMIN_ROLE.</p>
+<p><em>The to and feedId are optional, but at least one of them must be provided.</em></p>
+<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount token points to send. It can be empty.</td></tr>
+<tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
+<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
 </tbody></table>
 </div>
 <h3 id="mint"><a class="header" href="#mint">mint</a></h3>
-<p>Mints new token points.</p>
+<p>Mints new token points. The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function mint(address to) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -244,26 +255,56 @@ ERC20Upgradeable</p>
 <tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the tokens.</td></tr>
 </tbody></table>
 </div>
-<h3 id="transferpoints"><a class="header" href="#transferpoints">transferPoints</a></h3>
-<p>Transfers token points.</p>
-<pre><code class="language-solidity">function transferPoints(uint256 amount, bytes32 feedId) external;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount token points to send.</td></tr>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id.</td></tr>
-</tbody></table>
-</div>
 <h3 id="withdraw"><a class="header" href="#withdraw">withdraw</a></h3>
-<p>Withdraws tokens.</p>
-<pre><code class="language-solidity">function withdraw(address to, uint256 amount) external;
+<p>Withdraws tokens by feedId. The caller must have the APP_ADMIN_ROLE.</p>
+<pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>to</code></td><td><code>address</code></td><td>The address who receives the tokens.</td></tr>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of the tokens.</td></tr>
+<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The amount belongs to the feedId.</td></tr>
 </tbody></table>
 </div>
+<h3 id="balanceofpoins"><a class="header" href="#balanceofpoins">balanceOfPoins</a></h3>
+<pre><code class="language-solidity">function balanceOfPoins(address owner) external view returns (uint256);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/0f065ffc1f37b853fe8b78644f52eefdd5a905bc/src/PowerToken.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+ERC20Upgradeable, <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, AccessControlEnumerable</p>
+<h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
+<h3 id="app_admin_role"><a class="header" href="#app_admin_role">APP_ADMIN_ROLE</a></h3>
+<pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
+</code></pre>
+<h3 id="_pointsbalances"><a class="header" href="#_pointsbalances">_pointsBalances</a></h3>
+<pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _pointsBalances;
+</code></pre>
+<h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
+<h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
+<pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_) external override initializer;
+</code></pre>
+<h3 id="mint-1"><a class="header" href="#mint-1">mint</a></h3>
+<pre><code class="language-solidity">function mint(address to) external override onlyRole(APP_ADMIN_ROLE);
+</code></pre>
+<h3 id="tip-1"><a class="header" href="#tip-1">tip</a></h3>
+<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
+</code></pre>
+<h3 id="withdraw-1"><a class="header" href="#withdraw-1">withdraw</a></h3>
+<pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
+</code></pre>
+<h3 id="balanceofpoins-1"><a class="header" href="#balanceofpoins-1">balanceOfPoins</a></h3>
+<pre><code class="language-solidity">function balanceOfPoins(address owner) external view override returns (uint256);
+</code></pre>
+<h3 id="_contextsuffixlength"><a class="header" href="#_contextsuffixlength">_contextSuffixLength</a></h3>
+<pre><code class="language-solidity">function _contextSuffixLength() internal view virtual override(Context, ContextUpgradeable) returns (uint256);
+</code></pre>
+<h3 id="_msgsender"><a class="header" href="#_msgsender">_msgSender</a></h3>
+<pre><code class="language-solidity">function _msgSender() internal view virtual override(Context, ContextUpgradeable) returns (address);
+</code></pre>
+<h3 id="_msgdata"><a class="header" href="#_msgdata">_msgData</a></h3>
+<pre><code class="language-solidity">function _msgData() internal view virtual override(Context, ContextUpgradeable) returns (bytes calldata);
+</code></pre>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
