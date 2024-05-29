@@ -3,32 +3,17 @@ pragma solidity 0.8.22;
 
 interface IFollow {
     /**
-     * @notice Register a new account.
-     * @dev Only ADMIN_ROLE is allowed to call this method.
-     * @param userId The new user ID to register.
+     * @notice Initializes the contract.
+     * @param name_ The token name.
+     * @param symbol_ The token symbol.
      */
-    function register(bytes32 userId, address account) external returns (address);
+    function initialize(string calldata name_, string calldata symbol_) external;
 
     /**
      * @notice Mints new tokens.
      * @param to The account to receive the tokens.
      */
     function mint(address to) external;
-
-    /**
-     * @notice Creates a feed.
-     * @dev Only ADMIN_ROLE is allowed to call this method.
-     * @param feedId The feed id.
-     * @param userId The user ID who owns the feed.
-     */
-    function createFeed(bytes32 feedId, bytes32 userId) external;
-
-    /**
-     * @notice Returns the feed owner.
-     * @param feedId The feed id.
-     * @return userId The user ID who owns the feed.
-     */
-    function getFeedOwner(bytes32 feedId) external view returns (bytes32 userId);
 
     /**
      * @notice Tips the recipient feed.
