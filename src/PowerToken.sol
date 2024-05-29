@@ -1,39 +1,67 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.22;
 
+import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import {
-    ERC20Upgradeable
-} from "@openzeppelin-upgradeable/contracts/token/ERC20/ERC20Upgradeable.sol";
+    AccessControlEnumerable
+} from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
+import {ContextUpgradeable} from "@openzeppelin-upgradeable/utils/ContextUpgradeable.sol";
+import {Context} from "@openzeppelin/contracts/utils/Context.sol"; // Add this line
+import {IPowerToken} from "./interfaces/IPowerToken.sol";
 
-contract PowerToken is ERC20Upgradeable {
+contract PowerToken is ERC20Upgradeable, IPowerToken, AccessControlEnumerable {
+    bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
+
     mapping(bytes32 feedId => uint256) internal _pointsBalances;
 
-    /**
-     * @notice Initializes the contract.
-     * @param name_ The token name.
-     * @param symbol_ The token symbol.
-     */
-    function initialize(string calldata name_, string calldata symbol_) external initializer {
+    function initialize(
+        string calldata name_,
+        string calldata symbol_
+    ) external override initializer {
         super.__ERC20_init(name_, symbol_);
+        _grantRole(APP_ADMIN_ROLE, _msgSender());
     }
 
-    /**
-     * @notice Mints new token points.
-     * @param to The account to receive the tokens.
-     */
-    function mint(address to) external {}
+    function mint(address to) external override onlyRole(APP_ADMIN_ROLE) {}
 
-    /**
-     * @notice Transfers token points.
-     * @param amount The amount token points to send.
-     * @param feedId The feed id.
-     */
-    function transferPoints(uint256 amount, bytes32 feedId) external {}
+    function tip(
+        uint256 amount,
+        address to,
+        bytes32 feedId
+    ) external override onlyRole(APP_ADMIN_ROLE) {}
 
-    /**
-     * @notice Withdraws tokens.
-     * @param to The address who receives the tokens.
-     * @param amount The amount of the tokens.
-     */
-    function withdraw(address to, uint256 amount) external {}
+    function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE) {}
+
+    function balanceOfPoins(address owner) external view override returns (uint256) {}
+
+    /* ContextUpgradeable */
+    function _contextSuffixLength()
+        internal
+        view
+        virtual
+        override(Context, ContextUpgradeable)
+        returns (uint256)
+    {
+        super._contextSuffixLength();
+    }
+
+    function _msgSender()
+        internal
+        view
+        virtual
+        override(Context, ContextUpgradeable)
+        returns (address)
+    {
+        super._msgSender();
+    }
+
+    function _msgData()
+        internal
+        view
+        virtual
+        override(Context, ContextUpgradeable)
+        returns (bytes calldata)
+    {
+        return super._msgData();
+    }
 }
