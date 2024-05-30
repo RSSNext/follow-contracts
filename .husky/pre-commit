@@ -11,4 +11,4 @@ yarn solhint
 
 # unit test
 echo "Running test"
-#yarn test
+yarn test
