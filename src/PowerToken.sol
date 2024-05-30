@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// solhint-disable no-empty-blocks
 pragma solidity 0.8.22;
 
 import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
@@ -7,7 +8,7 @@ import {
 } from "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
 import {IPowerToken} from "./interfaces/IPowerToken.sol";
 
-contract PowerToken is ERC20Upgradeable, IPowerToken, AccessControlEnumerableUpgradeable {
+contract PowerToken is IPowerToken, AccessControlEnumerableUpgradeable, ERC20Upgradeable {
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 
     mapping(bytes32 feedId => uint256) internal _pointsBalances;
