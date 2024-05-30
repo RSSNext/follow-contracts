@@ -16,10 +16,11 @@ contract PowerToken is IPowerToken, AccessControlEnumerableUpgradeable, ERC20Upg
     /// @inheritdoc IPowerToken
     function initialize(
         string calldata name_,
-        string calldata symbol_
+        string calldata symbol_,
+        address admin_
     ) external override initializer {
         super.__ERC20_init(name_, symbol_);
-        _grantRole(APP_ADMIN_ROLE, _msgSender());
+        _grantRole(APP_ADMIN_ROLE, admin_);
     }
 
     /// @inheritdoc IPowerToken
