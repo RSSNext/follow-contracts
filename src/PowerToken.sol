@@ -3,13 +3,11 @@ pragma solidity 0.8.22;
 
 import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import {
-    AccessControlEnumerable
-} from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
-import {ContextUpgradeable} from "@openzeppelin-upgradeable/utils/ContextUpgradeable.sol";
-import {Context} from "@openzeppelin/contracts/utils/Context.sol"; // Add this line
+    AccessControlEnumerableUpgradeable
+} from "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
 import {IPowerToken} from "./interfaces/IPowerToken.sol";
 
-contract PowerToken is ERC20Upgradeable, IPowerToken, AccessControlEnumerable {
+contract PowerToken is ERC20Upgradeable, IPowerToken, AccessControlEnumerableUpgradeable {
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 
     mapping(bytes32 feedId => uint256) internal _pointsBalances;
@@ -38,35 +36,4 @@ contract PowerToken is ERC20Upgradeable, IPowerToken, AccessControlEnumerable {
 
     /// @inheritdoc IPowerToken
     function balanceOfPoins(address owner) external view override returns (uint256) {}
-
-    /* ContextUpgradeable */
-    function _contextSuffixLength()
-        internal
-        view
-        virtual
-        override(Context, ContextUpgradeable)
-        returns (uint256)
-    {
-        super._contextSuffixLength();
-    }
-
-    function _msgSender()
-        internal
-        view
-        virtual
-        override(Context, ContextUpgradeable)
-        returns (address)
-    {
-        super._msgSender();
-    }
-
-    function _msgData()
-        internal
-        view
-        virtual
-        override(Context, ContextUpgradeable)
-        returns (bytes calldata)
-    {
-        return super._msgData();
-    }
 }
