@@ -221,7 +221,7 @@ $ cast --help
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/0f065ffc1f37b853fe8b78644f52eefdd5a905bc/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/6488639abe4f4b0408162d28b63ea7bd80396362/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name and symbol.
@@ -269,7 +269,7 @@ Also The msg.sender will be the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function balanceOfPoins(address owner) external view returns (uint256);
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/0f065ffc1f37b853fe8b78644f52eefdd5a905bc/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/6488639abe4f4b0408162d28b63ea7bd80396362/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC20Upgradeable, <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, AccessControlEnumerable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
@@ -281,17 +281,47 @@ ERC20Upgradeable, <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/in
 </code></pre>
 <h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
 <h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
+<p>Initializes the contract. Setup token name and symbol.
+Also The msg.sender will be the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_) external override initializer;
 </code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>name_</code></td><td><code>string</code></td><td>The name of the token.</td></tr>
+<tr><td><code>symbol_</code></td><td><code>string</code></td><td>The symbol of the token.</td></tr>
+</tbody></table>
+</div>
 <h3 id="mint-1"><a class="header" href="#mint-1">mint</a></h3>
+<p>Mints new token points. The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function mint(address to) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the tokens.</td></tr>
+</tbody></table>
+</div>
 <h3 id="tip-1"><a class="header" href="#tip-1">tip</a></h3>
+<p>Tips with tokens. The caller must have the APP_ADMIN_ROLE.</p>
+<p><em>The to and feedId are optional, but at least one of them must be provided.</em></p>
 <pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount token points to send. It can be empty.</td></tr>
+<tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
+<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
+</tbody></table>
+</div>
 <h3 id="withdraw-1"><a class="header" href="#withdraw-1">withdraw</a></h3>
+<p>Withdraws tokens by feedId. The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>to</code></td><td><code>address</code></td><td>The address who receives the tokens.</td></tr>
+<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The amount belongs to the feedId.</td></tr>
+</tbody></table>
+</div>
 <h3 id="balanceofpoins-1"><a class="header" href="#balanceofpoins-1">balanceOfPoins</a></h3>
 <pre><code class="language-solidity">function balanceOfPoins(address owner) external view override returns (uint256);
 </code></pre>
