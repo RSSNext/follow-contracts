@@ -24,7 +24,7 @@ contract PowerToken is IPowerToken, AccessControlEnumerableUpgradeable, ERC20Upg
     }
 
     /// @inheritdoc IPowerToken
-    function mint(address to) external override onlyRole(APP_ADMIN_ROLE) {}
+    function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE) {}
 
     /// @inheritdoc IPowerToken
     function tip(
@@ -37,5 +37,5 @@ contract PowerToken is IPowerToken, AccessControlEnumerableUpgradeable, ERC20Upg
     function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE) {}
 
     /// @inheritdoc IPowerToken
-    function balanceOfPoins(address owner) external view override returns (uint256) {}
+    function balanceOfPoints(address owner) external view override returns (uint256) {}
 }

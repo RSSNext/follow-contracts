@@ -3,7 +3,7 @@ pragma solidity 0.8.22;
 
 interface IPowerToken {
     /**
-     * @notice Initializes the contract. Setup token name and symbol.
+     * @notice Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.
      * @param name_ The name of the token.
      * @param symbol_ The symbol of the token.
      * @param admin_ The account to be granted with APP_ADMIN_ROLE.
@@ -12,7 +12,7 @@ interface IPowerToken {
 
     /**
      * @notice Tips with token points.
-     * @param amount The amount token points to send. It can be empty.
+     * @param amount The amount of token points to send. It can be empty.
      * @param feedId The feed id. It can be empty.
      * @dev The to and feedId are optional, but at least one of them must be provided.
      */
@@ -22,8 +22,9 @@ interface IPowerToken {
      * @notice Mints new token points.
      * @dev The caller must have the APP_ADMIN_ROLE.
      * @param to The account to receive the token points.
+     * @param amount The amount of token points to mint.
      */
-    function mint(address to) external;
+    function mint(address to, uint256 amount) external;
 
     /**
      * @notice Withdraws tokens by feedId.
@@ -38,5 +39,5 @@ interface IPowerToken {
      * @param owner The address of the owner
      * @return The amount of the balance
      */
-    function balanceOfPoins(address owner) external view returns (uint256);
+    function balanceOfPoints(address owner) external view returns (uint256);
 }
