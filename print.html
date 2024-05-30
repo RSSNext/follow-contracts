@@ -209,7 +209,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/de414c188f2d39d422fa56a02e3e71476758c11c/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/dee6f5387363ee15e1f8662dc5b75221ae6bf227/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -274,7 +274,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/de414c188f2d39d422fa56a02e3e71476758c11c/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/dee6f5387363ee15e1f8662dc5b75221ae6bf227/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
 <p>*This contract implements a proxy that is upgradeable by an admin.
@@ -347,7 +347,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/de414c188f2d39d422fa56a02e3e71476758c11c/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/dee6f5387363ee15e1f8662dc5b75221ae6bf227/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
@@ -356,7 +356,11 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 </code></pre>
 <h3 id="_pointsbalances"><a class="header" href="#_pointsbalances">_pointsBalances</a></h3>
 <p><em>Points balances of the users, which are non-transferable and can be used to tip others.</em></p>
-<pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _pointsBalances;
+<pre><code class="language-solidity">mapping(address owner =&gt; uint256) internal _pointsBalances;
+</code></pre>
+<h3 id="_feedbalances"><a class="header" href="#_feedbalances">_feedBalances</a></h3>
+<p><em>Feed balances can be claimed and withdrawn by the feed owners.</em></p>
+<pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _feedBalances;
 </code></pre>
 <h2 id="functions-2"><a class="header" href="#functions-2">Functions</a></h2>
 <h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
