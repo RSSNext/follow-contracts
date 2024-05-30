@@ -12,7 +12,10 @@ contract PowerToken is IPowerToken, AccessControlEnumerableUpgradeable, ERC20Upg
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 
     /// @dev Points balances of the users, which are non-transferable and can be used to tip others.
-    mapping(bytes32 feedId => uint256) internal _pointsBalances;
+    mapping(address owner => uint256) internal _pointsBalances;
+
+    /// @dev Feed balances can be claimed and withdrawn by the feed owners.
+    mapping(bytes32 feedId => uint256) internal _feedBalances;
 
     /// @inheritdoc IPowerToken
     function initialize(
