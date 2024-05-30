@@ -178,7 +178,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/14df66e14976303c97f13eb1c9e36fdd32e3323f/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/de414c188f2d39d422fa56a02e3e71476758c11c/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="/src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
@@ -186,6 +186,7 @@
 <pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 </code></pre>
 <h3 id="_pointsbalances"><a class="header" href="#_pointsbalances">_pointsBalances</a></h3>
+<p><em>Points balances of the users, which are non-transferable and can be used to tip others.</em></p>
 <pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _pointsBalances;
 </code></pre>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
