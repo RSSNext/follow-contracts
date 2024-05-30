@@ -11,6 +11,7 @@ import {IPowerToken} from "./interfaces/IPowerToken.sol";
 contract PowerToken is IPowerToken, AccessControlEnumerableUpgradeable, ERC20Upgradeable {
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 
+    /// @dev Points balances of the users, which are non-transferable and can be used to tip others.
     mapping(bytes32 feedId => uint256) internal _pointsBalances;
 
     /// @inheritdoc IPowerToken
@@ -20,6 +21,7 @@ contract PowerToken is IPowerToken, AccessControlEnumerableUpgradeable, ERC20Upg
         address admin_
     ) external override initializer {
         super.__ERC20_init(name_, symbol_);
+
         _grantRole(APP_ADMIN_ROLE, admin_);
     }
 
