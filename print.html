@@ -90,7 +90,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item "><a href="src/interfaces/index.html">❱ interfaces</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li></ol></li><li class="chapter-item "><a href="src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item "><a href="src/interfaces/index.html">❱ interfaces</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li></ol></li><li class="chapter-item "><a href="src/upgradeability/index.html">❱ upgradeability</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li></ol></li><li class="chapter-item "><a href="src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -221,21 +221,21 @@ $ cast --help
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/979d9765258de957a9144c2b4c4f3509002eedc8/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/4081e43d62ba83a1a52bf0c6d194a414255016e0/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
-<p>Initializes the contract. Setup token name and symbol.
-Also The msg.sender will be the APP_ADMIN_ROLE.</p>
-<pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_) external;
+<p>Initializes the contract. Setup token name and symbol.</p>
+<pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_, address admin_) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>name_</code></td><td><code>string</code></td><td>The name of the token.</td></tr>
 <tr><td><code>symbol_</code></td><td><code>string</code></td><td>The symbol of the token.</td></tr>
+<tr><td><code>admin_</code></td><td><code>address</code></td><td>The account to be granted with APP_ADMIN_ROLE.</td></tr>
 </tbody></table>
 </div>
 <h3 id="tip"><a class="header" href="#tip">tip</a></h3>
-<p>Tips with tokens. The caller must have the APP_ADMIN_ROLE.</p>
+<p>Tips with token points.</p>
 <p><em>The to and feedId are optional, but at least one of them must be provided.</em></p>
 <pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external;
 </code></pre>
@@ -247,16 +247,18 @@ Also The msg.sender will be the APP_ADMIN_ROLE.</p>
 </tbody></table>
 </div>
 <h3 id="mint"><a class="header" href="#mint">mint</a></h3>
-<p>Mints new token points. The caller must have the APP_ADMIN_ROLE.</p>
+<p>Mints new token points.</p>
+<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function mint(address to) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the tokens.</td></tr>
+<tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the token points.</td></tr>
 </tbody></table>
 </div>
 <h3 id="withdraw"><a class="header" href="#withdraw">withdraw</a></h3>
-<p>Withdraws tokens by feedId. The caller must have the APP_ADMIN_ROLE.</p>
+<p>Withdraws tokens by feedId.</p>
+<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -278,8 +280,85 @@ Also The msg.sender will be the APP_ADMIN_ROLE.</p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>The amount of the balance</td></tr>
 </tbody></table>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/979d9765258de957a9144c2b4c4f3509002eedc8/src/PowerToken.sol">Git Source</a></p>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="contents-1"><a class="header" href="#contents-1">Contents</a></h1>
+<ul>
+<li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/4081e43d62ba83a1a52bf0c6d194a414255016e0/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+ERC1967Proxy</p>
+<p>*This contract implements a proxy that is upgradeable by an admin.
+To avoid https://medium.com/nomic-labs-blog/malicious-backdoors-in-ethereum-proxies-62629adf3357[proxy selector
+clashing], which can potentially be used in an attack, this contract uses the
+https://blog.openzeppelin.com/the-transparent-proxy-pattern/[transparent proxy pattern]. This pattern implies two
+things that go hand in hand:</p>
+<ol>
+<li>If any account other than the admin calls the proxy, the call will be forwarded to the implementation, even if
+that call matches one of the admin functions exposed by the proxy itself.</li>
+<li>If the admin calls the proxy, it can access the admin functions, but its calls will never be forwarded to the
+implementation. If the admin tries to call a function on the implementation it will fail with an error that says
+"admin cannot fallback to proxy target".
+These properties mean that the admin account can only be used for admin actions like upgrading the proxy or changing
+the admin, so it's best if it's a dedicated account that is not used for anything else. This will avoid headaches due
+to sudden errors when trying to call a function from the proxy implementation.
+Our recommendation is for the dedicated account to be an instance of the {ProxyAdmin} contract. If set up this way,
+you should think of the <code>ProxyAdmin</code> instance as the real administrative interface of your proxy.*</li>
+</ol>
+<h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
+<h3 id="constructor"><a class="header" href="#constructor">constructor</a></h3>
+<p><em>Initializes an upgradeable proxy managed by <code>_admin</code>, backed by the implementation at <code>_logic</code>, and
+optionally initialized with <code>_data</code> as explained in <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/lib/forge-std/test/StdCheats.t.sol/contract.Bar.html#constructor">ERC1967Proxy-constructor</a>.</em></p>
+<pre><code class="language-solidity">constructor(address _logic, address admin_, bytes memory _data) payable ERC1967Proxy(_logic, _data);
+</code></pre>
+<h3 id="ifadmin"><a class="header" href="#ifadmin">ifAdmin</a></h3>
+<p><em>Modifier used internally that will delegate the call to the implementation unless the sender is the admin.</em></p>
+<pre><code class="language-solidity">modifier ifAdmin();
+</code></pre>
+<h3 id="admin"><a class="header" href="#admin">admin</a></h3>
+<p><em>Returns the current admin.
+NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#getproxyadmin">ProxyAdmin-getProxyAdmin</a>.
+TIP: To get this value clients can read directly from the storage slot shown below (specified by EIP1967) using the
+https://eth.wiki/json-rpc/API#eth_getstorageat[<code>eth_getStorageAt</code>] RPC call.
+<code>0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103</code></em></p>
+<pre><code class="language-solidity">function admin() external ifAdmin returns (address admin_);
+</code></pre>
+<h3 id="implementation"><a class="header" href="#implementation">implementation</a></h3>
+<p><em>Returns the current implementation.
+NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#getproxyimplementation">ProxyAdmin-getProxyImplementation</a>.
+TIP: To get this value clients can read directly from the storage slot shown below (specified by EIP1967) using the
+https://eth.wiki/json-rpc/API#eth_getstorageat[<code>eth_getStorageAt</code>] RPC call.
+<code>0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc</code></em></p>
+<pre><code class="language-solidity">function implementation() external ifAdmin returns (address implementation_);
+</code></pre>
+<h3 id="changeadmin"><a class="header" href="#changeadmin">changeAdmin</a></h3>
+<p><em>Changes the admin of the proxy.
+Emits an {AdminChanged} event.
+NOTE: Only the admin can call this function. See {ProxyAdmin-changeProxyAdmin}.</em></p>
+<pre><code class="language-solidity">function changeAdmin(address newAdmin) external virtual ifAdmin;
+</code></pre>
+<h3 id="upgradeto"><a class="header" href="#upgradeto">upgradeTo</a></h3>
+<p><em>Upgrade the implementation of the proxy.
+NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#upgrade">ProxyAdmin-upgrade</a>.</em></p>
+<pre><code class="language-solidity">function upgradeTo(address newImplementation) external ifAdmin;
+</code></pre>
+<h3 id="upgradetoandcall"><a class="header" href="#upgradetoandcall">upgradeToAndCall</a></h3>
+<p><em>Upgrade the implementation of the proxy, and then call a function from the new implementation as specified
+by <code>data</code>, which should be an encoded function call. This is useful to initialize new storage variables in the
+proxied contract.
+NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#upgradeandcall">ProxyAdmin-upgradeAndCall</a>.</em></p>
+<pre><code class="language-solidity">function upgradeToAndCall(address newImplementation, bytes calldata data) external payable ifAdmin;
+</code></pre>
+<h3 id="_admin"><a class="header" href="#_admin">_admin</a></h3>
+<p><em>Returns the current admin.</em></p>
+<pre><code class="language-solidity">function _admin() internal view virtual returns (address);
+</code></pre>
+<h3 id="_beforefallback"><a class="header" href="#_beforefallback">_beforeFallback</a></h3>
+<p><em>Makes sure the admin cannot access the fallback function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/Proxy.sol/abstract.Proxy.html#_beforefallback">Proxy-_beforeFallback</a>.</em></p>
+<pre><code class="language-solidity">function _beforeFallback() internal virtual override;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/4081e43d62ba83a1a52bf0c6d194a414255016e0/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
@@ -289,29 +368,30 @@ Also The msg.sender will be the APP_ADMIN_ROLE.</p>
 <h3 id="_pointsbalances"><a class="header" href="#_pointsbalances">_pointsBalances</a></h3>
 <pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _pointsBalances;
 </code></pre>
-<h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
+<h2 id="functions-2"><a class="header" href="#functions-2">Functions</a></h2>
 <h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
-<p>Initializes the contract. Setup token name and symbol.
-Also The msg.sender will be the APP_ADMIN_ROLE.</p>
-<pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_) external override initializer;
+<p>Initializes the contract. Setup token name and symbol.</p>
+<pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_, address admin_) external override initializer;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>name_</code></td><td><code>string</code></td><td>The name of the token.</td></tr>
 <tr><td><code>symbol_</code></td><td><code>string</code></td><td>The symbol of the token.</td></tr>
+<tr><td><code>admin_</code></td><td><code>address</code></td><td>The account to be granted with APP_ADMIN_ROLE.</td></tr>
 </tbody></table>
 </div>
 <h3 id="mint-1"><a class="header" href="#mint-1">mint</a></h3>
-<p>Mints new token points. The caller must have the APP_ADMIN_ROLE.</p>
+<p>Mints new token points.</p>
+<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function mint(address to) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the tokens.</td></tr>
+<tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the token points.</td></tr>
 </tbody></table>
 </div>
 <h3 id="tip-1"><a class="header" href="#tip-1">tip</a></h3>
-<p>Tips with tokens. The caller must have the APP_ADMIN_ROLE.</p>
+<p>Tips with token points.</p>
 <p><em>The to and feedId are optional, but at least one of them must be provided.</em></p>
 <pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
@@ -323,7 +403,8 @@ Also The msg.sender will be the APP_ADMIN_ROLE.</p>
 </tbody></table>
 </div>
 <h3 id="withdraw-1"><a class="header" href="#withdraw-1">withdraw</a></h3>
-<p>Withdraws tokens by feedId. The caller must have the APP_ADMIN_ROLE.</p>
+<p>Withdraws tokens by feedId.</p>
+<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
 <p><strong>Parameters</strong></p>
