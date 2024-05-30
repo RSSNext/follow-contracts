@@ -1,5 +1,10 @@
 ## Follow contracts
 
+[![Docs](https://github.com/RSSNext/follow-contracts/actions/workflows/docs.yml/badge.svg)](https://github.com/RSSNext/follow-contracts/actions/workflows/docs.yml)
+[![checks](https://github.com/RSSNext/follow-contracts/actions/workflows/checks.yml/badge.svg)](https://github.com/RSSNext/follow-contracts/actions/workflows/checks.yml)
+[![Tests](https://github.com/RSSNext/follow-contracts/actions/workflows/tests.yml/badge.svg)](https://github.com/RSSNext/follow-contracts/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/gh/RSSNext/follow-contracts/graph/badge.svg?token=23COU041UA)](https://codecov.io/gh/RSSNext/follow-contracts)
+
 ## Usage
 
 ### Build
