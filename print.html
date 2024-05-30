@@ -178,50 +178,34 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2 id="foundry"><a class="header" href="#foundry">Foundry</a></h2>
-<p><strong>Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.</strong></p>
-<p>Foundry consists of:</p>
-<ul>
-<li><strong>Forge</strong>: Ethereum testing framework (like Truffle, Hardhat and DappTools).</li>
-<li><strong>Cast</strong>: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.</li>
-<li><strong>Anvil</strong>: Local Ethereum node, akin to Ganache, Hardhat Network.</li>
-<li><strong>Chisel</strong>: Fast, utilitarian, and verbose solidity REPL.</li>
-</ul>
-<h2 id="documentation"><a class="header" href="#documentation">Documentation</a></h2>
-<p>https://book.getfoundry.sh/</p>
+                        <h2 id="follow-contracts"><a class="header" href="#follow-contracts">Follow contracts</a></h2>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <h3 id="build"><a class="header" href="#build">Build</a></h3>
-<pre><code class="language-shell">$ forge build
+<pre><code class="language-shell">yarn
+forge build
 </code></pre>
 <h3 id="test"><a class="header" href="#test">Test</a></h3>
-<pre><code class="language-shell">$ forge test
-</code></pre>
-<h3 id="format"><a class="header" href="#format">Format</a></h3>
-<pre><code class="language-shell">$ forge fmt
-</code></pre>
-<h3 id="gas-snapshots"><a class="header" href="#gas-snapshots">Gas Snapshots</a></h3>
-<pre><code class="language-shell">$ forge snapshot
-</code></pre>
-<h3 id="anvil"><a class="header" href="#anvil">Anvil</a></h3>
-<pre><code class="language-shell">$ anvil
+<pre><code class="language-shell">forge test
 </code></pre>
 <h3 id="deploy"><a class="header" href="#deploy">Deploy</a></h3>
-<pre><code class="language-shell">$ forge script script/Counter.s.sol:CounterScript --rpc-url &lt;your_rpc_url&gt; --private-key &lt;your_private_key&gt;
-</code></pre>
-<h3 id="cast"><a class="header" href="#cast">Cast</a></h3>
-<pre><code class="language-shell">$ cast &lt;subcommand&gt;
-</code></pre>
-<h3 id="help"><a class="header" href="#help">Help</a></h3>
-<pre><code class="language-shell">$ forge --help
-$ anvil --help
-$ cast --help
+<pre><code class="language-shell">forge script script/Deploy.s.sol:Deploy \
+--chain-id $CHAIN_ID \
+--rpc-url $RPC_URL \
+--private-key $PRIVATE_KEY \
+--verifier-url $VERIFIER_URL \
+--verifier $VERIFIER \
+--verify \
+--broadcast --ffi -vvvv 
+
+# generate easily readable abi to /deployments
+forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broadcast --ffi
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="contents"><a class="header" href="#contents">Contents</a></h1>
 <ul>
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/b10982d1f9b807bdac3ddc5674befa73ad2fdf21/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/4dbd94217b1d682ec3cfe487066ebb2ae3771847/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -286,7 +270,7 @@ $ cast --help
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/b10982d1f9b807bdac3ddc5674befa73ad2fdf21/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/4dbd94217b1d682ec3cfe487066ebb2ae3771847/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
 <p>*This contract implements a proxy that is upgradeable by an admin.
@@ -359,7 +343,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/b10982d1f9b807bdac3ddc5674befa73ad2fdf21/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/4dbd94217b1d682ec3cfe487066ebb2ae3771847/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>

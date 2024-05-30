@@ -177,43 +177,27 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2 id="foundry"><a class="header" href="#foundry">Foundry</a></h2>
-<p><strong>Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.</strong></p>
-<p>Foundry consists of:</p>
-<ul>
-<li><strong>Forge</strong>: Ethereum testing framework (like Truffle, Hardhat and DappTools).</li>
-<li><strong>Cast</strong>: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.</li>
-<li><strong>Anvil</strong>: Local Ethereum node, akin to Ganache, Hardhat Network.</li>
-<li><strong>Chisel</strong>: Fast, utilitarian, and verbose solidity REPL.</li>
-</ul>
-<h2 id="documentation"><a class="header" href="#documentation">Documentation</a></h2>
-<p>https://book.getfoundry.sh/</p>
+                        <h2 id="follow-contracts"><a class="header" href="#follow-contracts">Follow contracts</a></h2>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <h3 id="build"><a class="header" href="#build">Build</a></h3>
-<pre><code class="language-shell">$ forge build
+<pre><code class="language-shell">yarn
+forge build
 </code></pre>
 <h3 id="test"><a class="header" href="#test">Test</a></h3>
-<pre><code class="language-shell">$ forge test
-</code></pre>
-<h3 id="format"><a class="header" href="#format">Format</a></h3>
-<pre><code class="language-shell">$ forge fmt
-</code></pre>
-<h3 id="gas-snapshots"><a class="header" href="#gas-snapshots">Gas Snapshots</a></h3>
-<pre><code class="language-shell">$ forge snapshot
-</code></pre>
-<h3 id="anvil"><a class="header" href="#anvil">Anvil</a></h3>
-<pre><code class="language-shell">$ anvil
+<pre><code class="language-shell">forge test
 </code></pre>
 <h3 id="deploy"><a class="header" href="#deploy">Deploy</a></h3>
-<pre><code class="language-shell">$ forge script script/Counter.s.sol:CounterScript --rpc-url &lt;your_rpc_url&gt; --private-key &lt;your_private_key&gt;
-</code></pre>
-<h3 id="cast"><a class="header" href="#cast">Cast</a></h3>
-<pre><code class="language-shell">$ cast &lt;subcommand&gt;
-</code></pre>
-<h3 id="help"><a class="header" href="#help">Help</a></h3>
-<pre><code class="language-shell">$ forge --help
-$ anvil --help
-$ cast --help
+<pre><code class="language-shell">forge script script/Deploy.s.sol:Deploy \
+--chain-id $CHAIN_ID \
+--rpc-url $RPC_URL \
+--private-key $PRIVATE_KEY \
+--verifier-url $VERIFIER_URL \
+--verifier $VERIFIER \
+--verify \
+--broadcast --ffi -vvvv 
+
+# generate easily readable abi to /deployments
+forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broadcast --ffi
 </code></pre>
 
                     </main>
