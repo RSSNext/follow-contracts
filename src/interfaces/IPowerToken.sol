@@ -31,7 +31,8 @@ interface IPowerToken {
      */
     function withdraw(address to, bytes32 feedId) external;
 
-    /* @notice Return the balance of points, aka the inactive tokens, of the owner
+    /**
+     * @notice Return the balance of points, aka the inactive tokens, of the owner
      * @param owner The address of the owner
      * @return The amount of the balance
      */
