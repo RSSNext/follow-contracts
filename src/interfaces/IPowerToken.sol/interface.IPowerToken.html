@@ -178,10 +178,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/4081e43d62ba83a1a52bf0c6d194a414255016e0/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/b10982d1f9b807bdac3ddc5674befa73ad2fdf21/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
-<p>Initializes the contract. Setup token name and symbol.</p>
+<p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_, address admin_) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -198,7 +198,7 @@
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount token points to send. It can be empty.</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send. It can be empty.</td></tr>
 <tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
 <tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
 </tbody></table>
@@ -206,11 +206,12 @@
 <h3 id="mint"><a class="header" href="#mint">mint</a></h3>
 <p>Mints new token points.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function mint(address to) external;
+<pre><code class="language-solidity">function mint(address to, uint256 amount) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the token points.</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to mint.</td></tr>
 </tbody></table>
 </div>
 <h3 id="withdraw"><a class="header" href="#withdraw">withdraw</a></h3>
@@ -224,9 +225,9 @@
 <tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The amount belongs to the feedId.</td></tr>
 </tbody></table>
 </div>
-<h3 id="balanceofpoins"><a class="header" href="#balanceofpoins">balanceOfPoins</a></h3>
+<h3 id="balanceofpoints"><a class="header" href="#balanceofpoints">balanceOfPoints</a></h3>
 <p>Return the balance of points, aka the inactive tokens, of the owner</p>
-<pre><code class="language-solidity">function balanceOfPoins(address owner) external view returns (uint256);
+<pre><code class="language-solidity">function balanceOfPoints(address owner) external view returns (uint256);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>

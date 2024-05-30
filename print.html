@@ -221,10 +221,10 @@ $ cast --help
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/4081e43d62ba83a1a52bf0c6d194a414255016e0/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/b10982d1f9b807bdac3ddc5674befa73ad2fdf21/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
-<p>Initializes the contract. Setup token name and symbol.</p>
+<p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_, address admin_) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -241,7 +241,7 @@ $ cast --help
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount token points to send. It can be empty.</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send. It can be empty.</td></tr>
 <tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
 <tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
 </tbody></table>
@@ -249,11 +249,12 @@ $ cast --help
 <h3 id="mint"><a class="header" href="#mint">mint</a></h3>
 <p>Mints new token points.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function mint(address to) external;
+<pre><code class="language-solidity">function mint(address to, uint256 amount) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the token points.</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to mint.</td></tr>
 </tbody></table>
 </div>
 <h3 id="withdraw"><a class="header" href="#withdraw">withdraw</a></h3>
@@ -267,9 +268,9 @@ $ cast --help
 <tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The amount belongs to the feedId.</td></tr>
 </tbody></table>
 </div>
-<h3 id="balanceofpoins"><a class="header" href="#balanceofpoins">balanceOfPoins</a></h3>
+<h3 id="balanceofpoints"><a class="header" href="#balanceofpoints">balanceOfPoints</a></h3>
 <p>Return the balance of points, aka the inactive tokens, of the owner</p>
-<pre><code class="language-solidity">function balanceOfPoins(address owner) external view returns (uint256);
+<pre><code class="language-solidity">function balanceOfPoints(address owner) external view returns (uint256);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -285,7 +286,7 @@ $ cast --help
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/4081e43d62ba83a1a52bf0c6d194a414255016e0/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/b10982d1f9b807bdac3ddc5674befa73ad2fdf21/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
 <p>*This contract implements a proxy that is upgradeable by an admin.
@@ -358,7 +359,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/4081e43d62ba83a1a52bf0c6d194a414255016e0/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/b10982d1f9b807bdac3ddc5674befa73ad2fdf21/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
@@ -370,7 +371,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 </code></pre>
 <h2 id="functions-2"><a class="header" href="#functions-2">Functions</a></h2>
 <h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
-<p>Initializes the contract. Setup token name and symbol.</p>
+<p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_, address admin_) external override initializer;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -383,11 +384,12 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <h3 id="mint-1"><a class="header" href="#mint-1">mint</a></h3>
 <p>Mints new token points.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function mint(address to) external override onlyRole(APP_ADMIN_ROLE);
+<pre><code class="language-solidity">function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the token points.</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to mint.</td></tr>
 </tbody></table>
 </div>
 <h3 id="tip-1"><a class="header" href="#tip-1">tip</a></h3>
@@ -397,7 +399,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount token points to send. It can be empty.</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send. It can be empty.</td></tr>
 <tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
 <tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
 </tbody></table>
@@ -413,9 +415,9 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The amount belongs to the feedId.</td></tr>
 </tbody></table>
 </div>
-<h3 id="balanceofpoins-1"><a class="header" href="#balanceofpoins-1">balanceOfPoins</a></h3>
+<h3 id="balanceofpoints-1"><a class="header" href="#balanceofpoints-1">balanceOfPoints</a></h3>
 <p>Return the balance of points, aka the inactive tokens, of the owner</p>
-<pre><code class="language-solidity">function balanceOfPoins(address owner) external view override returns (uint256);
+<pre><code class="language-solidity">function balanceOfPoints(address owner) external view override returns (uint256);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
