@@ -221,7 +221,7 @@ $ cast --help
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/6488639abe4f4b0408162d28b63ea7bd80396362/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/7e3925227739bbafefff7f7bc6b5d13696aa83c5/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name and symbol.
@@ -269,9 +269,9 @@ Also The msg.sender will be the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function balanceOfPoins(address owner) external view returns (uint256);
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/6488639abe4f4b0408162d28b63ea7bd80396362/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/7e3925227739bbafefff7f7bc6b5d13696aa83c5/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
-ERC20Upgradeable, <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, AccessControlEnumerable</p>
+ERC20Upgradeable, <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, AccessControlEnumerableUpgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
 <h3 id="app_admin_role"><a class="header" href="#app_admin_role">APP_ADMIN_ROLE</a></h3>
 <pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
@@ -324,15 +324,6 @@ Also The msg.sender will be the APP_ADMIN_ROLE.</p>
 </div>
 <h3 id="balanceofpoins-1"><a class="header" href="#balanceofpoins-1">balanceOfPoins</a></h3>
 <pre><code class="language-solidity">function balanceOfPoins(address owner) external view override returns (uint256);
-</code></pre>
-<h3 id="_contextsuffixlength"><a class="header" href="#_contextsuffixlength">_contextSuffixLength</a></h3>
-<pre><code class="language-solidity">function _contextSuffixLength() internal view virtual override(Context, ContextUpgradeable) returns (uint256);
-</code></pre>
-<h3 id="_msgsender"><a class="header" href="#_msgsender">_msgSender</a></h3>
-<pre><code class="language-solidity">function _msgSender() internal view virtual override(Context, ContextUpgradeable) returns (address);
-</code></pre>
-<h3 id="_msgdata"><a class="header" href="#_msgdata">_msgData</a></h3>
-<pre><code class="language-solidity">function _msgData() internal view virtual override(Context, ContextUpgradeable) returns (bytes calldata);
 </code></pre>
 
                     </main>
