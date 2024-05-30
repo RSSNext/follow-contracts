@@ -14,6 +14,7 @@ contract PowerToken is ERC20Upgradeable, IPowerToken, AccessControlEnumerable {
 
     mapping(bytes32 feedId => uint256) internal _pointsBalances;
 
+    /// @inheritdoc IPowerToken
     function initialize(
         string calldata name_,
         string calldata symbol_
@@ -22,16 +23,20 @@ contract PowerToken is ERC20Upgradeable, IPowerToken, AccessControlEnumerable {
         _grantRole(APP_ADMIN_ROLE, _msgSender());
     }
 
+    /// @inheritdoc IPowerToken
     function mint(address to) external override onlyRole(APP_ADMIN_ROLE) {}
 
+    /// @inheritdoc IPowerToken
     function tip(
         uint256 amount,
         address to,
         bytes32 feedId
     ) external override onlyRole(APP_ADMIN_ROLE) {}
 
+    /// @inheritdoc IPowerToken
     function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE) {}
 
+    /// @inheritdoc IPowerToken
     function balanceOfPoins(address owner) external view override returns (uint256) {}
 
     /* ContextUpgradeable */
