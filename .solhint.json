@@ -14,7 +14,7 @@
     "contract-name-camelcase": "error",
     "gas-custom-errors": "off",
     "event-name-camelcase": "error",
-    "function-max-lines": ["warn",60],
+    "function-max-lines": ["warn",40],
     "func-name-mixedcase": "error",
     "func-named-parameters": "off",
     "func-visibility": ["error", { "ignoreConstructors": true }],
