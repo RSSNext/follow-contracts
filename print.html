@@ -90,7 +90,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item "><a href="src/interfaces/index.html">❱ interfaces</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li></ol></li><li class="chapter-item "><a href="src/upgradeability/index.html">❱ upgradeability</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li></ol></li><li class="chapter-item "><a href="src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item "><a href="src/interfaces/index.html">❱ interfaces</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a></li><li class="chapter-item "><a href="src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a></li><li class="chapter-item "><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li></ol></li><li class="chapter-item "><a href="src/upgradeability/index.html">❱ upgradeability</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li></ol></li><li class="chapter-item "><a href="src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -206,10 +206,46 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="contents"><a class="header" href="#contents">Contents</a></h1>
 <ul>
+<li><a href="src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a></li>
+<li><a href="src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a></li>
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors"><a class="header" href="#ierrors">IErrors</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/33251a2dfae43a76ba2dbc7f1afd9165f2b85377/src/interfaces/IErrors.sol">Git Source</a></p>
+<h2 id="errors"><a class="header" href="#errors">Errors</a></h2>
+<h3 id="tipreceiverisempty"><a class="header" href="#tipreceiverisempty">TipReceiverIsEmpty</a></h3>
+<p><em>Tip parameter is empty.</em></p>
+<pre><code class="language-solidity">error TipReceiverIsEmpty();
+</code></pre>
+<h3 id="pointsinvalidreceiver"><a class="header" href="#pointsinvalidreceiver">PointsInvalidReceiver</a></h3>
+<p><em>Points receiver is invalid.</em></p>
+<pre><code class="language-solidity">error PointsInvalidReceiver(address);
+</code></pre>
+<h3 id="tipamountiszero"><a class="header" href="#tipamountiszero">TipAmountIsZero</a></h3>
+<p><em>Tip amount is zero.</em></p>
+<pre><code class="language-solidity">error TipAmountIsZero();
+</code></pre>
+<h3 id="insufficientbalanceandpoints"><a class="header" href="#insufficientbalanceandpoints">InsufficientBalanceAndPoints</a></h3>
+<p><em>Insufficient balance and points.</em></p>
+<pre><code class="language-solidity">error InsufficientBalanceAndPoints();
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ievents"><a class="header" href="#ievents">IEvents</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/33251a2dfae43a76ba2dbc7f1afd9165f2b85377/src/interfaces/IEvents.sol">Git Source</a></p>
+<h2 id="events"><a class="header" href="#events">Events</a></h2>
+<h3 id="distributepoints"><a class="header" href="#distributepoints">DistributePoints</a></h3>
+<p><em>Emitted when points are distributed to an address.</em></p>
+<pre><code class="language-solidity">event DistributePoints(address indexed to, uint256 indexed amount);
+</code></pre>
+<h3 id="tip"><a class="header" href="#tip">Tip</a></h3>
+<p><em>Emitted when points are tipped from one address to another.</em></p>
+<pre><code class="language-solidity">event Tip(address indexed from, address indexed to, bytes32 indexed feedId, uint256 amount);
+</code></pre>
+<h3 id="withdraw"><a class="header" href="#withdraw">Withdraw</a></h3>
+<p><em>Emitted when points are withdrawn from an address.</em></p>
+<pre><code class="language-solidity">event Withdraw(address indexed to, bytes32 indexed feedId, uint256 indexed amount);
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/dee6f5387363ee15e1f8662dc5b75221ae6bf227/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/33251a2dfae43a76ba2dbc7f1afd9165f2b85377/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -220,18 +256,6 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <tr><td><code>name_</code></td><td><code>string</code></td><td>The name of the token.</td></tr>
 <tr><td><code>symbol_</code></td><td><code>string</code></td><td>The symbol of the token.</td></tr>
 <tr><td><code>admin_</code></td><td><code>address</code></td><td>The account to be granted with APP_ADMIN_ROLE.</td></tr>
-</tbody></table>
-</div>
-<h3 id="tip"><a class="header" href="#tip">tip</a></h3>
-<p>Tips with token points.</p>
-<p><em>The to and feedId are optional, but at least one of them must be provided.</em></p>
-<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send. It can be empty.</td></tr>
-<tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
 </tbody></table>
 </div>
 <h3 id="mint"><a class="header" href="#mint">mint</a></h3>
@@ -245,8 +269,21 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to mint.</td></tr>
 </tbody></table>
 </div>
-<h3 id="withdraw"><a class="header" href="#withdraw">withdraw</a></h3>
-<p>Withdraws tokens by feedId.</p>
+<h3 id="tip-1"><a class="header" href="#tip-1">tip</a></h3>
+<p>Tips with token points. If token points are not enough, it will try the balance.</p>
+<p><em>The to and feedId are optional, but at least one of them must be provided.
+If both are provided, the <code>to</code> will be used.</em></p>
+<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send. It can be empty.</td></tr>
+<tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
+<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
+</tbody></table>
+</div>
+<h3 id="withdraw-1"><a class="header" href="#withdraw-1">withdraw</a></h3>
+<p>Withdraws tokens by feedId. <code>to</code> is supposed to be the true owner of the feedId.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external;
 </code></pre>
@@ -254,6 +291,20 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>to</code></td><td><code>address</code></td><td>The address who receives the tokens.</td></tr>
 <tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The amount belongs to the feedId.</td></tr>
+</tbody></table>
+</div>
+<h3 id="balanceofbyfeed"><a class="header" href="#balanceofbyfeed">balanceOfByFeed</a></h3>
+<p>Return the balance of the feedId</p>
+<pre><code class="language-solidity">function balanceOfByFeed(bytes32 feedId) external view returns (uint256);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>The amount of the balance</td></tr>
 </tbody></table>
 </div>
 <h3 id="balanceofpoints"><a class="header" href="#balanceofpoints">balanceOfPoints</a></h3>
@@ -274,7 +325,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/dee6f5387363ee15e1f8662dc5b75221ae6bf227/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/33251a2dfae43a76ba2dbc7f1afd9165f2b85377/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
 <p>*This contract implements a proxy that is upgradeable by an admin.
@@ -347,19 +398,19 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/dee6f5387363ee15e1f8662dc5b75221ae6bf227/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/33251a2dfae43a76ba2dbc7f1afd9165f2b85377/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
-<a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
+<a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, <a href="src/PowerToken.sol//src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/PowerToken.sol//src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
 <h3 id="app_admin_role"><a class="header" href="#app_admin_role">APP_ADMIN_ROLE</a></h3>
 <pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 </code></pre>
 <h3 id="_pointsbalances"><a class="header" href="#_pointsbalances">_pointsBalances</a></h3>
 <p><em>Points balances of the users, which are non-transferable and can be used to tip others.</em></p>
-<pre><code class="language-solidity">mapping(address owner =&gt; uint256) internal _pointsBalances;
+<pre><code class="language-solidity">mapping(address account =&gt; uint256) internal _pointsBalances;
 </code></pre>
 <h3 id="_feedbalances"><a class="header" href="#_feedbalances">_feedBalances</a></h3>
-<p><em>Feed balances can be claimed and withdrawn by the feed owners.</em></p>
+<p><em>Token balances of the feed, which could be withdrawn to the feed owner.</em></p>
 <pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _feedBalances;
 </code></pre>
 <h2 id="functions-2"><a class="header" href="#functions-2">Functions</a></h2>
@@ -385,10 +436,11 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to mint.</td></tr>
 </tbody></table>
 </div>
-<h3 id="tip-1"><a class="header" href="#tip-1">tip</a></h3>
-<p>Tips with token points.</p>
-<p><em>The to and feedId are optional, but at least one of them must be provided.</em></p>
-<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
+<h3 id="tip-2"><a class="header" href="#tip-2">tip</a></h3>
+<p>Tips with token points. If token points are not enough, it will try the balance.</p>
+<p><em>The to and feedId are optional, but at least one of them must be provided.
+If both are provided, the <code>to</code> will be used.</em></p>
+<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external override;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -397,8 +449,8 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
 </tbody></table>
 </div>
-<h3 id="withdraw-1"><a class="header" href="#withdraw-1">withdraw</a></h3>
-<p>Withdraws tokens by feedId.</p>
+<h3 id="withdraw-2"><a class="header" href="#withdraw-2">withdraw</a></h3>
+<p>Withdraws tokens by feedId. <code>to</code> is supposed to be the true owner of the feedId.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
@@ -415,6 +467,20 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>owner</code></td><td><code>address</code></td><td>The address of the owner</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>The amount of the balance</td></tr>
+</tbody></table>
+</div>
+<h3 id="balanceofbyfeed-1"><a class="header" href="#balanceofbyfeed-1">balanceOfByFeed</a></h3>
+<p>Return the balance of the feedId</p>
+<pre><code class="language-solidity">function balanceOfByFeed(bytes32 feedId) external view override returns (uint256);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id</td></tr>
 </tbody></table>
 </div>
 <p><strong>Returns</strong></p>
