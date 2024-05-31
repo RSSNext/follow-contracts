@@ -27,5 +27,16 @@ solhint :; solhint -f table "{src,test,scripts}/**/*.sol"
 # to install slither, visit [https://github.com/crytic/slither]
 slither :; slither . --fail-low #--triage-mode
 
+
+# upgradeable check
+upgradeable:
+	@echo " > \033[32mChecking upgradeable...\033[0m"
+	./tools/checkUpgradeable.sh
+
+# check upgradeable contract storage layout
+storage-layout:
+	@echo " > \033[32mChecking contract storage layout...\033[0m"
+	./tools/checkStorageLayout.sh
+
 # Lints
 lint :; npx prettier --plugin=prettier-plugin-solidity  --write "{src,test,scripts}/**/*.sol"
