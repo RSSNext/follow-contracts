@@ -6,7 +6,7 @@ interface IErrors {
     error TipReceiverIsEmpty();
 
     /// @dev Points receiver is invalid.
-    error PointsInvalidReceiver(address);
+    error PointsInvalidReceiver(bytes32);
 
     /// @dev Tip amount is zero.
     error TipAmountIsZero();

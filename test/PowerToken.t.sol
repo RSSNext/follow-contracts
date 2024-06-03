@@ -107,7 +107,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         _mintPoints(alice, initialPoints);
 
-        // Alice tips bob(only points)
+        // Alice tips bob (only points)
         vm.prank(alice);
 
         vm.expectEmit();
@@ -118,7 +118,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _checkBalanceAndPoints(alice, 0, initialPoints - amount);
         _checkBalanceAndPoints(bob, amount, 0);
 
-        // Bob is minted with some points. Then bob tips charlie(points + balance)
+        // Bob is minted with some points. Then bob tips charlie (points + balance)
         uint256 bobInitialPoints = amount / 2;
         _mintPoints(bob, bobInitialPoints);
 
@@ -134,8 +134,18 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         emit Tip(bob, charlie, "", amount + 1 - bobInitialPoints);
         _token.tip(amount + 1, charlie, "");
 
+        uint256 expectedBobTokenBalance = bobInitialPoints - 1;
+
         // points is prioritized to be used over balance
-        _checkBalanceAndPoints(bob, bobInitialPoints - 1, 0);
+        _checkBalanceAndPoints(bob, expectedBobTokenBalance, 0);
+
+        // Bob tips alice only with tokens
+
+        vm.expectEmit();
+        emit Transfer(bob, alice, expectedBobTokenBalance);
+        emit Tip(bob, alice, "", expectedBobTokenBalance);
+        vm.prank(bob);
+        _token.tip(expectedBobTokenBalance, alice, "");
     }
 
     function testWithdraw(uint256 amount) public {
@@ -146,6 +156,10 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         vm.prank(alice);
         _token.tip(amount, address(0x0), someFeedId1);
+
+        vm.prank(appAdmin);
+        vm.expectRevert(abi.encodeWithSelector(PointsInvalidReceiver.selector, bytes32(0)));
+        _token.withdraw(charlie, "");
 
         vm.prank(appAdmin);
         _token.withdraw(charlie, someFeedId1);

@@ -37,10 +37,6 @@ contract PowerToken is
 
     /// @inheritdoc IPowerToken
     function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE) {
-        if (to == address(0)) {
-            revert PointsInvalidReceiver(address(0));
-        }
-
         _pointsBalances[to] += amount;
         _mint(address(this), amount);
 
@@ -88,7 +84,7 @@ contract PowerToken is
 
     /// @inheritdoc IPowerToken
     function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE) {
-        if (feedId == bytes32(0)) revert PointsInvalidReceiver(address(0));
+        if (feedId == bytes32(0)) revert PointsInvalidReceiver(bytes32(0));
 
         uint256 amount = _feedBalances[feedId];
         _feedBalances[feedId] = 0;
