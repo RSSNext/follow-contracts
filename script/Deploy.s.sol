@@ -58,7 +58,7 @@ contract Deploy is Deployer {
 
     /// @notice Deploy all of the proxies
     function deployProxies() public {
-        deployProxy("Billing");
+        deployProxy("PowerToken");
     }
 
     /// @notice Deploy all of the logic contracts
