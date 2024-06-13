@@ -1,4 +1,4 @@
 | Name            | Type                        | Slot | Offset | Bytes | Contract                      |
 |-----------------|-----------------------------|------|--------|-------|-------------------------------|
 | _pointsBalances | mapping(address => uint256) | 0    | 0      | 32    | src/PowerToken.sol:PowerToken |
-| _feedBalances   | mapping(bytes32 => uint256) | 1    | 0      | 32    | src/PowerToken.sol:PowerToken |
+| _entryBalances  | mapping(bytes32 => uint256) | 1    | 0      | 32    | src/PowerToken.sol:PowerToken |
