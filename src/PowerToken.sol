@@ -21,17 +21,18 @@ contract PowerToken is
     /// @dev Points balances of the users, which are non-transferable and can be used to tip others.
     mapping(address account => uint256) internal _pointsBalances;
 
-    /// @dev Token balances of the feed, which could be withdrawn to the feed owner.
-    mapping(bytes32 feedId => uint256) internal _feedBalances;
+    /// @dev Token balances of the feed, which could be withdrawn to the entry owner.
+    mapping(bytes32 entryId => uint256) internal _entryBalances;
 
     /// @inheritdoc IPowerToken
     function initialize(
         string calldata name_,
         string calldata symbol_,
         address admin_
-    ) external override initializer {
+    ) external override reinitializer(2) {
         super.__ERC20_init(name_, symbol_);
 
+        _grantRole(DEFAULT_ADMIN_ROLE, admin_);
         _grantRole(APP_ADMIN_ROLE, admin_);
     }
 
@@ -44,10 +45,10 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function tip(uint256 amount, address to, bytes32 feedId) external override {
+    function tip(uint256 amount, address to, bytes32 entryId) external override {
         if (amount == 0) revert TipAmountIsZero();
 
-        if (feedId == bytes32(0) && to == address(0)) revert TipReceiverIsEmpty();
+        if (entryId == bytes32(0) && to == address(0)) revert TipReceiverIsEmpty();
 
         uint256 oldPoints = _pointsBalances[msg.sender];
         uint256 newPoints;
@@ -72,25 +73,25 @@ contract PowerToken is
             _transfer(address(this), to, amount - amountToTransfer);
         } else {
             receiver = address(this);
-            _feedBalances[feedId] += amount;
+            _entryBalances[entryId] += amount;
         }
 
         if (amountToTransfer > 0) {
             _transfer(msg.sender, receiver, amountToTransfer);
         }
 
-        emit Tip(msg.sender, to, feedId, amount);
+        emit Tip(msg.sender, to, entryId, amount);
     }
 
     /// @inheritdoc IPowerToken
-    function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE) {
-        if (feedId == bytes32(0)) revert PointsInvalidReceiver(bytes32(0));
+    function withdraw(address to, bytes32 entryId) external override onlyRole(APP_ADMIN_ROLE) {
+        if (entryId == bytes32(0)) revert PointsInvalidReceiver(bytes32(0));
 
-        uint256 amount = _feedBalances[feedId];
-        _feedBalances[feedId] = 0;
+        uint256 amount = _entryBalances[entryId];
+        _entryBalances[entryId] = 0;
         _transfer(address(this), to, amount);
 
-        emit Withdraw(to, feedId, amount);
+        emit Withdraw(to, entryId, amount);
     }
 
     /// @inheritdoc IPowerToken
@@ -99,7 +100,7 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function balanceOfByFeed(bytes32 feedId) external view override returns (uint256) {
-        return _feedBalances[feedId];
+    function balanceOfByEntry(bytes32 entryId) external view override returns (uint256) {
+        return _entryBalances[entryId];
     }
 }

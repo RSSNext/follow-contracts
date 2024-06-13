@@ -452,11 +452,11 @@
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "feedId",
+                "name": "entryId",
                 "type": "bytes32"
             }
         ],
-        "name": "balanceOfByFeed",
+        "name": "balanceOfByEntry",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -739,7 +739,7 @@
             },
             {
                 "internalType": "bytes32",
-                "name": "feedId",
+                "name": "entryId",
                 "type": "bytes32"
             }
         ],
@@ -823,7 +823,7 @@
             },
             {
                 "internalType": "bytes32",
-                "name": "feedId",
+                "name": "entryId",
                 "type": "bytes32"
             }
         ],
