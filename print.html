@@ -211,7 +211,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors"><a class="header" href="#ierrors">IErrors</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/8ec44438029ee7b1470c7073a8a96ed4ca5683de/src/interfaces/IErrors.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/49e99bc2ca9575854b5e8672716f4887fdabeddf/src/interfaces/IErrors.sol">Git Source</a></p>
 <h2 id="errors"><a class="header" href="#errors">Errors</a></h2>
 <h3 id="tipreceiverisempty"><a class="header" href="#tipreceiverisempty">TipReceiverIsEmpty</a></h3>
 <p><em>Tip parameter is empty.</em></p>
@@ -230,7 +230,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <pre><code class="language-solidity">error InsufficientBalanceAndPoints();
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ievents"><a class="header" href="#ievents">IEvents</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/8ec44438029ee7b1470c7073a8a96ed4ca5683de/src/interfaces/IEvents.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/49e99bc2ca9575854b5e8672716f4887fdabeddf/src/interfaces/IEvents.sol">Git Source</a></p>
 <h2 id="events"><a class="header" href="#events">Events</a></h2>
 <h3 id="distributepoints"><a class="header" href="#distributepoints">DistributePoints</a></h3>
 <p><em>Emitted when points are distributed to an address.</em></p>
@@ -245,7 +245,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <pre><code class="language-solidity">event Withdraw(address indexed to, bytes32 indexed feedId, uint256 indexed amount);
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/8ec44438029ee7b1470c7073a8a96ed4ca5683de/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/49e99bc2ca9575854b5e8672716f4887fdabeddf/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -271,35 +271,35 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </div>
 <h3 id="tip-1"><a class="header" href="#tip-1">tip</a></h3>
 <p>Tips with token points. If token points are not enough, it will try the balance.</p>
-<p><em>The to and feedId are optional, but at least one of them must be provided.
+<p><em>The to and entryId are optional, but at least one of them must be provided.
 If both are provided, the <code>to</code> will be used.</em></p>
-<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external;
+<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 entryId) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send. It can be empty.</td></tr>
 <tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
+<tr><td><code>entryId</code></td><td><code>bytes32</code></td><td>The entry id. It can be empty.</td></tr>
 </tbody></table>
 </div>
 <h3 id="withdraw-1"><a class="header" href="#withdraw-1">withdraw</a></h3>
-<p>Withdraws tokens by feedId. <code>to</code> is supposed to be the true owner of the feedId.</p>
+<p>Withdraws tokens by entryId. <code>to</code> is supposed to be the true owner of the entryId.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external;
+<pre><code class="language-solidity">function withdraw(address to, bytes32 entryId) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>to</code></td><td><code>address</code></td><td>The address who receives the tokens.</td></tr>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The amount belongs to the feedId.</td></tr>
+<tr><td><code>entryId</code></td><td><code>bytes32</code></td><td>The amount belongs to the entryId.</td></tr>
 </tbody></table>
 </div>
-<h3 id="balanceofbyfeed"><a class="header" href="#balanceofbyfeed">balanceOfByFeed</a></h3>
-<p>Return the balance of the feedId</p>
-<pre><code class="language-solidity">function balanceOfByFeed(bytes32 feedId) external view returns (uint256);
+<h3 id="balanceofbyentry"><a class="header" href="#balanceofbyentry">balanceOfByEntry</a></h3>
+<p>Return the balance of the entryId</p>
+<pre><code class="language-solidity">function balanceOfByEntry(bytes32 entryId) external view returns (uint256);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id</td></tr>
+<tr><td><code>entryId</code></td><td><code>bytes32</code></td><td>The entry id</td></tr>
 </tbody></table>
 </div>
 <p><strong>Returns</strong></p>
@@ -325,7 +325,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/8ec44438029ee7b1470c7073a8a96ed4ca5683de/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/49e99bc2ca9575854b5e8672716f4887fdabeddf/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
 <p>*This contract implements a proxy that is upgradeable by an admin.
@@ -398,7 +398,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/8ec44438029ee7b1470c7073a8a96ed4ca5683de/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/49e99bc2ca9575854b5e8672716f4887fdabeddf/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, <a href="src/PowerToken.sol//src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/PowerToken.sol//src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
@@ -409,14 +409,17 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <p><em>Points balances of the users, which are non-transferable and can be used to tip others.</em></p>
 <pre><code class="language-solidity">mapping(address account =&gt; uint256) internal _pointsBalances;
 </code></pre>
-<h3 id="_feedbalances"><a class="header" href="#_feedbalances">_feedBalances</a></h3>
-<p><em>Token balances of the feed, which could be withdrawn to the feed owner.</em></p>
-<pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _feedBalances;
+<h3 id="_entrybalances"><a class="header" href="#_entrybalances">_entryBalances</a></h3>
+<p><em>Token balances of the feed, which could be withdrawn to the entry owner.</em></p>
+<pre><code class="language-solidity">mapping(bytes32 entryId =&gt; uint256) internal _entryBalances;
 </code></pre>
 <h2 id="functions-2"><a class="header" href="#functions-2">Functions</a></h2>
 <h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
-<pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_, address admin_) external override initializer;
+<pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_, address admin_)
+    external
+    override
+    reinitializer(2);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -438,26 +441,26 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 </div>
 <h3 id="tip-2"><a class="header" href="#tip-2">tip</a></h3>
 <p>Tips with token points. If token points are not enough, it will try the balance.</p>
-<p><em>The to and feedId are optional, but at least one of them must be provided.
+<p><em>The to and entryId are optional, but at least one of them must be provided.
 If both are provided, the <code>to</code> will be used.</em></p>
-<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId) external override;
+<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 entryId) external override;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send. It can be empty.</td></tr>
 <tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
+<tr><td><code>entryId</code></td><td><code>bytes32</code></td><td>The entry id. It can be empty.</td></tr>
 </tbody></table>
 </div>
 <h3 id="withdraw-2"><a class="header" href="#withdraw-2">withdraw</a></h3>
-<p>Withdraws tokens by feedId. <code>to</code> is supposed to be the true owner of the feedId.</p>
+<p>Withdraws tokens by entryId. <code>to</code> is supposed to be the true owner of the entryId.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
+<pre><code class="language-solidity">function withdraw(address to, bytes32 entryId) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>to</code></td><td><code>address</code></td><td>The address who receives the tokens.</td></tr>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The amount belongs to the feedId.</td></tr>
+<tr><td><code>entryId</code></td><td><code>bytes32</code></td><td>The amount belongs to the entryId.</td></tr>
 </tbody></table>
 </div>
 <h3 id="balanceofpoints-1"><a class="header" href="#balanceofpoints-1">balanceOfPoints</a></h3>
@@ -474,13 +477,13 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>The amount of the balance</td></tr>
 </tbody></table>
 </div>
-<h3 id="balanceofbyfeed-1"><a class="header" href="#balanceofbyfeed-1">balanceOfByFeed</a></h3>
-<p>Return the balance of the feedId</p>
-<pre><code class="language-solidity">function balanceOfByFeed(bytes32 feedId) external view override returns (uint256);
+<h3 id="balanceofbyentry-1"><a class="header" href="#balanceofbyentry-1">balanceOfByEntry</a></h3>
+<p>Return the balance of the entryId</p>
+<pre><code class="language-solidity">function balanceOfByEntry(bytes32 entryId) external view override returns (uint256);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id</td></tr>
+<tr><td><code>entryId</code></td><td><code>bytes32</code></td><td>The entry id</td></tr>
 </tbody></table>
 </div>
 <p><strong>Returns</strong></p>
