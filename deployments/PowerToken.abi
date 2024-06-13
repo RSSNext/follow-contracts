@@ -292,7 +292,7 @@
             {
                 "indexed": true,
                 "internalType": "bytes32",
-                "name": "feedId",
+                "name": "entryId",
                 "type": "bytes32"
             },
             {
@@ -342,7 +342,7 @@
             {
                 "indexed": true,
                 "internalType": "bytes32",
-                "name": "feedId",
+                "name": "entryId",
                 "type": "bytes32"
             },
             {
