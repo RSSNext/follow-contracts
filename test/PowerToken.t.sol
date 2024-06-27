@@ -16,9 +16,9 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     address public constant alice = address(0x123);
     address public constant bob = address(0x456);
     address public constant charlie = address(0x789);
-    bytes32 public constant someEntryId1 = bytes32("someEntryId1");
-    bytes32 public constant someEntryId2 = bytes32("someEntryId2");
-    bytes32 public constant someEntryId3 = bytes32("someEntryId3");
+    bytes32 public constant someFeedId1 = bytes32("someFeedId1");
+    bytes32 public constant someFeedId2 = bytes32("someFeedId2");
+    bytes32 public constant someFeedId3 = bytes32("someFeedId3");
 
     PowerToken internal _token;
 
@@ -70,8 +70,8 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.tip(2 * initialPoints, bob, "");
 
         expectEmit();
-        emit Tip(alice, address(0x0), someEntryId1, 10);
-        _token.tip(10, address(0x0), someEntryId1);
+        emit Tip(alice, address(0x0), someFeedId1, 10);
+        _token.tip(10, address(0x0), someFeedId1);
     }
 
     function testTipEntryAndBalanceOf() public {
@@ -82,23 +82,23 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         assertEq(balance, 0);
 
         vm.startPrank(alice);
-        _token.tip(10, address(0x0), someEntryId1);
-        _token.tip(20, address(0x0), someEntryId2);
-        _token.tip(30, address(0x0), someEntryId3);
+        _token.tip(10, address(0x0), someFeedId1);
+        _token.tip(20, address(0x0), someFeedId2);
+        _token.tip(30, address(0x0), someFeedId3);
         vm.stopPrank();
 
         vm.startPrank(bob);
-        _token.tip(15, address(0x0), someEntryId1);
-        _token.tip(25, address(0x0), someEntryId2);
-        _token.tip(35, address(0x0), someEntryId3);
+        _token.tip(15, address(0x0), someFeedId1);
+        _token.tip(25, address(0x0), someFeedId2);
+        _token.tip(35, address(0x0), someFeedId3);
         vm.stopPrank();
 
-        uint256 entryBalance1 = _token.balanceOfByEntry(someEntryId1);
-        uint256 entryBalance2 = _token.balanceOfByEntry(someEntryId2);
-        uint256 entryBalance3 = _token.balanceOfByEntry(someEntryId3);
-        assertEq(entryBalance1, 10 + 15);
-        assertEq(entryBalance2, 20 + 25);
-        assertEq(entryBalance3, 30 + 35);
+        uint256 feedBalance1 = _token.balanceOfByFeed(someFeedId1);
+        uint256 feedBalance2 = _token.balanceOfByFeed(someFeedId2);
+        uint256 feedBalance3 = _token.balanceOfByFeed(someFeedId3);
+        assertEq(feedBalance1, 10 + 15);
+        assertEq(feedBalance2, 20 + 25);
+        assertEq(feedBalance3, 30 + 35);
     }
 
     function testTipAddress(uint256 amount) public {
@@ -155,14 +155,14 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         vm.assume(amount > 10 && amount < initialPoints);
 
         vm.prank(alice);
-        _token.tip(amount, address(0x0), someEntryId1);
+        _token.tip(amount, address(0x0), someFeedId1);
 
         vm.prank(appAdmin);
         vm.expectRevert(abi.encodeWithSelector(PointsInvalidReceiver.selector, bytes32(0)));
         _token.withdraw(charlie, "");
 
         vm.prank(appAdmin);
-        _token.withdraw(charlie, someEntryId1);
+        _token.withdraw(charlie, someFeedId1);
 
         _checkBalanceAndPoints(alice, 0, initialPoints - amount);
         _checkBalanceAndPoints(charlie, amount, 0);

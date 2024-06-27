@@ -9,9 +9,9 @@ interface IEvents {
     /**
      * @dev Emitted when points are tipped from one address to another.
      */
-    event Tip(address indexed from, address indexed to, bytes32 indexed entryId, uint256 amount);
+    event Tip(address indexed from, address indexed to, bytes32 indexed feedId, uint256 amount);
     /**
      * @dev Emitted when points are withdrawn from an address.
      */
-    event Withdraw(address indexed to, bytes32 indexed entryId, uint256 indexed amount);
+    event Withdraw(address indexed to, bytes32 indexed feedId, uint256 indexed amount);
 }
