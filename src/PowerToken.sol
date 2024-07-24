@@ -16,6 +16,8 @@ contract PowerToken is
     AccessControlEnumerableUpgradeable,
     ERC20Upgradeable
 {
+    string public constant version = "1.0.0";
+
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 
     /// @dev Points balances of the users, which are non-transferable and can be used to tip others.
