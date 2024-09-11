@@ -11,6 +11,14 @@ interface IPowerToken {
     function initialize(string calldata name_, string calldata symbol_, address admin_) external;
 
     /**
+     * @notice Migrates the token points of users.
+     * @dev The caller must have the APP_ADMIN_ROLE.
+     * @param users The addresses of the users to migrate.
+     * @param feedIds The feed ids of the feeds to migrate.
+     */
+    function migrate(address[] calldata users, bytes32[] calldata feedIds) external;
+
+    /**
      * @notice Mints new token points.
      * @dev The caller must have the APP_ADMIN_ROLE.
      * @param to The account to receive the token points.

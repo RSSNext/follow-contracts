@@ -44,6 +44,32 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
+    function migrate(
+        address[] calldata users,
+        bytes32[] calldata feedIds
+    ) external override onlyRole(APP_ADMIN_ROLE) {
+        // migrate points balances
+        for (uint256 i = 0; i < users.length; i++) {
+            address user = users[i];
+            uint256 points = _pointsBalancesV1[user] * 10;
+
+            _pointsBalancesV2[user] += points;
+            _mint(user, points);
+            emit DistributePoints(user, points);
+
+            delete _pointsBalancesV1[user];
+        }
+
+        // migrate feed balances
+        for (uint256 i = 0; i < feedIds.length; i++) {
+            bytes32 feedId = feedIds[i];
+
+            _mint(address(this), _feedBalances[feedId] * 9);
+            _feedBalances[feedId] *= 10;
+        }
+    }
+
+    /// @inheritdoc IPowerToken
     function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE) {
         _pointsBalancesV2[to] += amount;
         _mint(to, amount);
