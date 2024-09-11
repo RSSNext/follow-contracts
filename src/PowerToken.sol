@@ -49,11 +49,16 @@ contract PowerToken is
         address[] calldata users,
         bytes32[] calldata feedIds
     ) external override onlyRole(APP_ADMIN_ROLE) {
-        // migrate points balances
+        // migrate balances and points balances
         for (uint256 i = 0; i < users.length; i++) {
             address user = users[i];
-            uint256 points = _pointsBalancesV1[user] * 10;
 
+            // mint 9 times of the balance to the user
+            uint256 balance = balanceOf(user);
+            _mint(user, balance * 9);
+
+            // mint 10 times of the v2 points balances to the user
+            uint256 points = _pointsBalancesV1[user] * 10;
             _pointsBalancesV2[user] += points;
             _mint(user, points);
             emit DistributePoints(user, points);

@@ -22,6 +22,8 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
     PowerToken internal _token;
 
+    error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);
+
     function setUp() public {
         PowerToken tokenImpl = new PowerToken();
 
@@ -47,6 +49,24 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         assertEq(_token.balanceOf(alice), amount);
         assertEq(_token.balanceOfPoints(alice), amount);
         assertEq(_token.balanceOfPoints(address(_token)), 0);
+    }
+
+    function testMintFail() public {
+        // case 1: caller has no `APP_ADMIN_ROLE` permission
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector,
+                address(this),
+                keccak256("APP_ADMIN_ROLE")
+            )
+        );
+        _token.mint(alice, 1);
+
+        // case 2: max supply is reached
+        uint256 maxSupply = _token.MAX_SUPPLY();
+        vm.expectRevert(abi.encodeWithSelector(ExceedsMaxSupply.selector));
+        vm.prank(appAdmin);
+        _token.mint(alice, maxSupply + 1);
     }
 
     function testTip(uint256 amount) public {
