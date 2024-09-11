@@ -182,6 +182,8 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         vm.prank(alice);
         _token.tip(amount, address(0x0), someFeedId1);
 
+        expectEmit();
+        emit WithdrawnByFeedId(charlie, someFeedId1, amount);
         vm.prank(appAdmin);
         _token.withdrawByFeedId(charlie, someFeedId1);
 
@@ -211,6 +213,8 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         vm.expectEmit();
         emit Transfer(bob, receiver, withdrawAmount);
+        vm.expectEmit();
+        emit Withdrawn(bob, receiver, withdrawAmount);
         vm.prank(bob);
         _token.withdraw(receiver, withdrawAmount);
 

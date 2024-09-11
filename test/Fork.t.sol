@@ -59,6 +59,8 @@ contract ForkTest is Utils, IErrors, IEvents {
             balancesOfFeeds[i] = _token.balanceOfByFeed(feedIds[i]);
         }
 
+        uint256 totalSupply = _token.totalSupply();
+
         vm.prank(0xf496eEeD857aA4709AC4D5B66b6711975623D355);
         _token.migrate(users, feedIds);
 
@@ -72,6 +74,16 @@ contract ForkTest is Utils, IErrors, IEvents {
         for (uint256 i = 0; i < feedIds.length; i++) {
             assertEq(_token.balanceOfByFeed(feedIds[i]), balancesOfFeeds[i] * 10);
         }
+
+        // check total supply
+        uint256 delta;
+        for (uint256 i = 0; i < users.length; i++) {
+            delta += balances[i] * 9 + balancesOfPoints[i] * 9;
+        }
+        for (uint256 i = 0; i < feedIds.length; i++) {
+            delta += balancesOfFeeds[i] * 9;
+        }
+        assertEq(_token.totalSupply(), totalSupply + delta);
     }
 
     function testTipToFeed() public {

@@ -57,11 +57,11 @@ contract PowerToken is
             uint256 balance = balanceOf(user);
             _mint(user, balance * 9);
 
-            // mint 10 times of the v2 points balances to the user
-            uint256 points = _pointsBalancesV1[user] * 10;
-            _pointsBalancesV2[user] += points;
-            _mint(user, points);
-            emit DistributePoints(user, points);
+            // migrate v1 points balances to v2
+            uint256 points = _pointsBalancesV1[user];
+            _mintPoints(user, points * 10);
+            // burn the v1 points balances from token contract
+            _burn(address(this), points);
 
             delete _pointsBalancesV1[user];
         }
@@ -77,11 +77,7 @@ contract PowerToken is
 
     /// @inheritdoc IPowerToken
     function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE) {
-        _pointsBalancesV2[to] += amount;
-        _mint(to, amount);
-        if (totalSupply() > MAX_SUPPLY) revert ExceedsMaxSupply();
-
-        emit DistributePoints(to, amount);
+        _mintPoints(to, amount);
     }
 
     /// @inheritdoc IPowerToken
@@ -143,5 +139,18 @@ contract PowerToken is
         if (value > balance - points) revert InsufficientBalanceToWithdraw();
 
         return super.transfer(to, value);
+    }
+
+    /**
+     * @dev Mints points to a specified address.
+     * Increases the points balance of the recipient and mints the corresponding amount of tokens.
+     * Reverts if the total supply exceeds the maximum supply.
+     */
+    function _mintPoints(address to, uint256 amount) internal {
+        _pointsBalancesV2[to] += amount;
+        _mint(to, amount);
+        if (totalSupply() > MAX_SUPPLY) revert ExceedsMaxSupply();
+
+        emit DistributePoints(to, amount);
     }
 }
