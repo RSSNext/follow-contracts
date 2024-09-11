@@ -168,6 +168,37 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _checkBalanceAndPoints(charlie, amount, 0);
     }
 
+    function testWithdraw(uint256 amount) public {
+        amount = bound(amount, 1, 100 ether);
+        uint256 tipAmount = bound(amount, 1, amount);
+
+        _mintPoints(alice, amount);
+        _mintPoints(bob, amount);
+
+        vm.prank(alice);
+        _token.tip(tipAmount, bob, "");
+
+        uint256 withdrawAmount = bound(amount, 1, tipAmount);
+        address receiver = address(0xaaaa);
+
+        vm.expectEmit();
+        emit Transfer(bob, receiver, withdrawAmount);
+        vm.prank(bob);
+        _token.withdraw(receiver, withdrawAmount);
+
+        _checkBalanceAndPoints(alice, amount - tipAmount, amount - tipAmount);
+        _checkBalanceAndPoints(bob, amount + tipAmount - withdrawAmount, amount);
+        _checkBalanceAndPoints(receiver, withdrawAmount, 0);
+    }
+
+    function testWithdrawFail() public {
+        _mintPoints(alice, 100);
+
+        vm.prank(alice);
+        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToWithdraw.selector));
+        _token.withdraw(bob, 1);
+    }
+
     function _mintPoints(address user, uint256 amount) internal {
         vm.prank(appAdmin);
         _token.mint(user, amount);
