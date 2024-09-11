@@ -20,11 +20,16 @@ contract PowerToken is
 
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 
-    /// @dev Points balances of the users, which are non-transferable and can be used to tip others.
-    mapping(address account => uint256) internal _pointsBalances;
+    uint256 public constant MAX_SUPPLY = 1000000000 ether;
+
+    mapping(address account => uint256) internal _pointsBalancesV1;
 
     /// @dev Token balances of the feed, which could be withdrawn to the feed owner.
     mapping(bytes32 feedId => uint256) internal _feedBalances;
+
+    /// @dev Points balances of the users, which are non-transferable and can be used to tip others.
+    /// Points balances are included in user's balance.
+    mapping(address account => uint256) internal _pointsBalancesV2;
 
     /// @inheritdoc IPowerToken
     function initialize(
@@ -40,8 +45,9 @@ contract PowerToken is
 
     /// @inheritdoc IPowerToken
     function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE) {
-        _pointsBalances[to] += amount;
-        _mint(address(this), amount);
+        _pointsBalancesV2[to] += amount;
+        _mint(to, amount);
+        if (totalSupply() > MAX_SUPPLY) revert ExceedsMaxSupply();
 
         emit DistributePoints(to, amount);
     }
@@ -52,53 +58,58 @@ contract PowerToken is
 
         if (feedId == bytes32(0) && to == address(0)) revert TipReceiverIsEmpty();
 
-        uint256 oldPoints = _pointsBalances[msg.sender];
+        uint256 oldPoints = _pointsBalancesV2[msg.sender];
         uint256 newPoints;
-
-        uint256 amountToTransfer;
-
         if (oldPoints >= amount) {
             newPoints = oldPoints - amount;
-            amountToTransfer = 0;
-        } else if (oldPoints + balanceOf(msg.sender) >= amount) {
+        } else if (balanceOf(msg.sender) >= amount) {
             newPoints = 0;
-            amountToTransfer = amount - oldPoints;
         } else {
             revert InsufficientBalanceAndPoints();
         }
-
-        _pointsBalances[msg.sender] = newPoints;
+        _pointsBalancesV2[msg.sender] = newPoints;
 
         address receiver;
         if (to != address(0)) {
             receiver = to;
-            _transfer(address(this), to, amount - amountToTransfer);
         } else {
             receiver = address(this);
             _feedBalances[feedId] += amount;
         }
 
-        if (amountToTransfer > 0) {
-            _transfer(msg.sender, receiver, amountToTransfer);
-        }
+        _transfer(msg.sender, receiver, amount);
 
         emit Tip(msg.sender, to, feedId, amount);
     }
 
     /// @inheritdoc IPowerToken
-    function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE) {
+    function withdrawByFeedId(
+        address to,
+        bytes32 feedId
+    ) external override onlyRole(APP_ADMIN_ROLE) {
         if (feedId == bytes32(0)) revert PointsInvalidReceiver(bytes32(0));
 
         uint256 amount = _feedBalances[feedId];
         _feedBalances[feedId] = 0;
         _transfer(address(this), to, amount);
 
-        emit Withdraw(to, feedId, amount);
+        emit WithdrawnByFeedId(to, feedId, amount);
+    }
+
+    /// @inheritdoc IPowerToken
+    function withdraw(address to, uint256 amount) external override {
+        uint256 points = _pointsBalancesV2[msg.sender];
+        uint256 totalBalance = balanceOf(msg.sender);
+        if (amount > totalBalance - points) revert InsufficientBalanceToWithdraw();
+
+        _transfer(msg.sender, to, amount);
+
+        emit Withdrawn(msg.sender, to, amount);
     }
 
     /// @inheritdoc IPowerToken
     function balanceOfPoints(address owner) external view override returns (uint256) {
-        return _pointsBalances[owner];
+        return _pointsBalancesV2[owner];
     }
 
     /// @inheritdoc IPowerToken

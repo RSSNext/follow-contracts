@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// solhint-disable comprehensive-interface,no-console,no-empty-blocks
+// solhint-disable comprehensive-interface,no-console,no-empty-blocks,function-max-lines
 pragma solidity 0.8.22;
 
 import {Utils} from "./helpers/Utils.sol";
@@ -35,21 +35,18 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     }
 
     function testMintAndBalanceOfPoints(uint256 amount) public {
-        vm.assume(amount > 0 && amount < 10000);
+        amount = bound(amount, 1, 10000 ether);
 
         expectEmit();
-        emit Transfer(address(0), address(_token), amount);
+        emit Transfer(address(0), alice, amount);
         emit DistributePoints(alice, amount);
-        _mintPoints(alice, amount);
+        vm.prank(appAdmin);
+        _token.mint(alice, amount);
 
-        uint256 balance = _token.balanceOf(alice);
-        assertEq(balance, 0);
-
-        uint256 pointsBalance = _token.balanceOfPoints(alice);
-        assertEq(pointsBalance, amount);
-
-        uint256 tokenBalance = _token.balanceOf(address(_token));
-        assertEq(tokenBalance, amount);
+        // check balance and points
+        assertEq(_token.balanceOf(alice), amount);
+        assertEq(_token.balanceOfPoints(alice), amount);
+        assertEq(_token.balanceOfPoints(address(_token)), 0);
     }
 
     function testTip(uint256 amount) public {
@@ -72,6 +69,11 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         expectEmit();
         emit Tip(alice, address(0x0), someFeedId1, 10);
         _token.tip(10, address(0x0), someFeedId1);
+        vm.stopPrank();
+
+        assertEq(_token.balanceOf(alice), initialPoints - 10);
+        assertEq(_token.balanceOfPoints(alice), initialPoints - 10);
+        assertEq(_token.balanceOfByFeed(someFeedId1), 10);
     }
 
     function testTipEntryAndBalanceOf() public {
@@ -111,27 +113,26 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         vm.prank(alice);
 
         vm.expectEmit();
-        emit Transfer(address(_token), bob, amount);
+        emit Transfer(alice, bob, amount);
         emit Tip(alice, bob, "", amount);
         _token.tip(amount, bob, "");
 
-        _checkBalanceAndPoints(alice, 0, initialPoints - amount);
+        _checkBalanceAndPoints(alice, initialPoints - amount, initialPoints - amount);
         _checkBalanceAndPoints(bob, amount, 0);
 
         // Bob is minted with some points. Then bob tips charlie (points + balance)
         uint256 bobInitialPoints = amount / 2;
         _mintPoints(bob, bobInitialPoints);
 
-        _checkBalanceAndPoints(bob, amount, bobInitialPoints);
+        _checkBalanceAndPoints(bob, amount + bobInitialPoints, bobInitialPoints);
 
         vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceAndPoints.selector));
         _token.tip(amount * 2, charlie, "");
 
         vm.prank(bob);
         vm.expectEmit();
-        emit Transfer(address(_token), charlie, bobInitialPoints);
-        emit Transfer(bob, charlie, amount + 1 - bobInitialPoints);
-        emit Tip(bob, charlie, "", amount + 1 - bobInitialPoints);
+        emit Transfer(bob, charlie, amount + 1);
+        emit Tip(bob, charlie, "", amount + 1);
         _token.tip(amount + 1, charlie, "");
 
         uint256 expectedBobTokenBalance = bobInitialPoints - 1;
@@ -140,7 +141,6 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _checkBalanceAndPoints(bob, expectedBobTokenBalance, 0);
 
         // Bob tips alice only with tokens
-
         vm.expectEmit();
         emit Transfer(bob, alice, expectedBobTokenBalance);
         emit Tip(bob, alice, "", expectedBobTokenBalance);
@@ -148,7 +148,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.tip(expectedBobTokenBalance, alice, "");
     }
 
-    function testWithdraw(uint256 amount) public {
+    function testWithdrawByFeedId(uint256 amount) public {
         uint256 initialPoints = 100;
         _mintPoints(alice, initialPoints);
 
@@ -159,12 +159,12 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         vm.prank(appAdmin);
         vm.expectRevert(abi.encodeWithSelector(PointsInvalidReceiver.selector, bytes32(0)));
-        _token.withdraw(charlie, "");
+        _token.withdrawByFeedId(charlie, "");
 
         vm.prank(appAdmin);
-        _token.withdraw(charlie, someFeedId1);
+        _token.withdrawByFeedId(charlie, someFeedId1);
 
-        _checkBalanceAndPoints(alice, 0, initialPoints - amount);
+        _checkBalanceAndPoints(alice, initialPoints - amount, initialPoints - amount);
         _checkBalanceAndPoints(charlie, amount, 0);
     }
 

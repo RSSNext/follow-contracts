@@ -13,4 +13,10 @@ interface IErrors {
 
     /// @dev Insufficient balance and points.
     error InsufficientBalanceAndPoints();
+
+    /// @dev Insufficient balance to withdraw.
+    error InsufficientBalanceToWithdraw();
+
+    /// @dev Exceeds max supply.
+    error ExceedsMaxSupply();
 }
