@@ -69,34 +69,23 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.mint(alice, maxSupply + 1);
     }
 
-    function testTip(uint256 amount) public {
-        uint256 initialPoints = 100;
-        vm.assume(amount > 10 && amount < initialPoints);
+    function testTipFeedId(uint256 amount) public {
+        amount = bound(amount, 1, 10000 ether);
+        uint256 initialPoints = 10 * amount;
 
         _mintPoints(alice, initialPoints);
 
-        vm.startPrank(alice);
-
-        vm.expectRevert(abi.encodeWithSelector(TipReceiverIsEmpty.selector));
-        _token.tip(amount, address(0x0), "");
-
-        vm.expectRevert(abi.encodeWithSelector(TipAmountIsZero.selector));
-        _token.tip(0, bob, "");
-
-        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceAndPoints.selector));
-        _token.tip(2 * initialPoints, bob, "");
-
         expectEmit();
         emit Tip(alice, address(0x0), someFeedId1, 10);
+        vm.prank(alice);
         _token.tip(10, address(0x0), someFeedId1);
-        vm.stopPrank();
 
         assertEq(_token.balanceOf(alice), initialPoints - 10);
         assertEq(_token.balanceOfPoints(alice), initialPoints - 10);
         assertEq(_token.balanceOfByFeed(someFeedId1), 10);
     }
 
-    function testTipEntryAndBalanceOf() public {
+    function testTipFeedIdMultiple() public {
         _mintPoints(alice, 100);
         _mintPoints(bob, 100);
 
@@ -121,6 +110,8 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         assertEq(feedBalance1, 10 + 15);
         assertEq(feedBalance2, 20 + 25);
         assertEq(feedBalance3, 30 + 35);
+
+        assertEq(_token.balanceOf(address(_token)), 135);
     }
 
     function testTipAddress(uint256 amount) public {
@@ -168,24 +159,41 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.tip(expectedBobTokenBalance, alice, "");
     }
 
-    function testWithdrawByFeedId(uint256 amount) public {
-        uint256 initialPoints = 100;
-        _mintPoints(alice, initialPoints);
+    function testTipFail() public {
+        // case 1:  TipAmountIsZero
+        vm.expectRevert(abi.encodeWithSelector(TipAmountIsZero.selector));
+        _token.tip(0, bob, "");
 
-        vm.assume(amount > 10 && amount < initialPoints);
+        // case 2: TipReceiverIsEmpty
+        vm.expectRevert(abi.encodeWithSelector(TipReceiverIsEmpty.selector));
+        _token.tip(1, address(0x0), "");
+
+        // case 3: InsufficientBalanceAndPoints
+        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceAndPoints.selector));
+        _token.tip(1, bob, "");
+    }
+
+    function testWithdrawByFeedId(uint256 amount) public {
+        amount = bound(amount, 1, 100 ether);
+        uint256 initialPoints = 10 * amount;
+
+        _mintPoints(alice, initialPoints);
 
         vm.prank(alice);
         _token.tip(amount, address(0x0), someFeedId1);
-
-        vm.prank(appAdmin);
-        vm.expectRevert(abi.encodeWithSelector(PointsInvalidReceiver.selector, bytes32(0)));
-        _token.withdrawByFeedId(charlie, "");
 
         vm.prank(appAdmin);
         _token.withdrawByFeedId(charlie, someFeedId1);
 
         _checkBalanceAndPoints(alice, initialPoints - amount, initialPoints - amount);
         _checkBalanceAndPoints(charlie, amount, 0);
+    }
+
+    function testWithdrawByFeedIdFail() public {
+        // case 1: PointsInvalidReceiver
+        vm.prank(appAdmin);
+        vm.expectRevert(abi.encodeWithSelector(PointsInvalidReceiver.selector, bytes32(0)));
+        _token.withdrawByFeedId(charlie, "");
     }
 
     function testWithdraw(uint256 amount) public {
@@ -211,12 +219,54 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _checkBalanceAndPoints(receiver, withdrawAmount, 0);
     }
 
-    function testWithdrawFail() public {
-        _mintPoints(alice, 100);
+    function testWithdrawFail(uint256 amount) public {
+        amount = bound(amount, 1, 100 ether);
+        uint256 tipAmount = bound(amount, 1, amount);
 
+        _mintPoints(alice, amount);
+        _mintPoints(bob, amount);
+
+        // case 1: InsufficientBalanceToWithdraw
         vm.prank(alice);
         vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToWithdraw.selector));
         _token.withdraw(bob, 1);
+
+        // case 2: InsufficientBalanceToWithdraw
+        vm.prank(alice);
+        _token.tip(tipAmount, bob, "");
+
+        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToWithdraw.selector));
+        _token.withdraw(bob, tipAmount + 1);
+    }
+
+    function testTransfer(uint256 amount) public {
+        amount = bound(amount, 1, 100 ether);
+        uint256 tipAmount = bound(amount, 1, amount);
+
+        _mintPoints(alice, amount);
+        _mintPoints(bob, amount);
+
+        vm.prank(alice);
+        _token.tip(tipAmount, bob, "");
+
+        uint256 transferAmount = bound(amount, 1, tipAmount);
+        address receiver = address(0xaaaa);
+
+        vm.expectEmit();
+        emit Transfer(bob, receiver, transferAmount);
+        vm.prank(bob);
+        _token.transfer(receiver, transferAmount);
+    }
+
+    function testTransferFail(uint256 amount) public {
+        amount = bound(amount, 1, 100 ether);
+
+        _mintPoints(alice, amount);
+
+        // can't transfer points
+        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToWithdraw.selector));
+        vm.prank(alice);
+        _token.transfer(bob, 1);
     }
 
     function _mintPoints(address user, uint256 amount) internal {

@@ -88,17 +88,13 @@ contract PowerToken is
     function tip(uint256 amount, address to, bytes32 feedId) external override {
         if (amount == 0) revert TipAmountIsZero();
         if (feedId == bytes32(0) && to == address(0)) revert TipReceiverIsEmpty();
+        if (balanceOf(msg.sender) < amount) revert InsufficientBalanceAndPoints();
 
-        uint256 oldPoints = _pointsBalancesV2[msg.sender];
-        uint256 newPoints;
-        if (oldPoints >= amount) {
-            newPoints = oldPoints - amount;
-        } else if (balanceOf(msg.sender) >= amount) {
-            newPoints = 0;
+        if (_pointsBalancesV2[msg.sender] >= amount) {
+            _pointsBalancesV2[msg.sender] -= amount;
         } else {
-            revert InsufficientBalanceAndPoints();
+            _pointsBalancesV2[msg.sender] = 0;
         }
-        _pointsBalancesV2[msg.sender] = newPoints;
 
         address receiver = to != address(0) ? to : address(this);
         if (receiver == address(this)) {
