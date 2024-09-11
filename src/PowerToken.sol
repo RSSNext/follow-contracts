@@ -6,6 +6,7 @@ import {
     AccessControlEnumerableUpgradeable
 } from "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
 import {IPowerToken} from "./interfaces/IPowerToken.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IErrors} from "./interfaces/IErrors.sol";
 import {IEvents} from "./interfaces/IEvents.sol";
 
@@ -36,7 +37,7 @@ contract PowerToken is
         string calldata name_,
         string calldata symbol_,
         address admin_
-    ) external override reinitializer(2) {
+    ) external override reinitializer(3) {
         super.__ERC20_init(name_, symbol_);
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin_);
@@ -81,7 +82,6 @@ contract PowerToken is
     /// @inheritdoc IPowerToken
     function tip(uint256 amount, address to, bytes32 feedId) external override {
         if (amount == 0) revert TipAmountIsZero();
-
         if (feedId == bytes32(0) && to == address(0)) revert TipReceiverIsEmpty();
 
         uint256 oldPoints = _pointsBalancesV2[msg.sender];
@@ -95,14 +95,10 @@ contract PowerToken is
         }
         _pointsBalancesV2[msg.sender] = newPoints;
 
-        address receiver;
-        if (to != address(0)) {
-            receiver = to;
-        } else {
-            receiver = address(this);
+        address receiver = to != address(0) ? to : address(this);
+        if (receiver == address(this)) {
             _feedBalances[feedId] += amount;
         }
-
         _transfer(msg.sender, receiver, amount);
 
         emit Tip(msg.sender, to, feedId, amount);
@@ -124,11 +120,7 @@ contract PowerToken is
 
     /// @inheritdoc IPowerToken
     function withdraw(address to, uint256 amount) external override {
-        uint256 points = _pointsBalancesV2[msg.sender];
-        uint256 totalBalance = balanceOf(msg.sender);
-        if (amount > totalBalance - points) revert InsufficientBalanceToWithdraw();
-
-        _transfer(msg.sender, to, amount);
+        transfer(to, amount);
 
         emit Withdrawn(msg.sender, to, amount);
     }
@@ -141,5 +133,14 @@ contract PowerToken is
     /// @inheritdoc IPowerToken
     function balanceOfByFeed(bytes32 feedId) external view override returns (uint256) {
         return _feedBalances[feedId];
+    }
+
+    /// @inheritdoc IERC20
+    function transfer(address to, uint256 value) public override returns (bool) {
+        uint256 points = _pointsBalancesV2[msg.sender];
+        uint256 balance = balanceOf(msg.sender);
+        if (value > balance - points) revert InsufficientBalanceToWithdraw();
+
+        return super.transfer(to, value);
     }
 }
