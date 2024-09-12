@@ -10,12 +10,13 @@ import {IEvents} from "../src/interfaces/IEvents.sol";
 import {
     TransparentUpgradeableProxy as Proxy
 } from "../src/upgradeability/TransparentUpgradeableProxy.sol";
+import {console2 as console} from "forge-std/console2.sol";
 
 contract ForkTest is Utils, IErrors, IEvents {
     PowerToken internal _token;
 
     function setUp() public {
-        vm.createSelectFork("https://rpc.rss3.io", 8095571);
+        vm.createSelectFork("https://rpc.rss3.io", 8136711);
 
         PowerToken token = new PowerToken();
 
@@ -26,8 +27,8 @@ contract ForkTest is Utils, IErrors, IEvents {
         _token = PowerToken(address(powerProxy));
     }
 
-    function testMigrate() public {
-        uint256 totalUserTokens;
+    function testMigrateFork() public {
+        uint256 totalBalance;
 
         string memory walletJson = vm.readFile(
             string.concat(vm.projectRoot(), "/test/data/wallet.json")
@@ -37,11 +38,10 @@ contract ForkTest is Utils, IErrors, IEvents {
         uint256[] memory balancesOfPoints = new uint256[](users.length);
         uint256[] memory balances = new uint256[](users.length);
         for (uint256 i = 0; i < users.length; i++) {
-            bytes32 slot = keccak256(abi.encode(users[i], 0));
-            balancesOfPoints[i] = uint256(vm.load(address(_token), slot));
-
+            balancesOfPoints[i] = _getV2PointsBalance(users[i]);
             balances[i] = _token.balanceOf(users[i]);
-            totalUserTokens += (balances[i] + balancesOfPoints[i]);
+
+            totalBalance += (balances[i] + balancesOfPoints[i]);
         }
 
         string memory feedIdJson = vm.readFile(
@@ -53,10 +53,12 @@ contract ForkTest is Utils, IErrors, IEvents {
         for (uint256 i = 0; i < feedIds.length; i++) {
             balancesOfFeeds[i] = _token.balanceOfByFeed(feedIds[i]);
 
-            totalUserTokens += balancesOfFeeds[i];
+            totalBalance += balancesOfFeeds[i];
         }
 
-        uint256 delta = _token.totalSupply() - totalUserTokens;
+        uint256 adminBalance = _token.balanceOf(0xf496eEeD857aA4709AC4D5B66b6711975623D355);
+        // check total supply, totalBalance + adminBalance should be equal to totalSupply
+        assertEq(_token.totalSupply(), adminBalance + totalBalance);
 
         // migrate
         vm.prank(0xf496eEeD857aA4709AC4D5B66b6711975623D355);
@@ -74,24 +76,40 @@ contract ForkTest is Utils, IErrors, IEvents {
         }
 
         // check total supply
-        uint256 expectedTotalSupply = totalUserTokens * 10 + delta;
+        uint256 expectedTotalSupply = totalBalance * 10 + adminBalance;
         assertEq(_token.totalSupply(), expectedTotalSupply);
     }
 
-    function testTipToFeed() public {
+    function testTipToFeedFork() public {
         address[] memory users = new address[](1);
         users[0] = 0x5EF1994162EA6b5dC1b2F9c0A962bb2F33F103F7;
 
-        bytes32 feedId = 0x3536323834373335373537363435383234000000000000000000000000000000;
+        bytes32 feedId = 0x3431383833353133303538303438303030000000000000000000000000000000;
         uint256 amount = 5 ether;
+
+        uint256 feedBalance = _token.balanceOfByFeed(feedId);
+        uint256 balanceOfPointsBefore = _getV2PointsBalance(users[0]);
+        uint256 balanceBefore = _token.balanceOf(users[0]);
 
         vm.prank(0xf496eEeD857aA4709AC4D5B66b6711975623D355);
         _token.migrate(users, new bytes32[](0));
 
+        // check balance of points and balance after migrate
+        uint256 balanceOfPointsAfter = _token.balanceOfPoints(users[0]);
+        uint256 balanceAfter = _token.balanceOf(users[0]);
+        assertEq(balanceOfPointsAfter, balanceOfPointsBefore * 10);
+        assertEq(balanceAfter, (balanceOfPointsBefore + balanceBefore) * 10);
+
         vm.prank(users[0]);
         _token.tip(amount, address(0), feedId);
 
-        assertEq(_token.balanceOfByFeed(feedId), 8 ether);
-        assertEq(_token.balanceOf(users[0]), 15 ether);
+        assertEq(_token.balanceOfByFeed(feedId), feedBalance + amount);
+        assertEq(_token.balanceOf(users[0]), balanceAfter - amount);
+        assertEq(_token.balanceOfPoints(users[0]), balanceOfPointsAfter - amount);
+    }
+
+    function _getV2PointsBalance(address user) internal view returns (uint256) {
+        bytes32 slot = keccak256(abi.encode(user, 0));
+        return uint256(vm.load(address(_token), slot));
     }
 }
