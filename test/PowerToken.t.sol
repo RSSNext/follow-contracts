@@ -16,6 +16,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     address public constant alice = address(0x123);
     address public constant bob = address(0x456);
     address public constant charlie = address(0x789);
+    address public constant david = address(0xabc);
     bytes32 public constant someFeedId1 = bytes32("someFeedId1");
     bytes32 public constant someFeedId2 = bytes32("someFeedId2");
     bytes32 public constant someFeedId3 = bytes32("someFeedId3");
@@ -115,17 +116,16 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     }
 
     function testTipAddress(uint256 amount) public {
-        uint256 initialPoints = 100;
-        vm.assume(amount > 10 && amount < initialPoints);
+        uint256 initialPoints = 1000 ether;
+        amount = bound(amount, 10, initialPoints - 1);
 
         _mintPoints(alice, initialPoints);
 
         // Alice tips bob (only points)
-        vm.prank(alice);
-
         vm.expectEmit();
         emit Transfer(alice, bob, amount);
         emit Tip(alice, bob, "", amount);
+        vm.prank(alice);
         _token.tip(amount, bob, "");
 
         _checkBalanceAndPoints(alice, initialPoints - amount, initialPoints - amount);
@@ -137,13 +137,10 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         _checkBalanceAndPoints(bob, amount + bobInitialPoints, bobInitialPoints);
 
-        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceAndPoints.selector));
-        _token.tip(amount * 2, charlie, "");
-
-        vm.prank(bob);
         vm.expectEmit();
         emit Transfer(bob, charlie, amount + 1);
         emit Tip(bob, charlie, "", amount + 1);
+        vm.prank(bob);
         _token.tip(amount + 1, charlie, "");
 
         uint256 expectedBobTokenBalance = bobInitialPoints - 1;
@@ -159,6 +156,26 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.tip(expectedBobTokenBalance, alice, "");
     }
 
+    function testTipAddressWithPointsAndBalance(uint256 amount) public {
+        amount = bound(amount, 10, 1000 ether);
+
+        _mintPoints(alice, amount);
+        _mintPoints(bob, amount);
+
+        vm.prank(alice);
+        _token.tip(amount, bob, "");
+
+        _checkBalanceAndPoints(alice, 0, 0);
+        _checkBalanceAndPoints(bob, amount * 2, amount);
+
+        uint256 tipAmount = amount + amount / 2;
+        vm.prank(bob);
+        _token.tip(tipAmount, alice, "");
+
+        _checkBalanceAndPoints(alice, tipAmount, 0);
+        _checkBalanceAndPoints(bob, amount * 2 - tipAmount, 0);
+    }
+
     function testTipFail() public {
         // case 1:  TipAmountIsZero
         vm.expectRevert(abi.encodeWithSelector(TipAmountIsZero.selector));
@@ -171,6 +188,17 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         // case 3: InsufficientBalanceAndPoints
         vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceAndPoints.selector));
         _token.tip(1, bob, "");
+
+        // case 4: InsufficientBalanceToWithdraw
+        _mintPoints(charlie, 100);
+        _mintPoints(david, 100);
+
+        vm.prank(charlie);
+        _token.tip(50, david, "");
+
+        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceAndPoints.selector));
+        vm.prank(david);
+        _token.tip(200, david, "");
     }
 
     function testWithdrawByFeedId(uint256 amount) public {
