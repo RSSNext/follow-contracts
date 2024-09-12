@@ -45,14 +45,6 @@ interface IPowerToken {
     function withdrawByFeedId(address to, bytes32 feedId) external;
 
     /**
-     * @notice Withdraws tokens from a user's balance to a specified address.
-     * @dev It checks if the user has enough balance to withdraw after accounting for non-transferable points.
-     * @param to The address to which the tokens are to be transferred.
-     * @param amount The amount of tokens to withdraw.
-     */
-    function withdraw(address to, uint256 amount) external;
-
-    /**
      * @notice Return the balance of the feedId
      * @param feedId The feed id
      * @return The amount of the balance

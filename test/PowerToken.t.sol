@@ -189,7 +189,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceAndPoints.selector));
         _token.tip(1, bob, "");
 
-        // case 4: InsufficientBalanceToWithdraw
+        // case 4: InsufficientBalanceToTransfer
         _mintPoints(charlie, 100);
         _mintPoints(david, 100);
 
@@ -241,10 +241,8 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         vm.expectEmit();
         emit Transfer(bob, receiver, withdrawAmount);
-        vm.expectEmit();
-        emit Withdrawn(bob, receiver, withdrawAmount);
         vm.prank(bob);
-        _token.withdraw(receiver, withdrawAmount);
+        _token.transfer(receiver, withdrawAmount);
 
         _checkBalanceAndPoints(alice, amount - tipAmount, amount - tipAmount);
         _checkBalanceAndPoints(bob, amount + tipAmount - withdrawAmount, amount);
@@ -258,17 +256,17 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _mintPoints(alice, amount);
         _mintPoints(bob, amount);
 
-        // case 1: InsufficientBalanceToWithdraw
+        // case 1: InsufficientBalanceToTransfer
         vm.prank(alice);
-        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToWithdraw.selector));
-        _token.withdraw(bob, 1);
+        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToTransfer.selector));
+        _token.transfer(bob, 1);
 
-        // case 2: InsufficientBalanceToWithdraw
+        // case 2: InsufficientBalanceToTransfer
         vm.prank(alice);
         _token.tip(tipAmount, bob, "");
 
-        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToWithdraw.selector));
-        _token.withdraw(bob, tipAmount + 1);
+        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToTransfer.selector));
+        _token.transfer(bob, tipAmount + 1);
     }
 
     function testTransfer(uint256 amount) public {
@@ -296,7 +294,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _mintPoints(alice, amount);
 
         // can't transfer points
-        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToWithdraw.selector));
+        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToTransfer.selector));
         vm.prank(alice);
         _token.transfer(bob, 1);
     }

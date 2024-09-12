@@ -21,7 +21,7 @@ contract PowerToken is
 
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 
-    uint256 public constant MAX_SUPPLY = 1000000000 ether;
+    uint256 public constant MAX_SUPPLY = 10000000000 ether;
 
     mapping(address account => uint256) internal _pointsBalancesV1;
 
@@ -116,13 +116,6 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function withdraw(address to, uint256 amount) external override {
-        transfer(to, amount);
-
-        emit Withdrawn(msg.sender, to, amount);
-    }
-
-    /// @inheritdoc IPowerToken
     function balanceOfPoints(address owner) external view override returns (uint256) {
         return _pointsBalancesV2[owner];
     }
@@ -136,7 +129,7 @@ contract PowerToken is
     function transfer(address to, uint256 value) public override returns (bool) {
         uint256 points = _pointsBalancesV2[msg.sender];
         uint256 balance = balanceOf(msg.sender);
-        if (value > balance - points) revert InsufficientBalanceToWithdraw();
+        if (value > balance - points) revert InsufficientBalanceToTransfer();
 
         return super.transfer(to, value);
     }
@@ -147,9 +140,10 @@ contract PowerToken is
      * Reverts if the total supply exceeds the maximum supply.
      */
     function _mintPoints(address to, uint256 amount) internal {
+        if (totalSupply() + amount > MAX_SUPPLY) revert ExceedsMaxSupply();
+
         _pointsBalancesV2[to] += amount;
         _mint(to, amount);
-        if (totalSupply() > MAX_SUPPLY) revert ExceedsMaxSupply();
 
         emit DistributePoints(to, amount);
     }
