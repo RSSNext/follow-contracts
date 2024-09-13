@@ -299,6 +299,57 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.transfer(bob, 1);
     }
 
+    function testTransferFrom(uint256 amount) public {
+        amount = bound(amount, 1, 100 ether);
+        uint256 tipAmount = bound(amount, 1, amount);
+
+        _mintPoints(alice, amount);
+        _mintPoints(bob, amount);
+
+        vm.prank(alice);
+        _token.tip(tipAmount, bob, "");
+
+        uint256 transferAmount = bound(amount, 1, tipAmount);
+        address receiver = address(0xaaaa);
+
+        // bob approve charlie to transfer bob's tokens
+        vm.prank(bob);
+        _token.approve(charlie, transferAmount);
+
+        // charlie transfer bob's tokens to receiver
+        vm.expectEmit();
+        emit Transfer(bob, receiver, transferAmount);
+        vm.prank(charlie);
+        _token.transferFrom(bob, receiver, transferAmount);
+    }
+
+    function testTransferFromFail(uint256 amount) public {
+        // case 1: InsufficientBalanceToTransfer
+        amount = bound(amount, 1, 100 ether);
+        uint256 tipAmount = bound(amount, 1, amount);
+
+        _mintPoints(alice, amount);
+        // alice tip bob
+        vm.prank(alice);
+        _token.tip(tipAmount, bob, "");
+
+        // mint points to bob
+        _mintPoints(bob, amount);
+
+        _checkBalanceAndPoints(bob, amount + tipAmount, amount);
+
+        uint256 transferAmount = tipAmount + 1;
+
+        // bob approve charlie to transfer bob's tokens
+        vm.prank(bob);
+        _token.approve(charlie, transferAmount);
+
+        // charlie transfer bob's tokens to receiver, but bob has insufficient balance
+        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToTransfer.selector));
+        vm.prank(charlie);
+        _token.transferFrom(bob, address(0xaaaa), transferAmount);
+    }
+
     function _mintPoints(address user, uint256 amount) internal {
         vm.prank(appAdmin);
         _token.mint(user, amount);

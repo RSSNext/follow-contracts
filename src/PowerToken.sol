@@ -127,11 +127,16 @@ contract PowerToken is
 
     /// @inheritdoc IERC20
     function transfer(address to, uint256 value) public override returns (bool) {
-        uint256 points = _pointsBalancesV2[msg.sender];
-        uint256 balance = balanceOf(msg.sender);
-        if (value > balance - points) revert InsufficientBalanceToTransfer();
+        _checkTransferBalance(msg.sender, value);
 
         return super.transfer(to, value);
+    }
+
+    /// @inheritdoc IERC20
+    function transferFrom(address from, address to, uint256 value) public override returns (bool) {
+        _checkTransferBalance(from, value);
+
+        return super.transferFrom(from, to, value);
     }
 
     /**
@@ -146,5 +151,18 @@ contract PowerToken is
         _mint(to, amount);
 
         emit DistributePoints(to, amount);
+    }
+
+    /**
+     * @dev Checks if the transfer balance is sufficient.
+     * This function verifies that the `from` address has enough balance to cover the transfer amount
+     * after accounting for the points balance.
+     * @param from The address from which the tokens are being transferred.
+     * @param value The amount of tokens to be transferred.
+     */
+    function _checkTransferBalance(address from, uint256 value) internal view {
+        uint256 points = _pointsBalancesV2[from];
+        uint256 balance = balanceOf(from);
+        if (value > balance - points) revert InsufficientBalanceToTransfer();
     }
 }
