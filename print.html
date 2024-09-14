@@ -211,7 +211,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors"><a class="header" href="#ierrors">IErrors</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/d07ae65edf7da1eb64020d2887347708955cf8f2/src/interfaces/IErrors.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/a9c0c94f8d2f1fecc59713bac3b54aad64dc0916/src/interfaces/IErrors.sol">Git Source</a></p>
 <h2 id="errors"><a class="header" href="#errors">Errors</a></h2>
 <h3 id="tipreceiverisempty"><a class="header" href="#tipreceiverisempty">TipReceiverIsEmpty</a></h3>
 <p><em>Tip parameter is empty.</em></p>
@@ -238,7 +238,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <pre><code class="language-solidity">error ExceedsMaxSupply();
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ievents"><a class="header" href="#ievents">IEvents</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/d07ae65edf7da1eb64020d2887347708955cf8f2/src/interfaces/IEvents.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/a9c0c94f8d2f1fecc59713bac3b54aad64dc0916/src/interfaces/IEvents.sol">Git Source</a></p>
 <h2 id="events"><a class="header" href="#events">Events</a></h2>
 <h3 id="distributepoints"><a class="header" href="#distributepoints">DistributePoints</a></h3>
 <p><em>Emitted when points are distributed to an address.</em></p>
@@ -257,7 +257,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <pre><code class="language-solidity">event Withdrawn(address indexed user, address indexed to, uint256 indexed amount);
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/d07ae65edf7da1eb64020d2887347708955cf8f2/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/a9c0c94f8d2f1fecc59713bac3b54aad64dc0916/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -348,40 +348,54 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/d07ae65edf7da1eb64020d2887347708955cf8f2/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/a9c0c94f8d2f1fecc59713bac3b54aad64dc0916/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
 <p>*This contract implements a proxy that is upgradeable by an admin.
-To avoid https://medium.com/nomic-labs-blog/malicious-backdoors-in-ethereum-proxies-62629adf3357[proxy selector
+To avoid
+https://medium.com/nomic-labs-blog/malicious-backdoors-in-ethereum-proxies-62629adf3357[proxy
+selector
 clashing], which can potentially be used in an attack, this contract uses the
-https://blog.openzeppelin.com/the-transparent-proxy-pattern/[transparent proxy pattern]. This pattern implies two
+https://blog.openzeppelin.com/the-transparent-proxy-pattern/[transparent proxy pattern]. This
+pattern implies two
 things that go hand in hand:</p>
 <ol>
-<li>If any account other than the admin calls the proxy, the call will be forwarded to the implementation, even if
+<li>If any account other than the admin calls the proxy, the call will be forwarded to the
+implementation, even if
 that call matches one of the admin functions exposed by the proxy itself.</li>
-<li>If the admin calls the proxy, it can access the admin functions, but its calls will never be forwarded to the
-implementation. If the admin tries to call a function on the implementation it will fail with an error that says
+<li>If the admin calls the proxy, it can access the admin functions, but its calls will never be
+forwarded to the
+implementation. If the admin tries to call a function on the implementation it will fail with an
+error that says
 "admin cannot fallback to proxy target".
-These properties mean that the admin account can only be used for admin actions like upgrading the proxy or changing
-the admin, so it's best if it's a dedicated account that is not used for anything else. This will avoid headaches due
+These properties mean that the admin account can only be used for admin actions like upgrading
+the proxy or changing
+the admin, so it's best if it's a dedicated account that is not used for anything else. This will
+avoid headaches due
 to sudden errors when trying to call a function from the proxy implementation.
-Our recommendation is for the dedicated account to be an instance of the {ProxyAdmin} contract. If set up this way,
+Our recommendation is for the dedicated account to be an instance of the {ProxyAdmin} contract. If
+set up this way,
 you should think of the <code>ProxyAdmin</code> instance as the real administrative interface of your proxy.*</li>
 </ol>
 <h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
 <h3 id="constructor"><a class="header" href="#constructor">constructor</a></h3>
-<p><em>Initializes an upgradeable proxy managed by <code>_admin</code>, backed by the implementation at <code>_logic</code>, and
+<p><em>Initializes an upgradeable proxy managed by <code>_admin</code>, backed by the implementation at
+<code>_logic</code>, and
 optionally initialized with <code>_data</code> as explained in <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/forge-std/test/mocks/MockERC721.t.sol/contract.Token_ERC721.html#constructor">ERC1967Proxy-constructor</a>.</em></p>
-<pre><code class="language-solidity">constructor(address _logic, address admin_, bytes memory _data) payable ERC1967Proxy(_logic, _data);
+<pre><code class="language-solidity">constructor(address _logic, address admin_, bytes memory _data)
+    payable
+    ERC1967Proxy(_logic, _data);
 </code></pre>
 <h3 id="ifadmin"><a class="header" href="#ifadmin">ifAdmin</a></h3>
-<p><em>Modifier used internally that will delegate the call to the implementation unless the sender is the admin.</em></p>
+<p><em>Modifier used internally that will delegate the call to the implementation unless the
+sender is the admin.</em></p>
 <pre><code class="language-solidity">modifier ifAdmin();
 </code></pre>
 <h3 id="admin"><a class="header" href="#admin">admin</a></h3>
 <p><em>Returns the current admin.
 NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#getproxyadmin">ProxyAdmin-getProxyAdmin</a>.
-TIP: To get this value clients can read directly from the storage slot shown below (specified by EIP1967) using the
+TIP: To get this value clients can read directly from the storage slot shown below (specified
+by EIP1967) using the
 https://eth.wiki/json-rpc/API#eth_getstorageat[<code>eth_getStorageAt</code>] RPC call.
 <code>0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103</code></em></p>
 <pre><code class="language-solidity">function admin() external ifAdmin returns (address admin_);
@@ -389,7 +403,8 @@ https://eth.wiki/json-rpc/API#eth_getstorageat[<code>eth_getStorageAt</code>] RP
 <h3 id="implementation"><a class="header" href="#implementation">implementation</a></h3>
 <p><em>Returns the current implementation.
 NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#getproxyimplementation">ProxyAdmin-getProxyImplementation</a>.
-TIP: To get this value clients can read directly from the storage slot shown below (specified by EIP1967) using the
+TIP: To get this value clients can read directly from the storage slot shown below (specified
+by EIP1967) using the
 https://eth.wiki/json-rpc/API#eth_getstorageat[<code>eth_getStorageAt</code>] RPC call.
 <code>0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc</code></em></p>
 <pre><code class="language-solidity">function implementation() external ifAdmin returns (address implementation_);
@@ -406,11 +421,16 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function upgradeTo(address newImplementation) external ifAdmin;
 </code></pre>
 <h3 id="upgradetoandcall"><a class="header" href="#upgradetoandcall">upgradeToAndCall</a></h3>
-<p><em>Upgrade the implementation of the proxy, and then call a function from the new implementation as specified
-by <code>data</code>, which should be an encoded function call. This is useful to initialize new storage variables in the
+<p><em>Upgrade the implementation of the proxy, and then call a function from the new
+implementation as specified
+by <code>data</code>, which should be an encoded function call. This is useful to initialize new storage
+variables in the
 proxied contract.
 NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#upgradeandcall">ProxyAdmin-upgradeAndCall</a>.</em></p>
-<pre><code class="language-solidity">function upgradeToAndCall(address newImplementation, bytes calldata data) external payable ifAdmin;
+<pre><code class="language-solidity">function upgradeToAndCall(address newImplementation, bytes calldata data)
+    external
+    payable
+    ifAdmin;
 </code></pre>
 <h3 id="_admin"><a class="header" href="#_admin">_admin</a></h3>
 <p><em>Returns the current admin.</em></p>
@@ -421,7 +441,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/d07ae65edf7da1eb64020d2887347708955cf8f2/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/a9c0c94f8d2f1fecc59713bac3b54aad64dc0916/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, <a href="src/PowerToken.sol//src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/PowerToken.sol//src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
@@ -432,7 +452,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 </code></pre>
 <h3 id="max_supply"><a class="header" href="#max_supply">MAX_SUPPLY</a></h3>
-<pre><code class="language-solidity">uint256 public constant MAX_SUPPLY = 10000000000 ether;
+<pre><code class="language-solidity">uint256 public constant MAX_SUPPLY = 10_000_000_000 ether;
 </code></pre>
 <h3 id="_pointsbalancesv1"><a class="header" href="#_pointsbalancesv1">_pointsBalancesV1</a></h3>
 <pre><code class="language-solidity">mapping(address account =&gt; uint256) internal _pointsBalancesV1;
@@ -464,7 +484,10 @@ Points balances are included in user's balance.</em></p>
 <h3 id="migrate-1"><a class="header" href="#migrate-1">migrate</a></h3>
 <p>Migrates the token points of users.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function migrate(address[] calldata users, bytes32[] calldata feedIds) external override onlyRole(APP_ADMIN_ROLE);
+<pre><code class="language-solidity">function migrate(address[] calldata users, bytes32[] calldata feedIds)
+    external
+    override
+    onlyRole(APP_ADMIN_ROLE);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -552,7 +575,8 @@ Reverts if the total supply exceeds the maximum supply.</em></p>
 </code></pre>
 <h3 id="_checktransferbalance"><a class="header" href="#_checktransferbalance">_checkTransferBalance</a></h3>
 <p><em>Checks if the transfer balance is sufficient.
-This function verifies that the <code>from</code> address has enough balance to cover the transfer amount
+This function verifies that the <code>from</code> address has enough balance to cover the transfer
+amount
 after accounting for the points balance.</em></p>
 <pre><code class="language-solidity">function _checkTransferBalance(address from, uint256 value) internal view;
 </code></pre>
