@@ -11,7 +11,11 @@ interface IEvents {
      */
     event Tip(address indexed from, address indexed to, bytes32 indexed feedId, uint256 amount);
     /**
-     * @dev Emitted when points are withdrawn from an address.
+     * @dev Emitted when points are withdrawn by feed id.
      */
-    event Withdraw(address indexed to, bytes32 indexed feedId, uint256 indexed amount);
+    event WithdrawnByFeedId(address indexed to, bytes32 indexed feedId, uint256 indexed amount);
+    /**
+     * @dev Emitted when tokens are withdrawn from an address.
+     */
+    event Withdrawn(address indexed user, address indexed to, uint256 indexed amount);
 }

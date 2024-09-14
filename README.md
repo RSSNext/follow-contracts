@@ -24,7 +24,7 @@ forge test
 ### Deploy
 
 ```shell
-forge script script/Deploy.s.sol:Deploy \
+forge script script/Deploy.s.sol:Deploy --sig 'deployPowerToken()' \
 --chain-id $CHAIN_ID \
 --rpc-url $RPC_URL \
 --private-key $PRIVATE_KEY \

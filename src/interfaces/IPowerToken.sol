@@ -11,6 +11,14 @@ interface IPowerToken {
     function initialize(string calldata name_, string calldata symbol_, address admin_) external;
 
     /**
+     * @notice Migrates the token points of users.
+     * @dev The caller must have the APP_ADMIN_ROLE.
+     * @param users The addresses of the users to migrate.
+     * @param feedIds The feed ids of the feeds to migrate.
+     */
+    function migrate(address[] calldata users, bytes32[] calldata feedIds) external;
+
+    /**
      * @notice Mints new token points.
      * @dev The caller must have the APP_ADMIN_ROLE.
      * @param to The account to receive the token points.
@@ -21,6 +29,7 @@ interface IPowerToken {
     /**
      * @notice Tips with token points. If token points are not enough, it will try the balance.
      * @param amount The amount of token points to send. It can be empty.
+     * @param to The address to send the token points. It can be empty.
      * @param feedId The feed id. It can be empty.
      * @dev The to and feedId are optional, but at least one of them must be provided.
      * If both are provided, the `to` will be used.
@@ -33,7 +42,7 @@ interface IPowerToken {
      * @param to The address who receives the tokens.
      * @param feedId The amount belongs to the feedId.
      */
-    function withdraw(address to, bytes32 feedId) external;
+    function withdrawByFeedId(address to, bytes32 feedId) external;
 
     /**
      * @notice Return the balance of the feedId
