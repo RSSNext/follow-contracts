@@ -2,21 +2,21 @@
 // solhint-disable comprehensive-interface,no-console,no-empty-blocks,function-max-lines
 pragma solidity 0.8.22;
 
-import {stdJson} from "forge-std/StdJson.sol";
-import {Utils} from "./helpers/Utils.sol";
 import {PowerToken} from "../src/PowerToken.sol";
 import {IErrors} from "../src/interfaces/IErrors.sol";
 import {IEvents} from "../src/interfaces/IEvents.sol";
-import {
-    TransparentUpgradeableProxy as Proxy
-} from "../src/upgradeability/TransparentUpgradeableProxy.sol";
+import {TransparentUpgradeableProxy as Proxy} from
+    "../src/upgradeability/TransparentUpgradeableProxy.sol";
+import {Utils} from "./helpers/Utils.sol";
+import {stdJson} from "forge-std/StdJson.sol";
+
 import {console2 as console} from "forge-std/console2.sol";
 
 contract ForkTest is Utils, IErrors, IEvents {
     PowerToken internal _token;
 
     function setUp() public {
-        vm.createSelectFork("https://rpc.rss3.io", 8136711);
+        vm.createSelectFork("https://rpc.rss3.io", 8_136_711);
 
         PowerToken token = new PowerToken();
 
@@ -30,9 +30,8 @@ contract ForkTest is Utils, IErrors, IEvents {
     function testMigrateFork() public {
         uint256 totalBalance;
 
-        string memory walletJson = vm.readFile(
-            string.concat(vm.projectRoot(), "/test/data/wallet.json")
-        );
+        string memory walletJson =
+            vm.readFile(string.concat(vm.projectRoot(), "/test/data/wallet.json"));
         address[] memory users = stdJson.readAddressArray(walletJson, "$.wallets");
         // get balances before migrate
         uint256[] memory balancesOfPoints = new uint256[](users.length);
@@ -44,9 +43,8 @@ contract ForkTest is Utils, IErrors, IEvents {
             totalBalance += (balances[i] + balancesOfPoints[i]);
         }
 
-        string memory feedIdJson = vm.readFile(
-            string.concat(vm.projectRoot(), "/test/data/feedId.json")
-        );
+        string memory feedIdJson =
+            vm.readFile(string.concat(vm.projectRoot(), "/test/data/feedId.json"));
         bytes32[] memory feedIds = stdJson.readBytes32Array(feedIdJson, "$.feedIds");
         // get feed balances before migrate
         uint256[] memory balancesOfFeeds = new uint256[](feedIds.length);

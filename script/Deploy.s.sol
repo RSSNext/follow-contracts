@@ -2,11 +2,11 @@
 // solhint-disable no-console,ordering
 pragma solidity 0.8.22;
 
-import {Deployer} from "./Deployer.sol";
-import {DeployConfig} from "./DeployConfig.s.sol";
 import {PowerToken} from "../src/PowerToken.sol";
-import {console2 as console} from "forge-std/console2.sol";
 import {TransparentUpgradeableProxy} from "../src/upgradeability/TransparentUpgradeableProxy.sol";
+import {DeployConfig} from "./DeployConfig.s.sol";
+import {Deployer} from "./Deployer.sol";
+import {console2 as console} from "forge-std/console2.sol";
 
 contract Deploy is Deployer {
     bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
@@ -30,12 +30,8 @@ contract Deploy is Deployer {
 
     function setUp() public override {
         super.setUp();
-        string memory path = string.concat(
-            vm.projectRoot(),
-            "/deploy-config/",
-            deploymentContext,
-            ".json"
-        );
+        string memory path =
+            string.concat(vm.projectRoot(), "/deploy-config/", deploymentContext, ".json");
         cfg = new DeployConfig(path);
 
         console.log("Deploying from %s", deployScript);
@@ -97,12 +93,9 @@ contract Deploy is Deployer {
     function initializePowerToken() public broadcast {
         PowerToken tokenProxy = PowerToken(mustGetAddress("PowerTokenProxy"));
 
-        tokenProxy.initialize(cfg.name(),cfg.symbol(), cfg.appAdmin());
+        tokenProxy.initialize(cfg.name(), cfg.symbol(), cfg.appAdmin());
 
         // check states
-        require(
-            tokenProxy.hasRole(APP_ADMIN_ROLE, cfg.appAdmin()),
-            "check admin role error"
-        );
+        require(tokenProxy.hasRole(APP_ADMIN_ROLE, cfg.appAdmin()), "check admin role error");
     }
 }

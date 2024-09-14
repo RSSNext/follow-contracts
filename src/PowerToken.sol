@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.22;
 
-import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import {
-    AccessControlEnumerableUpgradeable
-} from "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
-import {IPowerToken} from "./interfaces/IPowerToken.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IErrors} from "./interfaces/IErrors.sol";
 import {IEvents} from "./interfaces/IEvents.sol";
+import {IPowerToken} from "./interfaces/IPowerToken.sol";
+import {AccessControlEnumerableUpgradeable} from
+    "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
+import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract PowerToken is
     IPowerToken,
@@ -21,7 +20,7 @@ contract PowerToken is
 
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 
-    uint256 public constant MAX_SUPPLY = 10000000000 ether;
+    uint256 public constant MAX_SUPPLY = 10_000_000_000 ether;
 
     mapping(address account => uint256) internal _pointsBalancesV1;
 
@@ -33,11 +32,11 @@ contract PowerToken is
     mapping(address account => uint256) internal _pointsBalancesV2;
 
     /// @inheritdoc IPowerToken
-    function initialize(
-        string calldata name_,
-        string calldata symbol_,
-        address admin_
-    ) external override reinitializer(3) {
+    function initialize(string calldata name_, string calldata symbol_, address admin_)
+        external
+        override
+        reinitializer(3)
+    {
         super.__ERC20_init(name_, symbol_);
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin_);
@@ -45,10 +44,11 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function migrate(
-        address[] calldata users,
-        bytes32[] calldata feedIds
-    ) external override onlyRole(APP_ADMIN_ROLE) {
+    function migrate(address[] calldata users, bytes32[] calldata feedIds)
+        external
+        override
+        onlyRole(APP_ADMIN_ROLE)
+    {
         // migrate balances and points balances
         for (uint256 i = 0; i < users.length; i++) {
             address user = users[i];
@@ -102,10 +102,11 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function withdrawByFeedId(
-        address to,
-        bytes32 feedId
-    ) external override onlyRole(APP_ADMIN_ROLE) {
+    function withdrawByFeedId(address to, bytes32 feedId)
+        external
+        override
+        onlyRole(APP_ADMIN_ROLE)
+    {
         if (feedId == bytes32(0)) revert PointsInvalidReceiver(bytes32(0));
 
         uint256 amount = _feedBalances[feedId];
@@ -155,7 +156,8 @@ contract PowerToken is
 
     /**
      * @dev Checks if the transfer balance is sufficient.
-     * This function verifies that the `from` address has enough balance to cover the transfer amount
+     * This function verifies that the `from` address has enough balance to cover the transfer
+     * amount
      * after accounting for the points balance.
      * @param from The address from which the tokens are being transferred.
      * @param value The amount of tokens to be transferred.

@@ -3,8 +3,8 @@
 pragma solidity 0.8.22;
 
 import {Script} from "forge-std/Script.sol";
-import {console2 as console} from "forge-std/console2.sol";
 import {stdJson} from "forge-std/StdJson.sol";
+import {console2 as console} from "forge-std/console2.sol";
 
 /// @title DeployConfig
 /// @notice Represents the configuration required to deploy the system. It is expected
@@ -17,7 +17,6 @@ contract DeployConfig is Script {
     string public symbol;
     address public proxyAdminOwner;
     address public appAdmin;
-
 
     constructor(string memory _path) {
         console.log("DeployConfig: reading file %s", _path);
@@ -33,6 +32,6 @@ contract DeployConfig is Script {
         name = stdJson.readString(_json, "$.name");
         symbol = stdJson.readString(_json, "$.symbol");
         proxyAdminOwner = stdJson.readAddress(_json, "$.proxyAdminOwner");
-    appAdmin = stdJson.readAddress(_json, "$.appAdmin");
+        appAdmin = stdJson.readAddress(_json, "$.appAdmin");
     }
 }

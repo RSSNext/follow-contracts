@@ -2,8 +2,8 @@
 // solhint-disable comprehensive-interface
 pragma solidity 0.8.22;
 
-import "forge-std/Vm.sol";
 import "forge-std/Test.sol";
+import "forge-std/Vm.sol";
 
 contract Utils is Test {
     uint8 public constant CheckTopic1 = 0x1;

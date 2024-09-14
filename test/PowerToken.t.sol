@@ -2,11 +2,11 @@
 // solhint-disable comprehensive-interface,no-console,no-empty-blocks,function-max-lines
 pragma solidity 0.8.22;
 
-import {Utils} from "./helpers/Utils.sol";
 import {PowerToken} from "../src/PowerToken.sol";
 import {IErrors} from "../src/interfaces/IErrors.sol";
 import {IEvents} from "../src/interfaces/IEvents.sol";
 import {TransparentUpgradeableProxy} from "../src/upgradeability/TransparentUpgradeableProxy.sol";
+import {Utils} from "./helpers/Utils.sol";
 import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
 contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
@@ -38,7 +38,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     }
 
     function testMintAndBalanceOfPoints(uint256 amount) public {
-        amount = bound(amount, 1, 10000 ether);
+        amount = bound(amount, 1, 10_000 ether);
 
         expectEmit();
         emit Transfer(address(0), alice, amount);
@@ -71,7 +71,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     }
 
     function testTipFeedId(uint256 amount) public {
-        amount = bound(amount, 1, 10000 ether);
+        amount = bound(amount, 1, 10_000 ether);
         uint256 initialPoints = 10 * amount;
 
         _mintPoints(alice, initialPoints);

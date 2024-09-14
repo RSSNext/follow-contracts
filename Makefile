@@ -39,4 +39,4 @@ storage-layout:
 	./tools/checkStorageLayout.sh
 
 # Lints
-lint :; npx prettier --plugin=prettier-plugin-solidity  --write "{src,test,scripts}/**/*.sol"
+lint :; forge fmt
