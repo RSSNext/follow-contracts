@@ -192,7 +192,7 @@ forge build
 <pre><code class="language-shell">forge test
 </code></pre>
 <h3 id="deploy"><a class="header" href="#deploy">Deploy</a></h3>
-<pre><code class="language-shell">forge script script/Deploy.s.sol:Deploy \
+<pre><code class="language-shell">forge script script/Deploy.s.sol:Deploy --sig 'deployPowerToken()' \
 --chain-id $CHAIN_ID \
 --rpc-url $RPC_URL \
 --private-key $PRIVATE_KEY \
@@ -211,7 +211,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors"><a class="header" href="#ierrors">IErrors</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/4f3442cfcb5e92af9e88e12570d5f8192fdb26f3/src/interfaces/IErrors.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/d07ae65edf7da1eb64020d2887347708955cf8f2/src/interfaces/IErrors.sol">Git Source</a></p>
 <h2 id="errors"><a class="header" href="#errors">Errors</a></h2>
 <h3 id="tipreceiverisempty"><a class="header" href="#tipreceiverisempty">TipReceiverIsEmpty</a></h3>
 <p><em>Tip parameter is empty.</em></p>
@@ -229,8 +229,16 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <p><em>Insufficient balance and points.</em></p>
 <pre><code class="language-solidity">error InsufficientBalanceAndPoints();
 </code></pre>
+<h3 id="insufficientbalancetotransfer"><a class="header" href="#insufficientbalancetotransfer">InsufficientBalanceToTransfer</a></h3>
+<p><em>Insufficient balance to transfer.</em></p>
+<pre><code class="language-solidity">error InsufficientBalanceToTransfer();
+</code></pre>
+<h3 id="exceedsmaxsupply"><a class="header" href="#exceedsmaxsupply">ExceedsMaxSupply</a></h3>
+<p><em>Exceeds max supply.</em></p>
+<pre><code class="language-solidity">error ExceedsMaxSupply();
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ievents"><a class="header" href="#ievents">IEvents</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/4f3442cfcb5e92af9e88e12570d5f8192fdb26f3/src/interfaces/IEvents.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/d07ae65edf7da1eb64020d2887347708955cf8f2/src/interfaces/IEvents.sol">Git Source</a></p>
 <h2 id="events"><a class="header" href="#events">Events</a></h2>
 <h3 id="distributepoints"><a class="header" href="#distributepoints">DistributePoints</a></h3>
 <p><em>Emitted when points are distributed to an address.</em></p>
@@ -240,12 +248,16 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <p><em>Emitted when points are tipped from one address to another.</em></p>
 <pre><code class="language-solidity">event Tip(address indexed from, address indexed to, bytes32 indexed feedId, uint256 amount);
 </code></pre>
-<h3 id="withdraw"><a class="header" href="#withdraw">Withdraw</a></h3>
-<p><em>Emitted when points are withdrawn from an address.</em></p>
-<pre><code class="language-solidity">event Withdraw(address indexed to, bytes32 indexed feedId, uint256 indexed amount);
+<h3 id="withdrawnbyfeedid"><a class="header" href="#withdrawnbyfeedid">WithdrawnByFeedId</a></h3>
+<p><em>Emitted when points are withdrawn by feed id.</em></p>
+<pre><code class="language-solidity">event WithdrawnByFeedId(address indexed to, bytes32 indexed feedId, uint256 indexed amount);
+</code></pre>
+<h3 id="withdrawn"><a class="header" href="#withdrawn">Withdrawn</a></h3>
+<p><em>Emitted when tokens are withdrawn from an address.</em></p>
+<pre><code class="language-solidity">event Withdrawn(address indexed user, address indexed to, uint256 indexed amount);
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/4f3442cfcb5e92af9e88e12570d5f8192fdb26f3/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/d07ae65edf7da1eb64020d2887347708955cf8f2/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -256,6 +268,17 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <tr><td><code>name_</code></td><td><code>string</code></td><td>The name of the token.</td></tr>
 <tr><td><code>symbol_</code></td><td><code>string</code></td><td>The symbol of the token.</td></tr>
 <tr><td><code>admin_</code></td><td><code>address</code></td><td>The account to be granted with APP_ADMIN_ROLE.</td></tr>
+</tbody></table>
+</div>
+<h3 id="migrate"><a class="header" href="#migrate">migrate</a></h3>
+<p>Migrates the token points of users.</p>
+<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<pre><code class="language-solidity">function migrate(address[] calldata users, bytes32[] calldata feedIds) external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>users</code></td><td><code>address[]</code></td><td>The addresses of the users to migrate.</td></tr>
+<tr><td><code>feedIds</code></td><td><code>bytes32[]</code></td><td>The feed ids of the feeds to migrate.</td></tr>
 </tbody></table>
 </div>
 <h3 id="mint"><a class="header" href="#mint">mint</a></h3>
@@ -278,14 +301,14 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send. It can be empty.</td></tr>
-<tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
+<tr><td><code>to</code></td><td><code>address</code></td><td>The address to send the token points. It can be empty.</td></tr>
 <tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
 </tbody></table>
 </div>
-<h3 id="withdraw-1"><a class="header" href="#withdraw-1">withdraw</a></h3>
+<h3 id="withdrawbyfeedid"><a class="header" href="#withdrawbyfeedid">withdrawByFeedId</a></h3>
 <p>Withdraws tokens by feedId. <code>to</code> is supposed to be the true owner of the feedId.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external;
+<pre><code class="language-solidity">function withdrawByFeedId(address to, bytes32 feedId) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -325,7 +348,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/4f3442cfcb5e92af9e88e12570d5f8192fdb26f3/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/d07ae65edf7da1eb64020d2887347708955cf8f2/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
 <p>*This contract implements a proxy that is upgradeable by an admin.
@@ -398,7 +421,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/4f3442cfcb5e92af9e88e12570d5f8192fdb26f3/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/d07ae65edf7da1eb64020d2887347708955cf8f2/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, <a href="src/PowerToken.sol//src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/PowerToken.sol//src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
@@ -408,13 +431,20 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <h3 id="app_admin_role"><a class="header" href="#app_admin_role">APP_ADMIN_ROLE</a></h3>
 <pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 </code></pre>
-<h3 id="_pointsbalances"><a class="header" href="#_pointsbalances">_pointsBalances</a></h3>
-<p><em>Points balances of the users, which are non-transferable and can be used to tip others.</em></p>
-<pre><code class="language-solidity">mapping(address account =&gt; uint256) internal _pointsBalances;
+<h3 id="max_supply"><a class="header" href="#max_supply">MAX_SUPPLY</a></h3>
+<pre><code class="language-solidity">uint256 public constant MAX_SUPPLY = 10000000000 ether;
+</code></pre>
+<h3 id="_pointsbalancesv1"><a class="header" href="#_pointsbalancesv1">_pointsBalancesV1</a></h3>
+<pre><code class="language-solidity">mapping(address account =&gt; uint256) internal _pointsBalancesV1;
 </code></pre>
 <h3 id="_feedbalances"><a class="header" href="#_feedbalances">_feedBalances</a></h3>
 <p><em>Token balances of the feed, which could be withdrawn to the feed owner.</em></p>
 <pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _feedBalances;
+</code></pre>
+<h3 id="_pointsbalancesv2"><a class="header" href="#_pointsbalancesv2">_pointsBalancesV2</a></h3>
+<p><em>Points balances of the users, which are non-transferable and can be used to tip others.
+Points balances are included in user's balance.</em></p>
+<pre><code class="language-solidity">mapping(address account =&gt; uint256) internal _pointsBalancesV2;
 </code></pre>
 <h2 id="functions-2"><a class="header" href="#functions-2">Functions</a></h2>
 <h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
@@ -422,13 +452,24 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function initialize(string calldata name_, string calldata symbol_, address admin_)
     external
     override
-    reinitializer(2);
+    reinitializer(3);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>name_</code></td><td><code>string</code></td><td>The name of the token.</td></tr>
 <tr><td><code>symbol_</code></td><td><code>string</code></td><td>The symbol of the token.</td></tr>
 <tr><td><code>admin_</code></td><td><code>address</code></td><td>The account to be granted with APP_ADMIN_ROLE.</td></tr>
+</tbody></table>
+</div>
+<h3 id="migrate-1"><a class="header" href="#migrate-1">migrate</a></h3>
+<p>Migrates the token points of users.</p>
+<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<pre><code class="language-solidity">function migrate(address[] calldata users, bytes32[] calldata feedIds) external override onlyRole(APP_ADMIN_ROLE);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>users</code></td><td><code>address[]</code></td><td>The addresses of the users to migrate.</td></tr>
+<tr><td><code>feedIds</code></td><td><code>bytes32[]</code></td><td>The feed ids of the feeds to migrate.</td></tr>
 </tbody></table>
 </div>
 <h3 id="mint-1"><a class="header" href="#mint-1">mint</a></h3>
@@ -451,14 +492,14 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send. It can be empty.</td></tr>
-<tr><td><code>to</code></td><td><code>address</code></td><td></td></tr>
+<tr><td><code>to</code></td><td><code>address</code></td><td>The address to send the token points. It can be empty.</td></tr>
 <tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
 </tbody></table>
 </div>
-<h3 id="withdraw-2"><a class="header" href="#withdraw-2">withdraw</a></h3>
+<h3 id="withdrawbyfeedid-1"><a class="header" href="#withdrawbyfeedid-1">withdrawByFeedId</a></h3>
 <p>Withdraws tokens by feedId. <code>to</code> is supposed to be the true owner of the feedId.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function withdraw(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
+<pre><code class="language-solidity">function withdrawByFeedId(address to, bytes32 feedId) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -492,6 +533,33 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <p><strong>Returns</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>The amount of the balance</td></tr>
+</tbody></table>
+</div>
+<h3 id="transfer"><a class="header" href="#transfer">transfer</a></h3>
+<p>Moves <code>amount</code> tokens from the caller's account to <code>to</code>.</p>
+<pre><code class="language-solidity">function transfer(address to, uint256 value) public override returns (bool);
+</code></pre>
+<h3 id="transferfrom"><a class="header" href="#transferfrom">transferFrom</a></h3>
+<p>Moves <code>amount</code> tokens from <code>from</code> to <code>to</code> using the allowance mechanism.
+<code>amount</code> is then deducted from the caller's allowance.</p>
+<pre><code class="language-solidity">function transferFrom(address from, address to, uint256 value) public override returns (bool);
+</code></pre>
+<h3 id="_mintpoints"><a class="header" href="#_mintpoints">_mintPoints</a></h3>
+<p><em>Mints points to a specified address.
+Increases the points balance of the recipient and mints the corresponding amount of tokens.
+Reverts if the total supply exceeds the maximum supply.</em></p>
+<pre><code class="language-solidity">function _mintPoints(address to, uint256 amount) internal;
+</code></pre>
+<h3 id="_checktransferbalance"><a class="header" href="#_checktransferbalance">_checkTransferBalance</a></h3>
+<p><em>Checks if the transfer balance is sufficient.
+This function verifies that the <code>from</code> address has enough balance to cover the transfer amount
+after accounting for the points balance.</em></p>
+<pre><code class="language-solidity">function _checkTransferBalance(address from, uint256 value) internal view;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>from</code></td><td><code>address</code></td><td>The address from which the tokens are being transferred.</td></tr>
+<tr><td><code>value</code></td><td><code>uint256</code></td><td>The amount of tokens to be transferred.</td></tr>
 </tbody></table>
 </div>
                     </main>

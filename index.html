@@ -191,7 +191,7 @@ forge build
 <pre><code class="language-shell">forge test
 </code></pre>
 <h3 id="deploy"><a class="header" href="#deploy">Deploy</a></h3>
-<pre><code class="language-shell">forge script script/Deploy.s.sol:Deploy \
+<pre><code class="language-shell">forge script script/Deploy.s.sol:Deploy --sig 'deployPowerToken()' \
 --chain-id $CHAIN_ID \
 --rpc-url $RPC_URL \
 --private-key $PRIVATE_KEY \
