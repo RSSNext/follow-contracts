@@ -15,6 +15,8 @@ import {console2 as console} from "forge-std/console2.sol";
 contract ForkTest is Utils, IErrors, IEvents {
     PowerToken internal _token;
 
+    uint256 internal constant _TOKEN_ESCORTED = 100_000 ether;
+
     function setUp() public {
         vm.createSelectFork("https://rpc.rss3.io", 8_136_711);
 
@@ -25,6 +27,17 @@ contract ForkTest is Utils, IErrors, IEvents {
         vm.prank(0x8AC80fa0993D95C9d6B8Cb494E561E6731038941);
         powerProxy.upgradeTo(address(token));
         _token = PowerToken(address(powerProxy));
+
+        // app admin
+        vm.startPrank(0xf496eEeD857aA4709AC4D5B66b6711975623D355);
+
+        _token.mintToTreasury(
+            0xf496eEeD857aA4709AC4D5B66b6711975623D355, _token.MAX_SUPPLY() - _token.totalSupply()
+        );
+
+        _token.transfer(address(_token), _TOKEN_ESCORTED);
+
+        vm.stopPrank();
     }
 
     function testMigrateFork() public {
@@ -55,8 +68,10 @@ contract ForkTest is Utils, IErrors, IEvents {
         }
 
         uint256 adminBalance = _token.balanceOf(0xf496eEeD857aA4709AC4D5B66b6711975623D355);
+
         // check total supply, totalBalance + adminBalance should be equal to totalSupply
-        assertEq(_token.totalSupply(), adminBalance + totalBalance);
+        assertEq(_token.totalSupply(), _token.MAX_SUPPLY());
+        assertEq(_token.MAX_SUPPLY(), adminBalance + totalBalance + _TOKEN_ESCORTED);
 
         // migrate
         vm.prank(0xf496eEeD857aA4709AC4D5B66b6711975623D355);
@@ -74,8 +89,7 @@ contract ForkTest is Utils, IErrors, IEvents {
         }
 
         // check total supply
-        uint256 expectedTotalSupply = totalBalance * 10 + adminBalance;
-        assertEq(_token.totalSupply(), expectedTotalSupply);
+        assertEq(_token.totalSupply(), _token.MAX_SUPPLY());
     }
 
     function testTipToFeedFork() public {

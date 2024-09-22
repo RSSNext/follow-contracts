@@ -27,6 +27,14 @@ interface IPowerToken {
     function mint(address to, uint256 amount) external;
 
     /**
+     * @notice Mints new token points to the treasury.
+     * @dev The caller must have the APP_ADMIN_ROLE.
+     * @param admin The account to receive the token points.
+     * @param amount The amount of token points to mint.
+     */
+    function mintToTreasury(address admin, uint256 amount) external;
+
+    /**
      * @notice Tips with token points. If token points are not enough, it will try the balance.
      * @param amount The amount of token points to send. It can be empty.
      * @param to The address to send the token points. It can be empty.
