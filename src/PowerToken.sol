@@ -55,13 +55,11 @@ contract PowerToken is
 
             // mint 9 times of the balance to the user
             uint256 balance = balanceOf(user);
-            _mint(user, balance * 9);
+            _transfer(address(this), user, balance * 9);
 
             // migrate v1 points balances to v2
             uint256 points = _pointsBalancesV1[user];
-            _mintPoints(user, points * 10);
-            // burn the v1 points balances from token contract
-            _burn(address(this), points);
+            _issuePoints(user, points * 10);
 
             delete _pointsBalancesV1[user];
         }
@@ -70,14 +68,23 @@ contract PowerToken is
         for (uint256 i = 0; i < feedIds.length; i++) {
             bytes32 feedId = feedIds[i];
 
-            _mint(address(this), _feedBalances[feedId] * 9);
+            // _mint(address(this), _feedBalances[feedId] * 9);
             _feedBalances[feedId] *= 10;
         }
     }
 
+    function mintToTreasury(address admin, uint256 amount)
+        external
+        override
+        onlyRole(APP_ADMIN_ROLE)
+    {
+        if (amount + totalSupply() > MAX_SUPPLY) revert ExceedsMaxSupply();
+        _mint(admin, amount);
+    }
+
     /// @inheritdoc IPowerToken
     function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE) {
-        _mintPoints(to, amount);
+        _issuePoints(to, amount);
     }
 
     /// @inheritdoc IPowerToken
@@ -145,11 +152,12 @@ contract PowerToken is
      * Increases the points balance of the recipient and mints the corresponding amount of tokens.
      * Reverts if the total supply exceeds the maximum supply.
      */
-    function _mintPoints(address to, uint256 amount) internal {
-        if (totalSupply() + amount > MAX_SUPPLY) revert ExceedsMaxSupply();
+    function _issuePoints(address to, uint256 amount) internal {
+        if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
 
         _pointsBalancesV2[to] += amount;
-        _mint(to, amount);
+
+        _transfer(address(this), to, amount);
 
         emit DistributePoints(to, amount);
     }

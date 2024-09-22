@@ -35,13 +35,25 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         );
 
         _token = PowerToken(address(proxy));
+
+        vm.startPrank(appAdmin);
+
+        _token.mintToTreasury(appAdmin, _token.MAX_SUPPLY());
+
+        assertEq(_token.balanceOf(address(appAdmin)), _token.MAX_SUPPLY());
+
+        _token.transfer(address(_token), 100_000 ether);
+
+        assertEq(_token.balanceOf(address(_token)), 100_000 ether);
+
+        vm.stopPrank();
     }
 
     function testMintAndBalanceOfPoints(uint256 amount) public {
         amount = bound(amount, 1, 10_000 ether);
 
         expectEmit();
-        emit Transfer(address(0), alice, amount);
+        emit Transfer(address(_token), alice, amount);
         emit DistributePoints(alice, amount);
         vm.prank(appAdmin);
         _token.mint(alice, amount);
@@ -67,7 +79,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         uint256 maxSupply = _token.MAX_SUPPLY();
         vm.expectRevert(abi.encodeWithSelector(ExceedsMaxSupply.selector));
         vm.prank(appAdmin);
-        _token.mint(alice, maxSupply + 1);
+        _token.mintToTreasury(alice, maxSupply + 1);
     }
 
     function testTipFeedId(uint256 amount) public {
@@ -89,6 +101,8 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     function testTipFeedIdMultiple() public {
         _mintPoints(alice, 100);
         _mintPoints(bob, 100);
+
+        uint256 tokenInitalBalance = _token.balanceOf(address(_token));
 
         uint256 balance = _token.balanceOf(charlie);
         assertEq(balance, 0);
@@ -112,7 +126,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         assertEq(feedBalance2, 20 + 25);
         assertEq(feedBalance3, 30 + 35);
 
-        assertEq(_token.balanceOf(address(_token)), 135);
+        assertEq(_token.balanceOf(address(_token)), tokenInitalBalance + 135);
     }
 
     function testTipAddress(uint256 amount) public {
