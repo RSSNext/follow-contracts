@@ -149,9 +149,7 @@ contract PowerToken is
     }
 
     /**
-     * @dev Mints points to a specified address.
-     * Increases the points balance of the recipient and mints the corresponding amount of tokens.
-     * Reverts if the total supply exceeds the maximum supply.
+     * @dev Issues points to a specified address by transferring tokens from the token contract.
      */
     function _issuePoints(address to, uint256 amount) internal {
         if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();

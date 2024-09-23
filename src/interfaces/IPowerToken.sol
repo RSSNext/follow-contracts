@@ -19,7 +19,7 @@ interface IPowerToken {
     function migrate(address[] calldata users, bytes32[] calldata feedIds) external;
 
     /**
-     * @notice Mints new token points.
+     * @notice Issues new token points.
      * @dev The caller must have the APP_ADMIN_ROLE.
      * @param to The account to receive the token points.
      * @param amount The amount of token points to mint.
@@ -27,10 +27,10 @@ interface IPowerToken {
     function mint(address to, uint256 amount) external;
 
     /**
-     * @notice Mints new token points to the treasury.
+     * @notice Mints new tokens to the treasury.
      * @dev The caller must have the APP_ADMIN_ROLE.
-     * @param admin The account to receive the token points.
-     * @param amount The amount of token points to mint.
+     * @param admin The account to receive the tokens.
+     * @param amount The amount of tokens to mint.
      */
     function mintToTreasury(address admin, uint256 amount) external;
 
