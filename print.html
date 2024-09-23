@@ -211,7 +211,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors"><a class="header" href="#ierrors">IErrors</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5c86340e2800ce3625b6943e32f10ae656503e11/src/interfaces/IErrors.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/7b542192fbafe8660943fef174ff9eed61dfe898/src/interfaces/IErrors.sol">Git Source</a></p>
 <h2 id="errors"><a class="header" href="#errors">Errors</a></h2>
 <h3 id="tipreceiverisempty"><a class="header" href="#tipreceiverisempty">TipReceiverIsEmpty</a></h3>
 <p><em>Tip parameter is empty.</em></p>
@@ -238,7 +238,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <pre><code class="language-solidity">error ExceedsMaxSupply();
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ievents"><a class="header" href="#ievents">IEvents</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5c86340e2800ce3625b6943e32f10ae656503e11/src/interfaces/IEvents.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/7b542192fbafe8660943fef174ff9eed61dfe898/src/interfaces/IEvents.sol">Git Source</a></p>
 <h2 id="events"><a class="header" href="#events">Events</a></h2>
 <h3 id="distributepoints"><a class="header" href="#distributepoints">DistributePoints</a></h3>
 <p><em>Emitted when points are distributed to an address.</em></p>
@@ -257,7 +257,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <pre><code class="language-solidity">event Withdrawn(address indexed user, address indexed to, uint256 indexed amount);
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5c86340e2800ce3625b6943e32f10ae656503e11/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/7b542192fbafe8660943fef174ff9eed61dfe898/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -282,7 +282,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </tbody></table>
 </div>
 <h3 id="mint"><a class="header" href="#mint">mint</a></h3>
-<p>Mints new token points.</p>
+<p>Issues new token points.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function mint(address to, uint256 amount) external;
 </code></pre>
@@ -293,14 +293,14 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </tbody></table>
 </div>
 <h3 id="minttotreasury"><a class="header" href="#minttotreasury">mintToTreasury</a></h3>
-<p>Mints new token points to the treasury.</p>
+<p>Mints new tokens to the treasury.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function mintToTreasury(address admin, uint256 amount) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>admin</code></td><td><code>address</code></td><td>The account to receive the token points.</td></tr>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to mint.</td></tr>
+<tr><td><code>admin</code></td><td><code>address</code></td><td>The account to receive the tokens.</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of tokens to mint.</td></tr>
 </tbody></table>
 </div>
 <h3 id="tip-1"><a class="header" href="#tip-1">tip</a></h3>
@@ -359,7 +359,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5c86340e2800ce3625b6943e32f10ae656503e11/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/7b542192fbafe8660943fef174ff9eed61dfe898/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
 <p>*This contract implements a proxy that is upgradeable by an admin.
@@ -452,7 +452,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5c86340e2800ce3625b6943e32f10ae656503e11/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/7b542192fbafe8660943fef174ff9eed61dfe898/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, <a href="src/PowerToken.sol//src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/PowerToken.sol//src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
@@ -507,18 +507,18 @@ Points balances are included in user's balance.</em></p>
 </tbody></table>
 </div>
 <h3 id="minttotreasury-1"><a class="header" href="#minttotreasury-1">mintToTreasury</a></h3>
-<p>Mints new token points to the treasury.</p>
+<p>Mints new tokens to the treasury.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function mintToTreasury(address admin, uint256 amount) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>admin</code></td><td><code>address</code></td><td>The account to receive the token points.</td></tr>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to mint.</td></tr>
+<tr><td><code>admin</code></td><td><code>address</code></td><td>The account to receive the tokens.</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of tokens to mint.</td></tr>
 </tbody></table>
 </div>
 <h3 id="mint-1"><a class="header" href="#mint-1">mint</a></h3>
-<p>Mints new token points.</p>
+<p>Issues new token points.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
@@ -590,9 +590,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <pre><code class="language-solidity">function transferFrom(address from, address to, uint256 value) public override returns (bool);
 </code></pre>
 <h3 id="_issuepoints"><a class="header" href="#_issuepoints">_issuePoints</a></h3>
-<p><em>Mints points to a specified address.
-Increases the points balance of the recipient and mints the corresponding amount of tokens.
-Reverts if the total supply exceeds the maximum supply.</em></p>
+<p><em>Issues points to a specified address by transferring tokens from the token contract.</em></p>
 <pre><code class="language-solidity">function _issuePoints(address to, uint256 amount) internal;
 </code></pre>
 <h3 id="_checktransferbalance"><a class="header" href="#_checktransferbalance">_checkTransferBalance</a></h3>
