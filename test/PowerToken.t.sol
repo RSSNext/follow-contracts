@@ -35,36 +35,57 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         );
 
         _token = PowerToken(address(proxy));
-
-        vm.startPrank(appAdmin);
-
-        _token.mintToTreasury(appAdmin, _token.MAX_SUPPLY());
-
-        assertEq(_token.balanceOf(address(appAdmin)), _token.MAX_SUPPLY());
-
-        _token.transfer(address(_token), 100_000 ether);
-
-        assertEq(_token.balanceOf(address(_token)), 100_000 ether);
-
-        vm.stopPrank();
     }
 
-    function testMintAndBalanceOfPoints(uint256 amount) public {
-        amount = bound(amount, 1, 10_000 ether);
+    function testMintToTreasury(uint256 amount) public {
+        amount = bound(amount, 1, _token.MAX_SUPPLY());
 
         expectEmit();
-        emit Transfer(address(_token), alice, amount);
+        emit Transfer(address(0x0), appAdmin, amount);
+        vm.prank(appAdmin);
+        _token.mintToTreasury(appAdmin, amount);
+
+        // check balance and points
+        assertEq(_token.balanceOf(appAdmin), amount);
+        assertEq(_token.balanceOfPoints(appAdmin), 0);
+    }
+
+    function testMintToTreasuryFail() public {
+        // case 1: caller has no `APP_ADMIN_ROLE` permission
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector,
+                address(this),
+                keccak256("APP_ADMIN_ROLE")
+            )
+        );
+        _token.mintToTreasury(alice, 1);
+
+        // case 2: max supply is reached
+        uint256 maxSupply = _token.MAX_SUPPLY();
+        vm.expectRevert(abi.encodeWithSelector(ExceedsMaxSupply.selector));
+        vm.prank(appAdmin);
+        _token.mintToTreasury(alice, maxSupply + 1);
+    }
+
+    function testMintPoints(uint256 amount) public {
+        amount = bound(amount, 1, 10_000 ether);
+
+        vm.prank(appAdmin);
+        _token.mintToTreasury(address(_token), amount);
+
+        expectEmit();
         emit DistributePoints(alice, amount);
         vm.prank(appAdmin);
         _token.mint(alice, amount);
 
-        // check balance and points
         assertEq(_token.balanceOf(alice), amount);
         assertEq(_token.balanceOfPoints(alice), amount);
-        assertEq(_token.balanceOfPoints(address(_token)), 0);
+
+        assertEq(_token.balanceOf(address(this)), 0);
     }
 
-    function testMintFail() public {
+    function testMintPointsFail() public {
         // case 1: caller has no `APP_ADMIN_ROLE` permission
         vm.expectRevert(
             abi.encodeWithSelector(
@@ -75,11 +96,14 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         );
         _token.mint(alice, 1);
 
-        // case 2: max supply is reached
-        uint256 maxSupply = _token.MAX_SUPPLY();
-        vm.expectRevert(abi.encodeWithSelector(ExceedsMaxSupply.selector));
+        uint256 amount = 1000 ether;
         vm.prank(appAdmin);
-        _token.mintToTreasury(alice, maxSupply + 1);
+        _token.mintToTreasury(address(_token), amount);
+
+        // case 2: balance is insufficient
+        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToTransfer.selector));
+        vm.prank(appAdmin);
+        _token.mint(alice, amount + 1);
     }
 
     function testTipFeedId(uint256 amount) public {
@@ -365,6 +389,9 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     }
 
     function _mintPoints(address user, uint256 amount) internal {
+        vm.prank(appAdmin);
+        _token.mintToTreasury(address(_token), amount);
+
         vm.prank(appAdmin);
         _token.mint(user, amount);
     }

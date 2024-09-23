@@ -73,6 +73,7 @@ contract PowerToken is
         }
     }
 
+    /// @inheritdoc IPowerToken
     function mintToTreasury(address admin, uint256 amount)
         external
         override
