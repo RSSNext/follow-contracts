@@ -31,6 +31,8 @@ contract PowerToken is
     /// Points balances are included in user's balance.
     mapping(address account => uint256) internal _pointsBalancesV2;
 
+    address public admin; // Admin address who will receive the tax
+
     /// @inheritdoc IPowerToken
     function initialize(string calldata name_, string calldata symbol_, address admin_)
         external
@@ -41,55 +43,56 @@ contract PowerToken is
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin_);
         _grantRole(APP_ADMIN_ROLE, admin_);
+
+        admin = admin_;
     }
 
     /// @inheritdoc IPowerToken
-    function migrate(address[] calldata users, bytes32[] calldata feedIds)
-        external
-        override
-        onlyRole(APP_ADMIN_ROLE)
-    {
-        // migrate balances and points balances
-        for (uint256 i = 0; i < users.length; i++) {
-            address user = users[i];
-
-            // mint 9 times of the balance to the user
-            uint256 balance = balanceOf(user);
-            _transfer(address(this), user, balance * 9);
-
-            // migrate v1 points balances to v2
-            uint256 points = _pointsBalancesV1[user];
-            _issuePoints(user, points * 10);
-
-            delete _pointsBalancesV1[user];
-        }
-
-        // migrate feed balances
-        for (uint256 i = 0; i < feedIds.length; i++) {
-            bytes32 feedId = feedIds[i];
-
-            // _mint(address(this), _feedBalances[feedId] * 9);
-            _feedBalances[feedId] *= 10;
-        }
-    }
-
-    /// @inheritdoc IPowerToken
-    function mintToTreasury(address admin, uint256 amount)
+    function mintToTreasury(address treasuryAdmin, uint256 amount)
         external
         override
         onlyRole(APP_ADMIN_ROLE)
     {
         if (amount + totalSupply() > MAX_SUPPLY) revert ExceedsMaxSupply();
-        _mint(admin, amount);
+        _mint(treasuryAdmin, amount);
     }
 
     /// @inheritdoc IPowerToken
-    function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE) {
-        _issuePoints(to, amount);
+    function mint(address to, uint256 amount, uint256 taxBasisPoints)
+        external
+        override
+        onlyRole(APP_ADMIN_ROLE)
+    {
+        if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
+
+        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
+
+        _transfer(address(this), admin, tax);
+
+        _issuePoints(to, amount - tax);
+    }
+
+    function airdrop(address to, uint256 amount, uint256 taxBasisPoints)
+        external
+        override
+        onlyRole(APP_ADMIN_ROLE)
+    {
+        if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
+
+        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
+
+        _transfer(address(this), admin, tax);
+
+        _transfer(address(this), to, amount - tax);
+
+        emit AirdropTokens(to, amount);
     }
 
     /// @inheritdoc IPowerToken
-    function tip(uint256 amount, address to, bytes32 feedId) external override {
+    function tip(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints)
+        external
+        override
+    {
         if (amount == 0) revert TipAmountIsZero();
         if (feedId == bytes32(0) && to == address(0)) revert TipReceiverIsEmpty();
         if (balanceOf(msg.sender) < amount) revert InsufficientBalanceAndPoints();
@@ -99,14 +102,20 @@ contract PowerToken is
         } else {
             _pointsBalancesV2[msg.sender] = 0;
         }
+        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
+
+        uint256 tipAmount = amount - tax;
 
         address receiver = to != address(0) ? to : address(this);
         if (receiver == address(this)) {
-            _feedBalances[feedId] += amount;
+            _feedBalances[feedId] += tipAmount;
         }
-        _transfer(msg.sender, receiver, amount);
 
-        emit Tip(msg.sender, to, feedId, amount);
+        _transfer(msg.sender, admin, tax);
+
+        _transfer(msg.sender, receiver, tipAmount);
+
+        emit Tip(msg.sender, to, feedId, tipAmount);
     }
 
     /// @inheritdoc IPowerToken
@@ -152,8 +161,6 @@ contract PowerToken is
      * @dev Issues points to a specified address by transferring tokens from the token contract.
      */
     function _issuePoints(address to, uint256 amount) internal {
-        if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
-
         _pointsBalancesV2[to] += amount;
 
         _transfer(address(this), to, amount);
@@ -173,5 +180,13 @@ contract PowerToken is
         uint256 points = _pointsBalancesV2[from];
         uint256 balance = balanceOf(from);
         if (value > balance - points) revert InsufficientBalanceToTransfer();
+    }
+
+    function _getTaxAmount(uint256 taxBasisPoints, uint256 amount)
+        internal
+        pure
+        returns (uint256)
+    {
+        return (taxBasisPoints * amount) / 10_000;
     }
 }
