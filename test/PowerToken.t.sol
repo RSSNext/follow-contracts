@@ -162,7 +162,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         vm.prank(alice);
         _token.dailyMint(1, 0);
 
-        uint256 amount = 1000 ether;
+        uint256 amount = 10_000 ether;
         vm.prank(appAdmin);
         _token.mintToTreasury(address(_token), amount);
 
@@ -175,6 +175,21 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         );
         vm.prank(alice);
         _token.dailyMint(amount + 1, 0);
+
+        // case 3: ExceedsDailyLimit
+        _addUser(alice);
+        amount = _token.getDailyMintLimit() + 1;
+        vm.expectRevert(abi.encodeWithSelector(ExceedsDailyLimit.selector));
+        vm.prank(alice);
+        _token.dailyMint(amount, 0);
+
+        // case 4: AlreadyMintedToday
+        vm.prank(alice);
+        _token.dailyMint(100 ether, 0);
+        skip(1 hours);
+        vm.expectRevert(abi.encodeWithSelector(AlreadyMintedToday.selector, alice));
+        vm.prank(alice);
+        _token.dailyMint(100 ether, 0);
     }
 
     function testDailyMintWithTax(uint256 taxBasisPoints) public {

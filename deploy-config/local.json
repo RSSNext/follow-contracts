@@ -3,5 +3,5 @@
   "name": "POWER",
   "symbol": "POWER",
   "appAdmin": "0x844e38Fae147aE933b0a930fF8EfDFF3767cEA24",
-  "dailyMintLimit": "10000000000000000000000"
+  "dailyMintLimit": "100000000000000000000000"
 }

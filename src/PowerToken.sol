@@ -210,7 +210,7 @@ contract PowerToken is
         if (amount == 0) return;
         if (amount > _dailyMintLimit) revert ExceedsDailyLimit();
 
-        uint256 currentDay = block.timestamp % 1 days;
+        uint256 currentDay = block.timestamp / 1 days;
         if (_hasMinted(to, currentDay)) revert AlreadyMintedToday(to);
         _setMinted(to, currentDay);
 
