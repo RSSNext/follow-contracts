@@ -135,7 +135,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         amount *= 1 ether;
 
         vm.prank(appAdmin);
-        _token.mintToTreasury(address(_token), amount);
+        _token.mintToTreasury(address(_token), amount * 2);
 
         _addUser(alice);
 
@@ -148,6 +148,13 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         assertEq(_token.balanceOfPoints(alice), amount);
 
         assertEq(_token.balanceOf(address(this)), 0);
+
+        // mint after a day
+        skip(1 days);
+        vm.prank(alice);
+        _token.dailyMint(amount, 0);
+        assertEq(_token.balanceOf(alice), amount * 2);
+        assertEq(_token.balanceOfPoints(alice), amount * 2);
     }
 
     function testDailyMintPointsFail() public {
@@ -186,7 +193,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         // case 4: AlreadyMintedToday
         vm.prank(alice);
         _token.dailyMint(100 ether, 0);
-        skip(1 hours);
+        skip(10 hours);
         vm.expectRevert(abi.encodeWithSelector(AlreadyMintedToday.selector, alice));
         vm.prank(alice);
         _token.dailyMint(100 ether, 0);
