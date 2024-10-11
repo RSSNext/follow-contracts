@@ -19,4 +19,7 @@ interface IErrors {
 
     /// @dev Exceeds max supply.
     error ExceedsMaxSupply();
+
+    /// @dev Already minted today.
+    error AlreadyMintedToday(address account);
 }

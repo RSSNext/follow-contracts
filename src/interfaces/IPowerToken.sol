@@ -19,12 +19,20 @@ interface IPowerToken {
     function mintToTreasury(address treasuryAdmin, uint256 amount) external;
 
     /**
+     * @notice Issues new token points.
+     * @dev The caller must have the APP_ADMIN_ROLE.
+     * @param to The account to receive the token points.
+     * @param amount The amount of token points to mint.
+     */
+    function mint(address to, uint256 amount) external;
+
+    /**
      * @notice Issues new token points to caller.
      * @dev The caller must have the APP_USER_ROLE.
      * @param amount The amount of token points to mint.
      * @param taxBasisPoints The tax basis points.
      */
-    function mint(uint256 amount, uint256 taxBasisPoints) external;
+    function dailyMint(uint256 amount, uint256 taxBasisPoints) external;
 
     /**
      * @notice Airdrops tokens to the users.

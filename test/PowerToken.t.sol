@@ -85,12 +85,10 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         vm.prank(appAdmin);
         _token.mintToTreasury(address(_token), amount);
 
-        _addUser(alice);
-
         expectEmit();
         emit DistributePoints(alice, amount);
-        vm.prank(alice);
-        _token.mint(amount, 0);
+        vm.prank(appAdmin);
+        _token.mint(alice, amount);
 
         assertEq(_token.balanceOf(alice), amount);
         assertEq(_token.balanceOfPoints(alice), amount);
@@ -99,6 +97,51 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     }
 
     function testMintPointsFail() public {
+        // case 1: caller has no `APP_ADMIN_ROLE` permission
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector,
+                address(this),
+                keccak256("APP_ADMIN_ROLE")
+            )
+        );
+        _token.mint(alice, 1);
+
+        uint256 amount = 1000 ether;
+        vm.prank(appAdmin);
+        _token.mintToTreasury(address(_token), amount);
+
+        // case 2: balance is insufficient
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                ERC20InsufficientBalance.selector, address(_token), amount, amount + 1
+            )
+        );
+        vm.prank(appAdmin);
+        _token.mint(alice, amount + 1);
+    }
+
+    function testDailyMintPoints(uint256 amount) public {
+        amount = bound(amount, 1, 1000);
+        amount *= 1 ether;
+
+        vm.prank(appAdmin);
+        _token.mintToTreasury(address(_token), amount);
+
+        _addUser(alice);
+
+        expectEmit();
+        emit DistributePoints(alice, amount);
+        vm.prank(alice);
+        _token.dailyMint(amount, 0);
+
+        assertEq(_token.balanceOf(alice), amount);
+        assertEq(_token.balanceOfPoints(alice), amount);
+
+        assertEq(_token.balanceOf(address(this)), 0);
+    }
+
+    function testDailyMintPointsFail() public {
         // case 1: caller has no `APP_USER_ROLE` permission
         vm.expectRevert(
             abi.encodeWithSelector(
@@ -108,7 +151,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
             )
         );
         vm.prank(alice);
-        _token.mint(1, 0);
+        _token.dailyMint(1, 0);
 
         uint256 amount = 1000 ether;
         vm.prank(appAdmin);
@@ -116,12 +159,16 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         // case 2: balance is insufficient
         _addUser(alice);
-        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToTransfer.selector));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                ERC20InsufficientBalance.selector, address(_token), amount, amount + 1
+            )
+        );
         vm.prank(alice);
-        _token.mint(amount + 1, 0);
+        _token.dailyMint(amount + 1, 0);
     }
 
-    function testMintWithTax(uint256 taxBasisPoints) public {
+    function testDailyMintWithTax(uint256 taxBasisPoints) public {
         uint256 amount = 1000 ether;
         taxBasisPoints = bound(taxBasisPoints, 1, 10_000);
 
@@ -137,7 +184,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         emit Transfer(address(_token), alice, amount - tax);
         emit DistributePoints(alice, amount - tax);
         vm.prank(alice);
-        _token.mint(amount, taxBasisPoints);
+        _token.dailyMint(amount, taxBasisPoints);
     }
 
     function testAddUser() public {

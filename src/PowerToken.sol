@@ -34,6 +34,8 @@ contract PowerToken is
 
     address public admin; // Admin address who will receive the tax
 
+    mapping(address account => mapping(uint256 day => bool hasMinted)) internal _dailyMinted;
+
     /// @inheritdoc IPowerToken
     function initialize(string calldata name_, string calldata symbol_, address admin_)
         external
@@ -59,7 +61,12 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function mint(uint256 amount, uint256 taxBasisPoints)
+    function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE) {
+        _issuePoints(to, amount);
+    }
+
+    /// @inheritdoc IPowerToken
+    function dailyMint(uint256 amount, uint256 taxBasisPoints)
         external
         override
         onlyRole(APP_USER_ROLE)
@@ -176,7 +183,12 @@ contract PowerToken is
      * @param taxBasisPoints The basis points to calculate the tax from.
      */
     function _mint(address to, uint256 amount, uint256 taxBasisPoints) internal {
-        if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
+        if (amount == 0) return;
+
+        uint256 currentDay = block.timestamp % 1 days;
+        if (_hasMinted(to, currentDay)) revert AlreadyMintedToday(to);
+
+        _setMinted(to, currentDay);
 
         uint256 tax = _getTaxAmount(taxBasisPoints, amount);
 
@@ -194,6 +206,14 @@ contract PowerToken is
         _transfer(address(this), to, amount);
 
         emit DistributePoints(to, amount);
+    }
+
+    function _setMinted(address account, uint256 day) internal {
+        _dailyMinted[account][day] = true;
+    }
+
+    function _hasMinted(address account, uint256 day) internal view returns (bool) {
+        return _dailyMinted[account][day];
     }
 
     /**
