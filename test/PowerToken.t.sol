@@ -221,6 +221,35 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.addUser(alice, 1 ether, 0);
     }
 
+    function testAddUsers() public {
+        address[] memory users = new address[](3);
+        users[0] = alice;
+        users[1] = bob;
+        users[2] = charlie;
+
+        vm.prank(appAdmin);
+        _token.addUsers(users);
+
+        assertEq(_token.hasRole(APP_USER_ROLE, alice), true);
+        assertEq(_token.hasRole(APP_USER_ROLE, bob), true);
+        assertEq(_token.hasRole(APP_USER_ROLE, charlie), true);
+    }
+
+    function testAddUsersFail() public {
+        // case 1: caller has no `APP_ADMIN_ROLE` permission
+        address[] memory users = new address[](1);
+        users[0] = alice;
+
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector,
+                address(this),
+                keccak256("APP_ADMIN_ROLE")
+            )
+        );
+        _token.addUsers(users);
+    }
+
     function testRemoveUser() public {
         vm.startPrank(appAdmin);
         _token.addUser(alice, 0, 0);

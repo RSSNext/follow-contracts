@@ -159,6 +159,13 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
+    function addUsers(address[] calldata accounts) external override onlyRole(APP_ADMIN_ROLE) {
+        for (uint256 i = 0; i < accounts.length; i++) {
+            _grantRole(APP_USER_ROLE, accounts[i]);
+        }
+    }
+
+    /// @inheritdoc IPowerToken
     function removeUser(address account) external override onlyRole(APP_ADMIN_ROLE) {
         _revokeRole(APP_USER_ROLE, account);
     }

@@ -86,6 +86,13 @@ interface IPowerToken {
     function addUser(address account, uint256 amount, uint256 taxBasisPoints) external;
 
     /**
+     * @notice Grants the APP_USER_ROLE to the specified accounts.
+     * @dev The caller must have the APP_ADMIN_ROLE.
+     * @param accounts The addresses to grant the role.
+     */
+    function addUsers(address[] calldata accounts) external;
+
+    /**
      * @notice Revokes the APP_USER_ROLE from the specified account.
      * @dev The caller must have the APP_ADMIN_ROLE.
      * @param account The address from which to revoke the role.
