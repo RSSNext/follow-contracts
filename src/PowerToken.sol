@@ -19,6 +19,7 @@ contract PowerToken is
     string public constant version = "1.1.0";
 
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
+    bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE");
 
     uint256 public constant MAX_SUPPLY = 10_000_000_000 ether;
 
@@ -58,20 +59,15 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function mint(address to, uint256 amount, uint256 taxBasisPoints)
+    function mint(uint256 amount, uint256 taxBasisPoints)
         external
         override
-        onlyRole(APP_ADMIN_ROLE)
+        onlyRole(APP_USER_ROLE)
     {
-        if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
-
-        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
-
-        _transfer(address(this), admin, tax);
-
-        _issuePoints(to, amount - tax);
+        _mint(msg.sender, amount, taxBasisPoints);
     }
 
+    /// @inheritdoc IPowerToken
     function airdrop(address to, uint256 amount, uint256 taxBasisPoints)
         external
         override
@@ -134,6 +130,21 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
+    function addUser(address account, uint256 amount, uint256 taxBasisPoints)
+        external
+        override
+        onlyRole(APP_ADMIN_ROLE)
+    {
+        _grantRole(APP_USER_ROLE, account);
+        _mint(account, amount, taxBasisPoints);
+    }
+
+    /// @inheritdoc IPowerToken
+    function removeUser(address account) external override onlyRole(APP_ADMIN_ROLE) {
+        _revokeRole(APP_USER_ROLE, account);
+    }
+
+    /// @inheritdoc IPowerToken
     function balanceOfPoints(address owner) external view override returns (uint256) {
         return _pointsBalancesV2[owner];
     }
@@ -155,6 +166,23 @@ contract PowerToken is
         _checkTransferBalance(from, value);
 
         return super.transferFrom(from, to, value);
+    }
+
+    /**
+     * @dev Mints token points to a specified address, applying a tax based on the provided basis
+     * points.
+     * @param to The address to mint token points to.
+     * @param amount The amount of token points to mint.
+     * @param taxBasisPoints The basis points to calculate the tax from.
+     */
+    function _mint(address to, uint256 amount, uint256 taxBasisPoints) internal {
+        if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
+
+        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
+
+        _transfer(address(this), admin, tax);
+
+        _issuePoints(to, amount - tax);
     }
 
     /**

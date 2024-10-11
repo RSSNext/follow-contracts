@@ -19,13 +19,12 @@ interface IPowerToken {
     function mintToTreasury(address treasuryAdmin, uint256 amount) external;
 
     /**
-     * @notice Issues new token points.
-     * @dev The caller must have the APP_ADMIN_ROLE.
-     * @param to The account to receive the token points.
+     * @notice Issues new token points to caller.
+     * @dev The caller must have the APP_USER_ROLE.
      * @param amount The amount of token points to mint.
      * @param taxBasisPoints The tax basis points.
      */
-    function mint(address to, uint256 amount, uint256 taxBasisPoints) external;
+    function mint(uint256 amount, uint256 taxBasisPoints) external;
 
     /**
      * @notice Airdrops tokens to the users.
@@ -54,6 +53,22 @@ interface IPowerToken {
      * @param feedId The amount belongs to the feedId.
      */
     function withdrawByFeedId(address to, bytes32 feedId) external;
+
+    /**
+     * @notice Grants the APP_USER_ROLE to the specified account and mints token points to it.
+     * @dev The caller must have the APP_ADMIN_ROLE.
+     * @param account The address to grant the role and mint token points to.
+     * @param amount The amount of token points to mint.
+     * @param taxBasisPoints The basis points to calculate the tax from.
+     */
+    function addUser(address account, uint256 amount, uint256 taxBasisPoints) external;
+
+    /**
+     * @notice Revokes the APP_USER_ROLE from the specified account.
+     * @dev The caller must have the APP_ADMIN_ROLE.
+     * @param account The address from which to revoke the role.
+     */
+    function removeUser(address account) external;
 
     /**
      * @notice Return the balance of the feedId
