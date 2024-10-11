@@ -218,17 +218,15 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.dailyMint(amount, taxBasisPoints);
     }
 
-    function testAddUser() public {
-        uint256 amount = 10_000 ether;
+    function testAddUserSucceed() public {
+        uint256 amount = 1000 ether;
+        vm.deal(appAdmin, amount);
 
         vm.prank(appAdmin);
-        _token.mintToTreasury(address(_token), amount);
-
-        vm.prank(appAdmin);
-        _token.addUser(alice, amount, 0);
+        _token.addUser{value: amount}(alice);
 
         assertEq(_token.hasRole(APP_USER_ROLE, alice), true);
-        assertEq(_token.balanceOfPoints(alice), amount);
+        assertEq(alice.balance, amount);
     }
 
     function testAddUserFail() public {
@@ -240,7 +238,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
                 keccak256("APP_ADMIN_ROLE")
             )
         );
-        _token.addUser(alice, 1 ether, 0);
+        _token.addUser(alice);
     }
 
     function testAddUsers() public {
@@ -274,7 +272,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
     function testRemoveUser() public {
         vm.startPrank(appAdmin);
-        _token.addUser(alice, 0, 0);
+        _token.addUser(alice);
         _token.removeUser(alice);
         vm.stopPrank();
 
@@ -647,13 +645,14 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     function _mintPoints(address user, uint256 amount) internal {
         vm.startPrank(appAdmin);
         _token.mintToTreasury(address(_token), amount);
-        _token.addUser(user, amount, 0);
+        _token.mint(user, amount, 0);
+        _token.addUser(user);
         vm.stopPrank();
     }
 
     function _addUser(address user) internal {
         vm.prank(appAdmin);
-        _token.addUser(user, 0, 0);
+        _token.addUser(user);
     }
 
     function _checkBalanceAndPoints(address user, uint256 balance, uint256 points) internal view {

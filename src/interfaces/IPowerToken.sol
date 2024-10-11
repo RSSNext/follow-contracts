@@ -77,20 +77,18 @@ interface IPowerToken {
     function withdrawByFeedId(address to, bytes32 feedId) external;
 
     /**
-     * @notice Grants the APP_USER_ROLE to the specified account and mints token points to it.
+     * @notice Grants the APP_USER_ROLE to the specified account and send native tokens to it.
      * @dev The caller must have the APP_ADMIN_ROLE.
-     * @param account The address to grant the role and mint token points to.
-     * @param amount The amount of token points to mint.
-     * @param taxBasisPoints The basis points to calculate the tax from.
+     * @param account The address to grant the role.
      */
-    function addUser(address account, uint256 amount, uint256 taxBasisPoints) external;
+    function addUser(address account) external payable;
 
     /**
      * @notice Grants the APP_USER_ROLE to the specified accounts.
      * @dev The caller must have the APP_ADMIN_ROLE.
      * @param accounts The addresses to grant the role.
      */
-    function addUsers(address[] calldata accounts) external;
+    function addUsers(address[] calldata accounts) external payable;
 
     /**
      * @notice Revokes the APP_USER_ROLE from the specified account.

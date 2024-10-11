@@ -8,6 +8,7 @@ import {AccessControlEnumerableUpgradeable} from
     "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
 import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 contract PowerToken is
     IPowerToken,
@@ -16,6 +17,8 @@ contract PowerToken is
     AccessControlEnumerableUpgradeable,
     ERC20Upgradeable
 {
+    using Address for address;
+
     string public constant version = "1.1.0";
 
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
@@ -83,7 +86,14 @@ contract PowerToken is
         override
         onlyRole(APP_USER_ROLE)
     {
-        _dailyMint(msg.sender, amount, taxBasisPoints);
+        if (amount == 0) return;
+        if (amount > _dailyMintLimit) revert ExceedsDailyLimit();
+
+        uint256 currentDay = block.timestamp / 1 days;
+        if (_hasMinted(msg.sender, currentDay)) revert AlreadyMintedToday(msg.sender);
+        _setMinted(msg.sender, currentDay);
+
+        _issuePoints(msg.sender, amount, taxBasisPoints);
     }
 
     /// @inheritdoc IPowerToken
@@ -149,19 +159,30 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function addUser(address account, uint256 amount, uint256 taxBasisPoints)
-        external
-        override
-        onlyRole(APP_ADMIN_ROLE)
-    {
+    function addUser(address account) external payable override onlyRole(APP_ADMIN_ROLE) {
         _grantRole(APP_USER_ROLE, account);
-        _dailyMint(account, amount, taxBasisPoints);
+
+        if (msg.value > 0) {
+            Address.sendValue(payable(account), msg.value);
+        }
     }
 
     /// @inheritdoc IPowerToken
-    function addUsers(address[] calldata accounts) external override onlyRole(APP_ADMIN_ROLE) {
+    function addUsers(address[] calldata accounts)
+        external
+        payable
+        override
+        onlyRole(APP_ADMIN_ROLE)
+    {
         for (uint256 i = 0; i < accounts.length; i++) {
             _grantRole(APP_USER_ROLE, accounts[i]);
+        }
+
+        if (msg.value > 0) {
+            uint256 value = msg.value / accounts.length;
+            for (uint256 i = 0; i < accounts.length; i++) {
+                Address.sendValue(payable(accounts[i]), value);
+            }
         }
     }
 
@@ -197,24 +218,6 @@ contract PowerToken is
         _checkTransferBalance(from, value);
 
         return super.transferFrom(from, to, value);
-    }
-
-    /**
-     * @dev Mints token points to a specified address, applying a tax based on the provided basis
-     * points.
-     * @param to The address to mint token points to.
-     * @param amount The amount of token points to mint.
-     * @param taxBasisPoints The basis points to calculate the tax from.
-     */
-    function _dailyMint(address to, uint256 amount, uint256 taxBasisPoints) internal {
-        if (amount == 0) return;
-        if (amount > _dailyMintLimit) revert ExceedsDailyLimit();
-
-        uint256 currentDay = block.timestamp / 1 days;
-        if (_hasMinted(to, currentDay)) revert AlreadyMintedToday(to);
-        _setMinted(to, currentDay);
-
-        _issuePoints(to, amount, taxBasisPoints);
     }
 
     /**

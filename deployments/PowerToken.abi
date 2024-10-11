@@ -59,20 +59,10 @@
         "name": "account",
         "type": "address",
         "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "taxBasisPoints",
-        "type": "uint256",
-        "internalType": "uint256"
       }
     ],
     "outputs": [],
-    "stateMutability": "nonpayable"
+    "stateMutability": "payable"
   },
   {
     "type": "function",
@@ -957,6 +947,17 @@
   },
   {
     "type": "error",
+    "name": "AddressInsufficientBalance",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address",
+        "internalType": "address"
+      }
+    ]
+  },
+  {
+    "type": "error",
     "name": "AlreadyMintedToday",
     "inputs": [
       {
@@ -1060,6 +1061,11 @@
   {
     "type": "error",
     "name": "ExceedsMaxSupply",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "FailedInnerCall",
     "inputs": []
   },
   {
