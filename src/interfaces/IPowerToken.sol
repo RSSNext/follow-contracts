@@ -11,38 +11,41 @@ interface IPowerToken {
     function initialize(string calldata name_, string calldata symbol_, address admin_) external;
 
     /**
-     * @notice Migrates the token points of users.
+     * @notice Mints tokens to the treasury.
      * @dev The caller must have the APP_ADMIN_ROLE.
-     * @param users The addresses of the users to migrate.
-     * @param feedIds The feed ids of the feeds to migrate.
+     * @param treasuryAdmin The account to receive the tokens.
+     * @param amount The amount of tokens to mint.
      */
-    function migrate(address[] calldata users, bytes32[] calldata feedIds) external;
+    function mintToTreasury(address treasuryAdmin, uint256 amount) external;
 
     /**
      * @notice Issues new token points.
      * @dev The caller must have the APP_ADMIN_ROLE.
      * @param to The account to receive the token points.
      * @param amount The amount of token points to mint.
+     * @param taxBasisPoints The tax basis points.
      */
-    function mint(address to, uint256 amount) external;
+    function mint(address to, uint256 amount, uint256 taxBasisPoints) external;
 
     /**
-     * @notice Mints new tokens to the treasury.
+     * @notice Airdrops tokens to the users.
      * @dev The caller must have the APP_ADMIN_ROLE.
-     * @param admin The account to receive the tokens.
+     * @param to The account to receive the tokens.
      * @param amount The amount of tokens to mint.
+     * @param taxBasisPoints The tax basis points.
      */
-    function mintToTreasury(address admin, uint256 amount) external;
+    function airdrop(address to, uint256 amount, uint256 taxBasisPoints) external;
 
     /**
      * @notice Tips with token points. If token points are not enough, it will try the balance.
      * @param amount The amount of token points to send. It can be empty.
      * @param to The address to send the token points. It can be empty.
      * @param feedId The feed id. It can be empty.
+     * @param taxBasisPoints The tax basis points.
      * @dev The to and feedId are optional, but at least one of them must be provided.
      * If both are provided, the `to` will be used.
      */
-    function tip(uint256 amount, address to, bytes32 feedId) external;
+    function tip(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints) external;
 
     /**
      * @notice Withdraws tokens by feedId. `to` is supposed to be the true owner of the feedId.
