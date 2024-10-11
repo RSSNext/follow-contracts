@@ -40,6 +40,11 @@ contract PowerToken is
     mapping(address account => mapping(uint256 day => bool hasMinted)) internal _dailyMinted;
     uint256 internal _dailyMintLimit;
 
+    modifier onlyAdminRole() {
+        _checkRole(APP_ADMIN_ROLE);
+        _;
+    }
+
     /// @inheritdoc IPowerToken
     function initialize(
         string calldata name_,
@@ -57,7 +62,7 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function setDailyMintLimit(uint256 limit) external override onlyRole(APP_ADMIN_ROLE) {
+    function setDailyMintLimit(uint256 limit) external override onlyAdminRole {
         _dailyMintLimit = limit;
     }
 
@@ -65,7 +70,7 @@ contract PowerToken is
     function mintToTreasury(address treasuryAdmin, uint256 amount)
         external
         override
-        onlyRole(APP_ADMIN_ROLE)
+        onlyAdminRole
     {
         if (amount + totalSupply() > MAX_SUPPLY) revert ExceedsMaxSupply();
         _mint(treasuryAdmin, amount);
@@ -75,7 +80,7 @@ contract PowerToken is
     function mint(address to, uint256 amount, uint256 taxBasisPoints)
         external
         override
-        onlyRole(APP_ADMIN_ROLE)
+        onlyAdminRole
     {
         _issuePoints(to, amount, taxBasisPoints);
     }
@@ -100,7 +105,7 @@ contract PowerToken is
     function airdrop(address to, uint256 amount, uint256 taxBasisPoints)
         external
         override
-        onlyRole(APP_ADMIN_ROLE)
+        onlyAdminRole
     {
         if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
 
@@ -144,11 +149,7 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function withdrawByFeedId(address to, bytes32 feedId)
-        external
-        override
-        onlyRole(APP_ADMIN_ROLE)
-    {
+    function withdrawByFeedId(address to, bytes32 feedId) external override onlyAdminRole {
         if (feedId == bytes32(0)) revert PointsInvalidReceiver(bytes32(0));
 
         uint256 amount = _feedBalances[feedId];
@@ -159,7 +160,7 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function addUser(address account) external payable override onlyRole(APP_ADMIN_ROLE) {
+    function addUser(address account) external payable override onlyAdminRole {
         _grantRole(APP_USER_ROLE, account);
 
         if (msg.value > 0) {
@@ -168,12 +169,7 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function addUsers(address[] calldata accounts)
-        external
-        payable
-        override
-        onlyRole(APP_ADMIN_ROLE)
-    {
+    function addUsers(address[] calldata accounts) external payable override onlyAdminRole {
         for (uint256 i = 0; i < accounts.length; i++) {
             _grantRole(APP_USER_ROLE, accounts[i]);
         }
@@ -187,7 +183,7 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function removeUser(address account) external override onlyRole(APP_ADMIN_ROLE) {
+    function removeUser(address account) external override onlyAdminRole {
         _revokeRole(APP_USER_ROLE, account);
     }
 
