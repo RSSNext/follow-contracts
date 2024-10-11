@@ -22,4 +22,7 @@ interface IErrors {
 
     /// @dev Already minted today.
     error AlreadyMintedToday(address account);
+
+    /// @dev Exceeds daily limit.
+    error ExceedsDailyLimit();
 }

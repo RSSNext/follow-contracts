@@ -7,8 +7,21 @@ interface IPowerToken {
      * @param name_ The name of the token.
      * @param symbol_ The symbol of the token.
      * @param admin_ The account to be granted with APP_ADMIN_ROLE.
+     * @param dailyMintLimit_ The token limit for daily mint.
      */
-    function initialize(string calldata name_, string calldata symbol_, address admin_) external;
+    function initialize(
+        string calldata name_,
+        string calldata symbol_,
+        address admin_,
+        uint256 dailyMintLimit_
+    ) external;
+
+    /**
+     * @notice Sets the token limit for daily mint.
+     * @dev The caller must have the APP_ADMIN_ROLE.
+     * @param limit The new limit to set.
+     */
+    function setDailyMintLimit(uint256 limit) external;
 
     /**
      * @notice Mints tokens to the treasury.
@@ -23,8 +36,9 @@ interface IPowerToken {
      * @dev The caller must have the APP_ADMIN_ROLE.
      * @param to The account to receive the token points.
      * @param amount The amount of token points to mint.
+     * @param taxBasisPoints The tax basis points.
      */
-    function mint(address to, uint256 amount) external;
+    function mint(address to, uint256 amount, uint256 taxBasisPoints) external;
 
     /**
      * @notice Issues new token points to caller.
@@ -91,4 +105,10 @@ interface IPowerToken {
      * @return The amount of the balance
      */
     function balanceOfPoints(address owner) external view returns (uint256);
+
+    /**
+     * @notice Returns the token limit for daily mint.
+     * @return The token limit for daily mint.
+     */
+    function getDailyMintLimit() external view returns (uint256);
 }

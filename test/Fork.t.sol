@@ -36,7 +36,9 @@ contract ForkTest is Utils, IErrors, IEvents {
         vm.prank(proxyAdminOwner);
         powerProxy.upgradeToAndCall(
             address(newImpl),
-            abi.encodeWithSelector(IPowerToken.initialize.selector, "POWER", "POWER", appAdmin)
+            abi.encodeWithSelector(
+                IPowerToken.initialize.selector, "POWER", "POWER", appAdmin, 10_000 ether
+            )
         );
     }
 

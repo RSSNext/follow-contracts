@@ -35,19 +35,27 @@ contract PowerToken is
     address public admin; // Admin address who will receive the tax
 
     mapping(address account => mapping(uint256 day => bool hasMinted)) internal _dailyMinted;
+    uint256 internal _dailyMintLimit;
 
     /// @inheritdoc IPowerToken
-    function initialize(string calldata name_, string calldata symbol_, address admin_)
-        external
-        override
-        reinitializer(4)
-    {
+    function initialize(
+        string calldata name_,
+        string calldata symbol_,
+        address admin_,
+        uint256 dailyMintLimit_
+    ) external override reinitializer(4) {
         super.__ERC20_init(name_, symbol_);
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin_);
         _grantRole(APP_ADMIN_ROLE, admin_);
 
         admin = admin_;
+        _dailyMintLimit = dailyMintLimit_;
+    }
+
+    /// @inheritdoc IPowerToken
+    function setDailyMintLimit(uint256 limit) external override onlyRole(APP_ADMIN_ROLE) {
+        _dailyMintLimit = limit;
     }
 
     /// @inheritdoc IPowerToken
@@ -61,8 +69,12 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function mint(address to, uint256 amount) external override onlyRole(APP_ADMIN_ROLE) {
-        _issuePoints(to, amount);
+    function mint(address to, uint256 amount, uint256 taxBasisPoints)
+        external
+        override
+        onlyRole(APP_ADMIN_ROLE)
+    {
+        _issuePoints(to, amount, taxBasisPoints);
     }
 
     /// @inheritdoc IPowerToken
@@ -71,7 +83,7 @@ contract PowerToken is
         override
         onlyRole(APP_USER_ROLE)
     {
-        _mint(msg.sender, amount, taxBasisPoints);
+        _dailyMint(msg.sender, amount, taxBasisPoints);
     }
 
     /// @inheritdoc IPowerToken
@@ -143,7 +155,7 @@ contract PowerToken is
         onlyRole(APP_ADMIN_ROLE)
     {
         _grantRole(APP_USER_ROLE, account);
-        _mint(account, amount, taxBasisPoints);
+        _dailyMint(account, amount, taxBasisPoints);
     }
 
     /// @inheritdoc IPowerToken
@@ -159,6 +171,11 @@ contract PowerToken is
     /// @inheritdoc IPowerToken
     function balanceOfByFeed(bytes32 feedId) external view override returns (uint256) {
         return _feedBalances[feedId];
+    }
+
+    /// @inheritdoc IPowerToken
+    function getDailyMintLimit() external view override returns (uint256) {
+        return _dailyMintLimit;
     }
 
     /// @inheritdoc IERC20
@@ -182,30 +199,29 @@ contract PowerToken is
      * @param amount The amount of token points to mint.
      * @param taxBasisPoints The basis points to calculate the tax from.
      */
-    function _mint(address to, uint256 amount, uint256 taxBasisPoints) internal {
+    function _dailyMint(address to, uint256 amount, uint256 taxBasisPoints) internal {
         if (amount == 0) return;
+        if (amount > _dailyMintLimit) revert ExceedsDailyLimit();
 
         uint256 currentDay = block.timestamp % 1 days;
         if (_hasMinted(to, currentDay)) revert AlreadyMintedToday(to);
-
         _setMinted(to, currentDay);
 
-        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
-
-        _transfer(address(this), admin, tax);
-
-        _issuePoints(to, amount - tax);
+        _issuePoints(to, amount, taxBasisPoints);
     }
 
     /**
      * @dev Issues points to a specified address by transferring tokens from the token contract.
      */
-    function _issuePoints(address to, uint256 amount) internal {
-        _pointsBalancesV2[to] += amount;
+    function _issuePoints(address to, uint256 amount, uint256 taxBasisPoints) internal {
+        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
+        _transfer(address(this), admin, tax);
 
-        _transfer(address(this), to, amount);
+        uint256 points = amount - tax;
+        _pointsBalancesV2[to] += points;
+        _transfer(address(this), to, points);
 
-        emit DistributePoints(to, amount);
+        emit DistributePoints(to, points);
     }
 
     function _setMinted(address account, uint256 day) internal {

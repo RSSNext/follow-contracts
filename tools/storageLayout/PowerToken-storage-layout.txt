@@ -1,5 +1,8 @@
-| Name              | Type                        | Slot | Offset | Bytes | Contract                      |
-|-------------------|-----------------------------|------|--------|-------|-------------------------------|
-| _pointsBalancesV1 | mapping(address => uint256) | 0    | 0      | 32    | src/PowerToken.sol:PowerToken |
-| _feedBalances     | mapping(bytes32 => uint256) | 1    | 0      | 32    | src/PowerToken.sol:PowerToken |
-| _pointsBalancesV2 | mapping(address => uint256) | 2    | 0      | 32    | src/PowerToken.sol:PowerToken |
+| Name              | Type                                         | Slot | Offset | Bytes | Contract                      |
+|-------------------|----------------------------------------------|------|--------|-------|-------------------------------|
+| _pointsBalancesV1 | mapping(address => uint256)                  | 0    | 0      | 32    | src/PowerToken.sol:PowerToken |
+| _feedBalances     | mapping(bytes32 => uint256)                  | 1    | 0      | 32    | src/PowerToken.sol:PowerToken |
+| _pointsBalancesV2 | mapping(address => uint256)                  | 2    | 0      | 32    | src/PowerToken.sol:PowerToken |
+| admin             | address                                      | 3    | 0      | 20    | src/PowerToken.sol:PowerToken |
+| _dailyMinted      | mapping(address => mapping(uint256 => bool)) | 4    | 0      | 32    | src/PowerToken.sol:PowerToken |
+| _dailyMintLimit   | uint256                                      | 5    | 0      | 32    | src/PowerToken.sol:PowerToken |
