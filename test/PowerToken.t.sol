@@ -2,6 +2,7 @@
 // solhint-disable comprehensive-interface,no-console,no-empty-blocks,function-max-lines
 pragma solidity 0.8.22;
 
+import {DeployConfig} from "../script/DeployConfig.s.sol";
 import {PowerToken} from "../src/PowerToken.sol";
 import {IErrors} from "../src/interfaces/IErrors.sol";
 import {IEvents} from "../src/interfaces/IEvents.sol";
@@ -10,9 +11,6 @@ import {Utils} from "./helpers/Utils.sol";
 import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
 contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
-    address public constant proxyAdmin = address(0x777);
-    address public constant appAdmin = address(0x999);
-
     address public constant alice = address(0x123);
     address public constant bob = address(0x456);
     address public constant charlie = address(0x789);
@@ -21,17 +19,27 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     bytes32 public constant someFeedId2 = bytes32("someFeedId2");
     bytes32 public constant someFeedId3 = bytes32("someFeedId3");
 
+    DeployConfig internal _cfg;
+    address public appAdmin;
+
     PowerToken internal _token;
 
     error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);
 
     function setUp() public {
+        // read config from local.json
+        string memory path = string.concat(vm.projectRoot(), "/deploy-config/", "local" ".json");
+        _cfg = new DeployConfig(path);
+        appAdmin = _cfg.appAdmin();
+
         PowerToken tokenImpl = new PowerToken();
 
         TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
             address(tokenImpl),
-            proxyAdmin,
-            abi.encodeWithSignature("initialize(string,string,address)", "POWER", "POWER", appAdmin)
+            _cfg.proxyAdminOwner(),
+            abi.encodeWithSignature(
+                "initialize(string,string,address)", _cfg.name(), _cfg.symbol(), _cfg.appAdmin()
+            )
         );
 
         _token = PowerToken(address(proxy));
