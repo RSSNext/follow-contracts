@@ -16,7 +16,7 @@ contract PowerToken is
     AccessControlEnumerableUpgradeable,
     ERC20Upgradeable
 {
-    string public constant version = "1.0.0";
+    string public constant version = "1.1.0";
 
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 
@@ -37,7 +37,7 @@ contract PowerToken is
     function initialize(string calldata name_, string calldata symbol_, address admin_)
         external
         override
-        reinitializer(3)
+        reinitializer(4)
     {
         super.__ERC20_init(name_, symbol_);
 
