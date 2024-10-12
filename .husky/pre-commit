@@ -13,5 +13,11 @@ yarn solhint
 echo "Running test"
 yarn test
 
-echo "Running pre-commit"
-yarn pre-commit
+echo "Checking if ABI files have changed"
+yarn abi
+if git diff --name-only | grep -q -E '\.abi$'; then
+    echo "ABI files have been updated. Please add these changes and commit again."
+    echo "You can do this by running:"
+    echo "git add . && git commit -m 'Your commit message'"
+    exit 1
+fi
