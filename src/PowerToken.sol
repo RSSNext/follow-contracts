@@ -26,6 +26,8 @@ contract PowerToken is
 
     uint256 public constant MAX_SUPPLY = 10_000_000_000 ether;
 
+    address public immutable ADMIN; // Admin address who will receive the tax
+
     mapping(address account => uint256) internal _pointsBalancesV1;
 
     /// @dev Token balances of the feed, which could be withdrawn to the feed owner.
@@ -35,14 +37,16 @@ contract PowerToken is
     /// Points balances are included in user's balance.
     mapping(address account => uint256) internal _pointsBalancesV2;
 
-    address public admin; // Admin address who will receive the tax
-
     mapping(address account => mapping(uint256 day => bool hasMinted)) internal _dailyMinted;
     uint256 internal _dailyMintLimit;
 
     modifier onlyAdminRole() {
         _checkRole(APP_ADMIN_ROLE);
         _;
+    }
+
+    constructor(address admin_) {
+        ADMIN = admin_;
     }
 
     /// @inheritdoc IPowerToken
@@ -54,11 +58,14 @@ contract PowerToken is
     ) external override reinitializer(4) {
         super.__ERC20_init(name_, symbol_);
 
-        _grantRole(DEFAULT_ADMIN_ROLE, admin_);
-        _grantRole(APP_ADMIN_ROLE, admin_);
+        if (admin_ != address(0)) {
+            _grantRole(DEFAULT_ADMIN_ROLE, admin_);
+            _grantRole(APP_ADMIN_ROLE, admin_);
+        }
 
-        admin = admin_;
-        _dailyMintLimit = dailyMintLimit_;
+        if (dailyMintLimit_ > 0) {
+            _dailyMintLimit = dailyMintLimit_;
+        }
     }
 
     /// @inheritdoc IPowerToken
@@ -91,7 +98,6 @@ contract PowerToken is
         override
         onlyRole(APP_USER_ROLE)
     {
-        if (amount == 0) return;
         if (amount > _dailyMintLimit) revert ExceedsDailyLimit();
 
         uint256 currentDay = block.timestamp / 1 days;
@@ -111,7 +117,7 @@ contract PowerToken is
 
         uint256 tax = _getTaxAmount(taxBasisPoints, amount);
 
-        _transfer(address(this), admin, tax);
+        _transfer(address(this), ADMIN, tax);
 
         _transfer(address(this), to, amount - tax);
 
@@ -141,7 +147,7 @@ contract PowerToken is
             _feedBalances[feedId] += tipAmount;
         }
 
-        _transfer(msg.sender, admin, tax);
+        _transfer(msg.sender, ADMIN, tax);
 
         _transfer(msg.sender, receiver, tipAmount);
 
@@ -170,13 +176,14 @@ contract PowerToken is
 
     /// @inheritdoc IPowerToken
     function addUsers(address[] calldata accounts) external payable override onlyAdminRole {
-        for (uint256 i = 0; i < accounts.length; i++) {
+        uint256 len = accounts.length;
+        for (uint256 i = 0; i < len; i++) {
             _grantRole(APP_USER_ROLE, accounts[i]);
         }
 
         if (msg.value > 0) {
-            uint256 value = msg.value / accounts.length;
-            for (uint256 i = 0; i < accounts.length; i++) {
+            uint256 value = msg.value / len;
+            for (uint256 i = 0; i < len; i++) {
                 Address.sendValue(payable(accounts[i]), value);
             }
         }
@@ -221,7 +228,7 @@ contract PowerToken is
      */
     function _issuePoints(address to, uint256 amount, uint256 taxBasisPoints) internal {
         uint256 tax = _getTaxAmount(taxBasisPoints, amount);
-        _transfer(address(this), admin, tax);
+        _transfer(address(this), ADMIN, tax);
 
         uint256 points = amount - tax;
         _pointsBalancesV2[to] += points;

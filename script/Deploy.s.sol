@@ -82,7 +82,7 @@ contract Deploy is Deployer {
     }
 
     function deployPowerToken() public broadcast returns (address addr_) {
-        PowerToken token = new PowerToken();
+        PowerToken token = new PowerToken(cfg.appAdmin());
 
         // check states
         save("PowerToken", address(token));

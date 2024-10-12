@@ -36,7 +36,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _cfg = new DeployConfig(path);
         appAdmin = _cfg.appAdmin();
 
-        PowerToken tokenImpl = new PowerToken();
+        PowerToken tokenImpl = new PowerToken(appAdmin);
 
         TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
             address(tokenImpl),
@@ -131,7 +131,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     }
 
     function testDailyMintPoints(uint256 amount) public {
-        amount = bound(amount, 1, 1000);
+        amount = bound(amount, 0, 1000);
         amount *= 1 ether;
 
         vm.prank(appAdmin);
@@ -222,11 +222,21 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         uint256 amount = 1000 ether;
         vm.deal(appAdmin, amount);
 
+        // add user
         vm.prank(appAdmin);
         _token.addUser{value: amount}(alice);
 
         assertEq(_token.hasRole(APP_USER_ROLE, alice), true);
         assertEq(alice.balance, amount);
+
+        // daily mint
+        vm.prank(appAdmin);
+        _token.mintToTreasury(address(_token), 100 ether);
+
+        vm.prank(alice);
+        _token.dailyMint(100 ether, 0);
+        assertEq(_token.balanceOf(alice), 100 ether);
+        assertEq(_token.balanceOfPoints(alice), 100 ether);
     }
 
     function testAddUserFail() public {
@@ -239,6 +249,15 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
             )
         );
         _token.addUser(alice);
+
+        // alice can't mint daily points
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector, alice, keccak256("APP_USER_ROLE")
+            )
+        );
+        vm.prank(alice);
+        _token.dailyMint(100 ether, 0);
     }
 
     function testAddUsers() public {
@@ -277,6 +296,15 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         vm.stopPrank();
 
         assertEq(_token.hasRole(APP_USER_ROLE, alice), false);
+
+        // alice can't mint daily points
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector, alice, keccak256("APP_USER_ROLE")
+            )
+        );
+        vm.prank(alice);
+        _token.dailyMint(100 ether, 0);
     }
 
     function testRemoveUserFail() public {

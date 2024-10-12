@@ -32,7 +32,7 @@ contract ForkTest is Utils, IErrors, IEvents {
         );
 
         // upgrade and call initialize
-        PowerToken newImpl = new PowerToken();
+        PowerToken newImpl = new PowerToken(appAdmin);
         vm.prank(proxyAdminOwner);
         powerProxy.upgradeToAndCall(
             address(newImpl),
@@ -56,7 +56,7 @@ contract ForkTest is Utils, IErrors, IEvents {
         assertEq(token.symbol(), "POWER");
 
         // check admin role
-        assertEq(token.admin(), appAdmin);
+        assertEq(token.ADMIN(), appAdmin);
         assertEq(token.hasRole(keccak256("APP_ADMIN_ROLE"), appAdmin), true);
         assertEq(token.hasRole(0x00, appAdmin), true);
 
