@@ -19,6 +19,7 @@
         "upgradeable": "make upgradeable",
         "mythril": "make mythril",
         "storage-layout": "make storage-layout",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "pre-commit": "yarn abi && git diff --cached --name-only --diff-filter=ACM | grep -E '\\.abi\\.json$' | xargs -r git add"
     }
 }

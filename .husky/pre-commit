@@ -12,3 +12,6 @@ yarn solhint
 # unit test
 echo "Running test"
 yarn test
+
+echo "Running pre-commit"
+yarn pre-commit
