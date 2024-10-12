@@ -82,7 +82,7 @@ contract Deploy is Deployer {
     }
 
     function deployPowerToken() public broadcast returns (address addr_) {
-        PowerToken token = new PowerToken();
+        PowerToken token = new PowerToken(cfg.appAdmin());
 
         // check states
         save("PowerToken", address(token));
@@ -93,7 +93,7 @@ contract Deploy is Deployer {
     function initializePowerToken() public broadcast {
         PowerToken tokenProxy = PowerToken(mustGetAddress("PowerTokenProxy"));
 
-        tokenProxy.initialize(cfg.name(), cfg.symbol(), cfg.appAdmin());
+        tokenProxy.initialize(cfg.name(), cfg.symbol(), cfg.appAdmin(), cfg.dailyMintLimit());
 
         // check states
         require(tokenProxy.hasRole(APP_ADMIN_ROLE, cfg.appAdmin()), "check admin role error");

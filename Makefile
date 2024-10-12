@@ -40,3 +40,7 @@ storage-layout:
 
 # Lints
 lint :; forge fmt
+
+abi:
+	@echo " > \033[32mGenerating abi...\033[0m"
+	./tools/generateABI.sh

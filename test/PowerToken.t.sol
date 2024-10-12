@@ -6,11 +6,15 @@ import {DeployConfig} from "../script/DeployConfig.s.sol";
 import {PowerToken} from "../src/PowerToken.sol";
 import {IErrors} from "../src/interfaces/IErrors.sol";
 import {IEvents} from "../src/interfaces/IEvents.sol";
+import {IPowerToken} from "../src/interfaces/IPowerToken.sol";
 import {TransparentUpgradeableProxy} from "../src/upgradeability/TransparentUpgradeableProxy.sol";
 import {Utils} from "./helpers/Utils.sol";
 import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
 contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
+    bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
+    bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE");
+
     address public constant alice = address(0x123);
     address public constant bob = address(0x456);
     address public constant charlie = address(0x789);
@@ -32,13 +36,17 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _cfg = new DeployConfig(path);
         appAdmin = _cfg.appAdmin();
 
-        PowerToken tokenImpl = new PowerToken();
+        PowerToken tokenImpl = new PowerToken(appAdmin);
 
         TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
             address(tokenImpl),
             _cfg.proxyAdminOwner(),
-            abi.encodeWithSignature(
-                "initialize(string,string,address)", _cfg.name(), _cfg.symbol(), _cfg.appAdmin()
+            abi.encodeWithSelector(
+                IPowerToken.initialize.selector,
+                _cfg.name(),
+                _cfg.symbol(),
+                _cfg.appAdmin(),
+                _cfg.dailyMintLimit()
             )
         );
 
@@ -76,21 +84,25 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.mintToTreasury(alice, maxSupply + 1);
     }
 
-    function testMintPoints(uint256 amount) public {
-        amount = bound(amount, 1, 10_000 ether);
+    function testMintPointsSucceed(uint256 amount, uint256 taxBasisPoints) public {
+        amount = bound(amount, 1, 10_000);
+        amount *= 1 ether;
+        taxBasisPoints = bound(taxBasisPoints, 1, 10_000);
+
+        uint256 expectedTax = (taxBasisPoints * amount) / 10_000;
 
         vm.prank(appAdmin);
         _token.mintToTreasury(address(_token), amount);
 
         expectEmit();
-        emit DistributePoints(alice, amount);
+        emit DistributePoints(alice, amount - expectedTax);
         vm.prank(appAdmin);
-        _token.mint(alice, amount, 0);
+        _token.mint(alice, amount, taxBasisPoints);
 
-        assertEq(_token.balanceOf(alice), amount);
-        assertEq(_token.balanceOfPoints(alice), amount);
+        assertEq(_token.balanceOf(alice), amount - expectedTax);
+        assertEq(_token.balanceOfPoints(alice), amount - expectedTax);
 
-        assertEq(_token.balanceOf(address(this)), 0);
+        assertEq(_token.balanceOf(appAdmin), expectedTax);
     }
 
     function testMintPointsFail() public {
@@ -109,12 +121,85 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.mintToTreasury(address(_token), amount);
 
         // case 2: balance is insufficient
-        vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceToTransfer.selector));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                ERC20InsufficientBalance.selector, address(_token), amount, amount + 1
+            )
+        );
         vm.prank(appAdmin);
         _token.mint(alice, amount + 1, 0);
     }
 
-    function testMintWithTax(uint256 taxBasisPoints) public {
+    function testDailyMintPoints(uint256 amount) public {
+        amount = bound(amount, 0, 1000);
+        amount *= 1 ether;
+
+        vm.prank(appAdmin);
+        _token.mintToTreasury(address(_token), amount * 2);
+
+        _addUser(alice);
+
+        expectEmit();
+        emit DistributePoints(alice, amount);
+        vm.prank(alice);
+        _token.dailyMint(amount, 0);
+
+        assertEq(_token.balanceOf(alice), amount);
+        assertEq(_token.balanceOfPoints(alice), amount);
+
+        assertEq(_token.balanceOf(address(this)), 0);
+
+        // mint after a day
+        skip(1 days);
+        vm.prank(alice);
+        _token.dailyMint(amount, 0);
+        assertEq(_token.balanceOf(alice), amount * 2);
+        assertEq(_token.balanceOfPoints(alice), amount * 2);
+    }
+
+    function testDailyMintPointsFail() public {
+        // case 1: caller has no `APP_USER_ROLE` permission
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector,
+                address(alice),
+                keccak256("APP_USER_ROLE")
+            )
+        );
+        vm.prank(alice);
+        _token.dailyMint(1, 0);
+
+        uint256 amount = 10_000 ether;
+        vm.prank(appAdmin);
+        _token.mintToTreasury(address(_token), amount);
+
+        // case 2: balance is insufficient
+        _addUser(alice);
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                ERC20InsufficientBalance.selector, address(_token), amount, amount + 1
+            )
+        );
+        vm.prank(alice);
+        _token.dailyMint(amount + 1, 0);
+
+        // case 3: ExceedsDailyLimit
+        _addUser(alice);
+        amount = _token.getDailyMintLimit() + 1;
+        vm.expectRevert(abi.encodeWithSelector(ExceedsDailyLimit.selector));
+        vm.prank(alice);
+        _token.dailyMint(amount, 0);
+
+        // case 4: AlreadyMintedToday
+        vm.prank(alice);
+        _token.dailyMint(100 ether, 0);
+        skip(10 hours);
+        vm.expectRevert(abi.encodeWithSelector(AlreadyMintedToday.selector, alice));
+        vm.prank(alice);
+        _token.dailyMint(100 ether, 0);
+    }
+
+    function testDailyMintWithTax(uint256 taxBasisPoints) public {
         uint256 amount = 1000 ether;
         taxBasisPoints = bound(taxBasisPoints, 1, 10_000);
 
@@ -123,12 +208,115 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         vm.prank(appAdmin);
         _token.mintToTreasury(address(_token), amount);
 
+        _addUser(alice);
+
         expectEmit();
         emit Transfer(address(_token), appAdmin, tax);
         emit Transfer(address(_token), alice, amount - tax);
         emit DistributePoints(alice, amount - tax);
+        vm.prank(alice);
+        _token.dailyMint(amount, taxBasisPoints);
+    }
+
+    function testAddUserSucceed() public {
+        uint256 amount = 1000 ether;
+        vm.deal(appAdmin, amount);
+
+        // add user
         vm.prank(appAdmin);
-        _token.mint(alice, amount, taxBasisPoints);
+        _token.addUser{value: amount}(alice);
+
+        assertEq(_token.hasRole(APP_USER_ROLE, alice), true);
+        assertEq(alice.balance, amount);
+
+        // daily mint
+        vm.prank(appAdmin);
+        _token.mintToTreasury(address(_token), 100 ether);
+
+        vm.prank(alice);
+        _token.dailyMint(100 ether, 0);
+        assertEq(_token.balanceOf(alice), 100 ether);
+        assertEq(_token.balanceOfPoints(alice), 100 ether);
+    }
+
+    function testAddUserFail() public {
+        // case 1: caller has no `APP_ADMIN_ROLE` permission
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector,
+                address(this),
+                keccak256("APP_ADMIN_ROLE")
+            )
+        );
+        _token.addUser(alice);
+
+        // alice can't mint daily points
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector, alice, keccak256("APP_USER_ROLE")
+            )
+        );
+        vm.prank(alice);
+        _token.dailyMint(100 ether, 0);
+    }
+
+    function testAddUsers() public {
+        address[] memory users = new address[](3);
+        users[0] = alice;
+        users[1] = bob;
+        users[2] = charlie;
+
+        vm.prank(appAdmin);
+        _token.addUsers(users);
+
+        assertEq(_token.hasRole(APP_USER_ROLE, alice), true);
+        assertEq(_token.hasRole(APP_USER_ROLE, bob), true);
+        assertEq(_token.hasRole(APP_USER_ROLE, charlie), true);
+    }
+
+    function testAddUsersFail() public {
+        // case 1: caller has no `APP_ADMIN_ROLE` permission
+        address[] memory users = new address[](1);
+        users[0] = alice;
+
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector,
+                address(this),
+                keccak256("APP_ADMIN_ROLE")
+            )
+        );
+        _token.addUsers(users);
+    }
+
+    function testRemoveUser() public {
+        vm.startPrank(appAdmin);
+        _token.addUser(alice);
+        _token.removeUser(alice);
+        vm.stopPrank();
+
+        assertEq(_token.hasRole(APP_USER_ROLE, alice), false);
+
+        // alice can't mint daily points
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector, alice, keccak256("APP_USER_ROLE")
+            )
+        );
+        vm.prank(alice);
+        _token.dailyMint(100 ether, 0);
+    }
+
+    function testRemoveUserFail() public {
+        // case 1: caller has no `APP_ADMIN_ROLE` permission
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector,
+                address(this),
+                keccak256("APP_ADMIN_ROLE")
+            )
+        );
+        _token.removeUser(alice);
     }
 
     function testAirdrop(uint256 taxBasisPoints) public {
@@ -148,8 +336,8 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.airdrop(alice, amount, taxBasisPoints);
     }
 
-    function testTipFeedId(uint256 amount) public {
-        amount = bound(amount, 1, 10_000 ether);
+    function testTipFeedIdSucceed(uint256 amount) public {
+        amount = bound(amount, 1, 1000 ether);
         uint256 initialPoints = 10 * amount;
 
         _mintPoints(alice, initialPoints);
@@ -379,6 +567,28 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.transfer(bob, tipAmount + 1);
     }
 
+    function testSetDailyMintLimit(uint256 limit) public {
+        limit = bound(limit, 1, 100_000);
+        limit *= 1 ether;
+
+        vm.prank(appAdmin);
+        _token.setDailyMintLimit(limit);
+
+        assertEq(_token.getDailyMintLimit(), limit);
+    }
+
+    function testSetDailyMintLimitFail() public {
+        // case 1: caller has no `APP_ADMIN_ROLE` permission
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AccessControlUnauthorizedAccount.selector,
+                address(this),
+                keccak256("APP_ADMIN_ROLE")
+            )
+        );
+        _token.setDailyMintLimit(100 ether);
+    }
+
     function testTransfer(uint256 amount) public {
         amount = bound(amount, 1, 100 ether);
         uint256 tipAmount = bound(amount, 1, amount);
@@ -461,11 +671,16 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     }
 
     function _mintPoints(address user, uint256 amount) internal {
-        vm.prank(appAdmin);
+        vm.startPrank(appAdmin);
         _token.mintToTreasury(address(_token), amount);
-
-        vm.prank(appAdmin);
         _token.mint(user, amount, 0);
+        _token.addUser(user);
+        vm.stopPrank();
+    }
+
+    function _addUser(address user) internal {
+        vm.prank(appAdmin);
+        _token.addUser(user);
     }
 
     function _checkBalanceAndPoints(address user, uint256 balance, uint256 points) internal view {

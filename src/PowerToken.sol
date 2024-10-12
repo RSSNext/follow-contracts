@@ -8,6 +8,7 @@ import {AccessControlEnumerableUpgradeable} from
     "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
 import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 contract PowerToken is
     IPowerToken,
@@ -16,11 +17,16 @@ contract PowerToken is
     AccessControlEnumerableUpgradeable,
     ERC20Upgradeable
 {
+    using Address for address;
+
     string public constant version = "1.1.0";
 
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
+    bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE");
 
     uint256 public constant MAX_SUPPLY = 10_000_000_000 ether;
+
+    address public immutable ADMIN; // Admin address who will receive the tax
 
     mapping(address account => uint256) internal _pointsBalancesV1;
 
@@ -31,27 +37,47 @@ contract PowerToken is
     /// Points balances are included in user's balance.
     mapping(address account => uint256) internal _pointsBalancesV2;
 
-    address public admin; // Admin address who will receive the tax
+    mapping(address account => mapping(uint256 day => bool hasMinted)) internal _dailyMinted;
+    uint256 internal _dailyMintLimit;
+
+    modifier onlyAdminRole() {
+        _checkRole(APP_ADMIN_ROLE);
+        _;
+    }
+
+    constructor(address admin_) {
+        ADMIN = admin_;
+    }
 
     /// @inheritdoc IPowerToken
-    function initialize(string calldata name_, string calldata symbol_, address admin_)
-        external
-        override
-        reinitializer(4)
-    {
+    function initialize(
+        string calldata name_,
+        string calldata symbol_,
+        address admin_,
+        uint256 dailyMintLimit_
+    ) external override reinitializer(4) {
         super.__ERC20_init(name_, symbol_);
 
-        _grantRole(DEFAULT_ADMIN_ROLE, admin_);
-        _grantRole(APP_ADMIN_ROLE, admin_);
+        if (admin_ != address(0)) {
+            _grantRole(DEFAULT_ADMIN_ROLE, admin_);
+            _grantRole(APP_ADMIN_ROLE, admin_);
+        }
 
-        admin = admin_;
+        if (dailyMintLimit_ > 0) {
+            _dailyMintLimit = dailyMintLimit_;
+        }
+    }
+
+    /// @inheritdoc IPowerToken
+    function setDailyMintLimit(uint256 limit) external override onlyAdminRole {
+        _dailyMintLimit = limit;
     }
 
     /// @inheritdoc IPowerToken
     function mintToTreasury(address treasuryAdmin, uint256 amount)
         external
         override
-        onlyRole(APP_ADMIN_ROLE)
+        onlyAdminRole
     {
         if (amount + totalSupply() > MAX_SUPPLY) revert ExceedsMaxSupply();
         _mint(treasuryAdmin, amount);
@@ -61,27 +87,37 @@ contract PowerToken is
     function mint(address to, uint256 amount, uint256 taxBasisPoints)
         external
         override
-        onlyRole(APP_ADMIN_ROLE)
+        onlyAdminRole
     {
-        if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
-
-        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
-
-        _transfer(address(this), admin, tax);
-
-        _issuePoints(to, amount - tax);
+        _issuePoints(to, amount, taxBasisPoints);
     }
 
+    /// @inheritdoc IPowerToken
+    function dailyMint(uint256 amount, uint256 taxBasisPoints)
+        external
+        override
+        onlyRole(APP_USER_ROLE)
+    {
+        if (amount > _dailyMintLimit) revert ExceedsDailyLimit();
+
+        uint256 currentDay = block.timestamp / 1 days;
+        if (_hasMinted(msg.sender, currentDay)) revert AlreadyMintedToday(msg.sender);
+        _setMinted(msg.sender, currentDay);
+
+        _issuePoints(msg.sender, amount, taxBasisPoints);
+    }
+
+    /// @inheritdoc IPowerToken
     function airdrop(address to, uint256 amount, uint256 taxBasisPoints)
         external
         override
-        onlyRole(APP_ADMIN_ROLE)
+        onlyAdminRole
     {
         if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
 
         uint256 tax = _getTaxAmount(taxBasisPoints, amount);
 
-        _transfer(address(this), admin, tax);
+        _transfer(address(this), ADMIN, tax);
 
         _transfer(address(this), to, amount - tax);
 
@@ -111,7 +147,7 @@ contract PowerToken is
             _feedBalances[feedId] += tipAmount;
         }
 
-        _transfer(msg.sender, admin, tax);
+        _transfer(msg.sender, ADMIN, tax);
 
         _transfer(msg.sender, receiver, tipAmount);
 
@@ -119,11 +155,7 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function withdrawByFeedId(address to, bytes32 feedId)
-        external
-        override
-        onlyRole(APP_ADMIN_ROLE)
-    {
+    function withdrawByFeedId(address to, bytes32 feedId) external override onlyAdminRole {
         if (feedId == bytes32(0)) revert PointsInvalidReceiver(bytes32(0));
 
         uint256 amount = _feedBalances[feedId];
@@ -134,6 +166,35 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
+    function addUser(address account) external payable override onlyAdminRole {
+        _grantRole(APP_USER_ROLE, account);
+
+        if (msg.value > 0) {
+            Address.sendValue(payable(account), msg.value);
+        }
+    }
+
+    /// @inheritdoc IPowerToken
+    function addUsers(address[] calldata accounts) external payable override onlyAdminRole {
+        uint256 len = accounts.length;
+        for (uint256 i = 0; i < len; i++) {
+            _grantRole(APP_USER_ROLE, accounts[i]);
+        }
+
+        if (msg.value > 0) {
+            uint256 value = msg.value / len;
+            for (uint256 i = 0; i < len; i++) {
+                Address.sendValue(payable(accounts[i]), value);
+            }
+        }
+    }
+
+    /// @inheritdoc IPowerToken
+    function removeUser(address account) external override onlyAdminRole {
+        _revokeRole(APP_USER_ROLE, account);
+    }
+
+    /// @inheritdoc IPowerToken
     function balanceOfPoints(address owner) external view override returns (uint256) {
         return _pointsBalancesV2[owner];
     }
@@ -141,6 +202,11 @@ contract PowerToken is
     /// @inheritdoc IPowerToken
     function balanceOfByFeed(bytes32 feedId) external view override returns (uint256) {
         return _feedBalances[feedId];
+    }
+
+    /// @inheritdoc IPowerToken
+    function getDailyMintLimit() external view override returns (uint256) {
+        return _dailyMintLimit;
     }
 
     /// @inheritdoc IERC20
@@ -160,12 +226,23 @@ contract PowerToken is
     /**
      * @dev Issues points to a specified address by transferring tokens from the token contract.
      */
-    function _issuePoints(address to, uint256 amount) internal {
-        _pointsBalancesV2[to] += amount;
+    function _issuePoints(address to, uint256 amount, uint256 taxBasisPoints) internal {
+        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
+        _transfer(address(this), ADMIN, tax);
 
-        _transfer(address(this), to, amount);
+        uint256 points = amount - tax;
+        _pointsBalancesV2[to] += points;
+        _transfer(address(this), to, points);
 
-        emit DistributePoints(to, amount);
+        emit DistributePoints(to, points);
+    }
+
+    function _setMinted(address account, uint256 day) internal {
+        _dailyMinted[account][day] = true;
+    }
+
+    function _hasMinted(address account, uint256 day) internal view returns (bool) {
+        return _dailyMinted[account][day];
     }
 
     /**

@@ -11,7 +11,7 @@ import {TransparentUpgradeableProxy as Proxy} from
 import {Utils} from "./helpers/Utils.sol";
 
 contract ForkTest is Utils, IErrors, IEvents {
-    address public appAdmin = vm.addr(11);
+    address public appAdmin = 0xf496eEeD857aA4709AC4D5B66b6711975623D355;
     address public proxyAdminOwner = 0x8AC80fa0993D95C9d6B8Cb494E561E6731038941;
     bytes32 public initializerSlot =
         0xf0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a00;
@@ -32,11 +32,13 @@ contract ForkTest is Utils, IErrors, IEvents {
         );
 
         // upgrade and call initialize
-        PowerToken newImpl = new PowerToken();
+        PowerToken newImpl = new PowerToken(appAdmin);
         vm.prank(proxyAdminOwner);
         powerProxy.upgradeToAndCall(
             address(newImpl),
-            abi.encodeWithSelector(IPowerToken.initialize.selector, "POWER", "POWER", appAdmin)
+            abi.encodeWithSelector(
+                IPowerToken.initialize.selector, "POWER", "POWER", address(0), 10_000 ether
+            )
         );
     }
 
@@ -54,9 +56,8 @@ contract ForkTest is Utils, IErrors, IEvents {
         assertEq(token.symbol(), "POWER");
 
         // check admin role
-        assertEq(token.admin(), appAdmin);
+        assertEq(token.ADMIN(), appAdmin);
         assertEq(token.hasRole(keccak256("APP_ADMIN_ROLE"), appAdmin), true);
-        assertEq(token.hasRole(0x00, appAdmin), true);
 
         // check max supply
         assertEq(token.totalSupply(), token.MAX_SUPPLY());

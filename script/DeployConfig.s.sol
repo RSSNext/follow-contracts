@@ -17,6 +17,7 @@ contract DeployConfig is Script {
     string public symbol;
     address public proxyAdminOwner;
     address public appAdmin;
+    uint256 public dailyMintLimit;
 
     constructor(string memory _path) {
         console.log("DeployConfig: reading file %s", _path);
@@ -33,5 +34,6 @@ contract DeployConfig is Script {
         symbol = stdJson.readString(_json, "$.symbol");
         proxyAdminOwner = stdJson.readAddress(_json, "$.proxyAdminOwner");
         appAdmin = stdJson.readAddress(_json, "$.appAdmin");
+        dailyMintLimit = stdJson.readUint(_json, "$.dailyMintLimit");
     }
 }
