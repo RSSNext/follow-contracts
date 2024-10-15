@@ -211,7 +211,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors"><a class="header" href="#ierrors">IErrors</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/235cbebc29af3910532ca0711d8892c4d695107e/src/interfaces/IErrors.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/d287b7143df8b6b8e66100d839df03666fdc690e/src/interfaces/IErrors.sol">Git Source</a></p>
 <h2 id="errors"><a class="header" href="#errors">Errors</a></h2>
 <h3 id="tipreceiverisempty"><a class="header" href="#tipreceiverisempty">TipReceiverIsEmpty</a></h3>
 <p><em>Tip parameter is empty.</em></p>
@@ -246,7 +246,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <pre><code class="language-solidity">error ExceedsDailyLimit();
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ievents"><a class="header" href="#ievents">IEvents</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/235cbebc29af3910532ca0711d8892c4d695107e/src/interfaces/IEvents.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/d287b7143df8b6b8e66100d839df03666fdc690e/src/interfaces/IEvents.sol">Git Source</a></p>
 <h2 id="events"><a class="header" href="#events">Events</a></h2>
 <h3 id="distributepoints"><a class="header" href="#distributepoints">DistributePoints</a></h3>
 <p><em>Emitted when points are distributed to an address.</em></p>
@@ -260,6 +260,16 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <p><em>Emitted when points are airdropped to an address.</em></p>
 <pre><code class="language-solidity">event AirdropTokens(address indexed to, uint256 indexed amount);
 </code></pre>
+<h3 id="taxcollected"><a class="header" href="#taxcollected">TaxCollected</a></h3>
+<p><em>Emitted when tax is collected.</em></p>
+<pre><code class="language-solidity">event TaxCollected(address indexed collector, uint256 indexed amount);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>collector</code></td><td><code>address</code></td><td>The address that collected the tax.</td></tr>
+<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of tax collected.</td></tr>
+</tbody></table>
+</div>
 <h3 id="withdrawnbyfeedid"><a class="header" href="#withdrawnbyfeedid">WithdrawnByFeedId</a></h3>
 <p><em>Emitted when points are withdrawn by feed id.</em></p>
 <pre><code class="language-solidity">event WithdrawnByFeedId(address indexed to, bytes32 indexed feedId, uint256 indexed amount);
@@ -269,7 +279,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <pre><code class="language-solidity">event Withdrawn(address indexed user, address indexed to, uint256 indexed amount);
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/235cbebc29af3910532ca0711d8892c4d695107e/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/d287b7143df8b6b8e66100d839df03666fdc690e/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -440,7 +450,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/235cbebc29af3910532ca0711d8892c4d695107e/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/d287b7143df8b6b8e66100d839df03666fdc690e/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
 <p>*This contract implements a proxy that is upgradeable by an admin.
@@ -533,7 +543,7 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/235cbebc29af3910532ca0711d8892c4d695107e/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/d287b7143df8b6b8e66100d839df03666fdc690e/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, <a href="src/PowerToken.sol//src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/PowerToken.sol//src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
