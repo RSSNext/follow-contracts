@@ -117,9 +117,14 @@ contract PowerToken is
 
         uint256 tax = _getTaxAmount(taxBasisPoints, amount);
 
-        _transfer(address(this), ADMIN, tax);
+        uint256 airdropAmount = amount - tax;
 
-        _transfer(address(this), to, amount - tax);
+        if (tax > 0) {
+            _transfer(address(this), ADMIN, tax);
+            emit TaxCollected(ADMIN, tax);
+        }
+
+        _transfer(address(this), to, airdropAmount);
 
         emit AirdropTokens(to, amount);
     }
@@ -147,7 +152,10 @@ contract PowerToken is
             _feedBalances[feedId] += tipAmount;
         }
 
-        _transfer(msg.sender, ADMIN, tax);
+        if (tax > 0) {
+            _transfer(msg.sender, ADMIN, tax);
+            emit TaxCollected(ADMIN, tax);
+        }
 
         _transfer(msg.sender, receiver, tipAmount);
 
@@ -228,9 +236,13 @@ contract PowerToken is
      */
     function _issuePoints(address to, uint256 amount, uint256 taxBasisPoints) internal {
         uint256 tax = _getTaxAmount(taxBasisPoints, amount);
-        _transfer(address(this), ADMIN, tax);
-
         uint256 points = amount - tax;
+
+        if (tax > 0) {
+            _transfer(address(this), ADMIN, tax);
+            emit TaxCollected(ADMIN, tax);
+        }
+
         _pointsBalancesV2[to] += points;
         _transfer(address(this), to, points);
 
