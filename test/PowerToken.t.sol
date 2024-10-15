@@ -95,6 +95,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.mintToTreasury(address(_token), amount);
 
         expectEmit();
+        emit TaxCollected(appAdmin, expectedTax);
         emit DistributePoints(alice, amount - expectedTax);
         vm.prank(appAdmin);
         _token.mint(alice, amount, taxBasisPoints);
@@ -212,6 +213,8 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         expectEmit();
         emit Transfer(address(_token), appAdmin, tax);
+        emit TaxCollected(appAdmin, tax);
+
         emit Transfer(address(_token), alice, amount - tax);
         emit DistributePoints(alice, amount - tax);
         vm.prank(alice);
@@ -330,6 +333,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         expectEmit();
         emit Transfer(address(_token), appAdmin, tax);
+        emit TaxCollected(appAdmin, tax);
         emit Transfer(address(_token), alice, amount - tax);
         emit AirdropTokens(alice, amount - tax);
         vm.prank(appAdmin);
