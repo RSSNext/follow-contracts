@@ -479,17 +479,20 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     }
 
     function testTipFail() public {
-        // case 1:  TipAmountIsZero
-        vm.expectRevert(abi.encodeWithSelector(TipAmountIsZero.selector));
+        _mintPoints(alice, 100);
+        vm.startPrank(alice);
+        // case 1:  AmountIsZero
+        vm.expectRevert(abi.encodeWithSelector(AmountIsZero.selector));
         _token.tip(0, bob, "", 0);
 
-        // case 2: TipReceiverIsEmpty
-        vm.expectRevert(abi.encodeWithSelector(TipReceiverIsEmpty.selector));
+        // case 2: ReceiverIsEmpty
+        vm.expectRevert(abi.encodeWithSelector(ReceiverIsEmpty.selector));
         _token.tip(1, address(0x0), "", 0);
 
         // case 3: InsufficientBalanceAndPoints
         vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceAndPoints.selector));
-        _token.tip(1, bob, "", 0);
+        _token.tip(101, bob, "", 0);
+        vm.stopPrank();
 
         // case 4: InsufficientBalanceToTransfer
         _mintPoints(charlie, 100);
@@ -501,6 +504,20 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         vm.expectRevert(abi.encodeWithSelector(InsufficientBalanceAndPoints.selector));
         vm.prank(david);
         _token.tip(200, david, "", 0);
+    }
+
+    function testPurchase() public {
+        _mintPoints(alice, 100 ether);
+
+        vm.prank(alice);
+        expectEmit();
+        emit Purchase(alice, address(0), "0x1234", 10 ether);
+        _token.purchase(10 ether, address(0), "0x1234", 0);
+
+        vm.prank(alice);
+        expectEmit();
+        emit Purchase(alice, address(0), "0x1234", 9 ether);
+        _token.purchase(10 ether, address(0), "0x1234", 1000);
     }
 
     function testWithdrawByFeedId(uint256 amount) public {

@@ -2,14 +2,14 @@
 pragma solidity 0.8.22;
 
 interface IErrors {
-    /// @dev Tip parameter is empty.
-    error TipReceiverIsEmpty();
+    /// @dev receiver is empty.
+    error ReceiverIsEmpty();
 
     /// @dev Points receiver is invalid.
     error PointsInvalidReceiver(bytes32);
 
-    /// @dev Tip amount is zero.
-    error TipAmountIsZero();
+    /// @dev Amount is zero.
+    error AmountIsZero();
 
     /// @dev Insufficient balance and points.
     error InsufficientBalanceAndPoints();
