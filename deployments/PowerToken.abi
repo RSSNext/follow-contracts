@@ -461,6 +461,34 @@
   },
   {
     "type": "function",
+    "name": "purchase",
+    "inputs": [
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "feedId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "taxBasisPoints",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "removeUser",
     "inputs": [
       {
@@ -756,6 +784,37 @@
   },
   {
     "type": "event",
+    "name": "Purchase",
+    "inputs": [
+      {
+        "name": "from",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "feedId",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "RoleAdminChanged",
     "inputs": [
       {
@@ -999,6 +1058,11 @@
   },
   {
     "type": "error",
+    "name": "AmountIsZero",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "ERC20InsufficientAllowance",
     "inputs": [
       {
@@ -1131,12 +1195,7 @@
   },
   {
     "type": "error",
-    "name": "TipAmountIsZero",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "TipReceiverIsEmpty",
+    "name": "ReceiverIsEmpty",
     "inputs": []
   }
 ]

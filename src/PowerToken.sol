@@ -130,34 +130,21 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
+    function purchase(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints)
+        external
+        override
+    {
+        uint256 purchaseAmount = _payWithTax(msg.sender, to, feedId, amount, taxBasisPoints);
+
+        emit Purchase(msg.sender, to, feedId, purchaseAmount);
+    }
+
+    /// @inheritdoc IPowerToken
     function tip(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints)
         external
         override
     {
-        if (amount == 0) revert TipAmountIsZero();
-        if (feedId == bytes32(0) && to == address(0)) revert TipReceiverIsEmpty();
-        if (balanceOf(msg.sender) < amount) revert InsufficientBalanceAndPoints();
-
-        if (_pointsBalancesV2[msg.sender] >= amount) {
-            _pointsBalancesV2[msg.sender] -= amount;
-        } else {
-            _pointsBalancesV2[msg.sender] = 0;
-        }
-        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
-
-        uint256 tipAmount = amount - tax;
-
-        address receiver = to != address(0) ? to : address(this);
-        if (receiver == address(this)) {
-            _feedBalances[feedId] += tipAmount;
-        }
-
-        if (tax > 0) {
-            _transfer(msg.sender, ADMIN, tax);
-            emit TaxCollected(ADMIN, tax);
-        }
-
-        _transfer(msg.sender, receiver, tipAmount);
+        uint256 tipAmount = _payWithTax(msg.sender, to, feedId, amount, taxBasisPoints);
 
         emit Tip(msg.sender, to, feedId, tipAmount);
     }
@@ -229,6 +216,43 @@ contract PowerToken is
         _checkTransferBalance(from, value);
 
         return super.transferFrom(from, to, value);
+    }
+
+    function _payWithTax(
+        address from,
+        address to,
+        bytes32 feedId,
+        uint256 amount,
+        uint256 taxBasisPoints
+    ) internal returns (uint256) {
+        if (amount == 0) revert AmountIsZero();
+
+        if (balanceOf(from) < amount) revert InsufficientBalanceAndPoints();
+
+        if (feedId == bytes32(0) && to == address(0)) revert ReceiverIsEmpty();
+
+        if (_pointsBalancesV2[from] >= amount) {
+            _pointsBalancesV2[from] -= amount;
+        } else {
+            _pointsBalancesV2[from] = 0;
+        }
+        uint256 tax = _getTaxAmount(taxBasisPoints, amount);
+
+        if (tax > 0) {
+            _transfer(msg.sender, ADMIN, tax);
+            emit TaxCollected(ADMIN, tax);
+        }
+
+        uint256 tipAmount = amount - tax;
+
+        address receiver = to != address(0) ? to : address(this);
+        if (receiver == address(this)) {
+            _feedBalances[feedId] += tipAmount;
+        }
+
+        _transfer(msg.sender, receiver, tipAmount);
+
+        return tipAmount;
     }
 
     /**

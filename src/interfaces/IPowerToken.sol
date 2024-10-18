@@ -58,8 +58,20 @@ interface IPowerToken {
     function airdrop(address to, uint256 amount, uint256 taxBasisPoints) external;
 
     /**
+     * @notice Purchases with token points. If token points are not enough, it will try the balance.
+     * @param amount The amount of token points to send.
+     * @param to The address to send the token points. It can be empty.
+     * @param feedId The feed id. It can be empty.
+     * @param taxBasisPoints The tax basis points.
+     * @dev The to and feedId are optional, but at least one of them must be provided.
+     * If both are provided, the `to` will be used.
+     */
+    function purchase(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints)
+        external;
+
+    /**
      * @notice Tips with token points. If token points are not enough, it will try the balance.
-     * @param amount The amount of token points to send. It can be empty.
+     * @param amount The amount of token points to send.
      * @param to The address to send the token points. It can be empty.
      * @param feedId The feed id. It can be empty.
      * @param taxBasisPoints The tax basis points.
