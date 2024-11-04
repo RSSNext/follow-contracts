@@ -15,6 +15,10 @@ contract DeployConfig is Script {
 
     string public name;
     string public symbol;
+
+    string public nftName;
+    string public nftSymbol;
+
     address public proxyAdminOwner;
     address public appAdmin;
     uint256 public dailyMintLimit;
@@ -32,6 +36,8 @@ contract DeployConfig is Script {
 
         name = stdJson.readString(_json, "$.name");
         symbol = stdJson.readString(_json, "$.symbol");
+        nftName = stdJson.readString(_json, "$.nftName");
+        nftSymbol = stdJson.readString(_json, "$.nftSymbol");
         proxyAdminOwner = stdJson.readAddress(_json, "$.proxyAdminOwner");
         appAdmin = stdJson.readAddress(_json, "$.appAdmin");
         dailyMintLimit = stdJson.readUint(_json, "$.dailyMintLimit");

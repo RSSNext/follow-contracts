@@ -23,7 +23,6 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     bytes32 public constant someFeedId2 = bytes32("someFeedId2");
     bytes32 public constant someFeedId3 = bytes32("someFeedId3");
 
-    DeployConfig internal _cfg;
     address public appAdmin;
 
     PowerToken internal _token;
@@ -33,24 +32,13 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
     function setUp() public {
         // read config from local.json
         string memory path = string.concat(vm.projectRoot(), "/deploy-config/", "local" ".json");
-        _cfg = new DeployConfig(path);
-        appAdmin = _cfg.appAdmin();
 
-        PowerToken tokenImpl = new PowerToken(appAdmin);
+        DeployConfig cfg = new DeployConfig(path);
+        appAdmin = cfg.appAdmin();
 
-        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
-            address(tokenImpl),
-            _cfg.proxyAdminOwner(),
-            abi.encodeWithSelector(
-                IPowerToken.initialize.selector,
-                _cfg.name(),
-                _cfg.symbol(),
-                _cfg.appAdmin(),
-                _cfg.dailyMintLimit()
-            )
-        );
+        address proxy = deployPowerTokenProxy(cfg);
 
-        _token = PowerToken(address(proxy));
+        _token = PowerToken(proxy);
     }
 
     function testMintToTreasury(uint256 amount) public {

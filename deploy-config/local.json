@@ -2,6 +2,8 @@
   "proxyAdminOwner": "0x8AC80fa0993D95C9d6B8Cb494E561E6731038941",
   "name": "POWER",
   "symbol": "POWER",
+  "nftName": "FOLLOW ACHIEVEMENT",
+  "nftSymbol": "FOLLOW ACHIEVEMENT",
   "appAdmin": "0x844e38Fae147aE933b0a930fF8EfDFF3767cEA24",
   "dailyMintLimit": "100000000000000000000000"
 }
