@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.22;
 
+import {AchievementDetails} from "../../src/libraries/AchievementDataTypes.sol";
+
 interface IAchievement {
     /**
      * @notice Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.
@@ -40,6 +42,12 @@ interface IAchievement {
      * @return Total supply of tokens.
      */
     function totalSupply() external view returns (uint256);
+
+    /**
+     * @notice Returns the achievement details of all achievements.
+     * @return Achievement details.
+     */
+    function getAllAchievements() external view returns (AchievementDetails[] memory);
 
     /**
      * @notice  Returns the address of the PowerToken contract.

@@ -7,4 +7,7 @@ interface IErrors {
 
     /// @dev achievement is not set.
     error AchievementNotSet();
+
+    /// @dev achievement is already mint.
+    error AlreadyMinted(string achievementName);
 }

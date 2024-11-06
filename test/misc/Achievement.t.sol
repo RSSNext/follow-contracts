@@ -11,6 +11,8 @@ import {IErrors} from "../../src/interfaces/IAchievementErrors.sol";
 import {IEvents} from "../../src/interfaces/IAchievementEvents.sol";
 import {TransparentUpgradeableProxy} from "../../src/upgradeability/TransparentUpgradeableProxy.sol";
 import {Utils} from "../helpers/Utils.sol";
+
+import {AchievementDetails} from "../../src/libraries/AchievementDataTypes.sol";
 import {ERC721Upgradeable} from "@openzeppelin-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {console} from "forge-std/Test.sol";
 
@@ -53,9 +55,16 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
         _achievement.setAchievement(
             mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL
         );
+
+        AchievementDetails[] memory allAchievements = _achievement.getAllAchievements();
+
+        assertEq(allAchievements.length, 1);
+        assertEq(allAchievements[0].name, mockAchievementName);
+        assertEq(allAchievements[0].description, mockAchievemenDescription);
+        assertEq(allAchievements[0].imageURL, mockAchievemenImageURL);
     }
 
-    function testAddRoleAndMint() public {
+    function testMintFail() public {
         // Preparation
         vm.prank(_appAdmin);
         _achievement.setAchievement(
@@ -66,6 +75,22 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
         vm.prank(bob);
         vm.expectRevert(abi.encodeWithSelector(Unauthorized.selector));
         _achievement.mint(mockAchievementName);
+
+        // Mint without achievement set: AchievementNotSet
+        vm.prank(_appAdmin);
+        _powerToken.addUser(bob);
+
+        vm.prank(bob);
+        vm.expectRevert(abi.encodeWithSelector(AchievementNotSet.selector));
+        _achievement.mint("something");
+    }
+
+    function testAddRoleAndMint() public {
+        // Preparation
+        vm.prank(_appAdmin);
+        _achievement.setAchievement(
+            mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL
+        );
 
         vm.prank(_appAdmin);
         _powerToken.addUser(bob);
@@ -92,6 +117,11 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
                 '"}'
             )
         );
+
+        // Mint achievement again: AlreadyMinted
+        vm.prank(bob);
+        vm.expectRevert(abi.encodeWithSelector(AlreadyMinted.selector, mockAchievementName));
+        _achievement.mint(mockAchievementName);
 
         // Remove Bob and mint achievement: Unauthorized
         vm.prank(_appAdmin);
