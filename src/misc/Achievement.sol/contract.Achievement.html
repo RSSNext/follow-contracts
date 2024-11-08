@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>IPowerToken</title>
+        <title>Achievement</title>
 
 
         <!-- Custom HTML head -->
@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="../../../index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item expanded "><a href="../../../src/interfaces/index.html">❱ interfaces</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../src/interfaces/IAchievement.sol/interface.IAchievement.html">IAchievement</a></li><li class="chapter-item "><a href="../../../src/interfaces/IAchievementErrors.sol/interface.IErrors.html">IErrors</a></li><li class="chapter-item "><a href="../../../src/interfaces/IAchievementEvents.sol/interface.IEvents.html">IEvents</a></li><li class="chapter-item "><a href="../../../src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a></li><li class="chapter-item "><a href="../../../src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a></li><li class="chapter-item expanded "><a href="../../../src/interfaces/IPowerToken.sol/interface.IPowerToken.html" class="active">IPowerToken</a></li></ol></li><li class="chapter-item "><a href="../../../src/libraries/index.html">❱ libraries</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../src/libraries/AchievementDataTypes.sol/struct.AchievementDetails.html">AchievementDetails</a></li></ol></li><li class="chapter-item "><a href="../../../src/misc/index.html">❱ misc</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../src/misc/Achievement.sol/contract.Achievement.html">Achievement</a></li></ol></li><li class="chapter-item "><a href="../../../src/upgradeability/index.html">❱ upgradeability</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li></ol></li><li class="chapter-item "><a href="../../../src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="../../../index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item "><a href="../../../src/interfaces/index.html">❱ interfaces</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../src/interfaces/IAchievement.sol/interface.IAchievement.html">IAchievement</a></li><li class="chapter-item "><a href="../../../src/interfaces/IAchievementErrors.sol/interface.IErrors.html">IErrors</a></li><li class="chapter-item "><a href="../../../src/interfaces/IAchievementEvents.sol/interface.IEvents.html">IEvents</a></li><li class="chapter-item "><a href="../../../src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a></li><li class="chapter-item "><a href="../../../src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a></li><li class="chapter-item "><a href="../../../src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li></ol></li><li class="chapter-item "><a href="../../../src/libraries/index.html">❱ libraries</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../src/libraries/AchievementDataTypes.sol/struct.AchievementDetails.html">AchievementDetails</a></li></ol></li><li class="chapter-item expanded "><a href="../../../src/misc/index.html">❱ misc</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../src/misc/Achievement.sol/contract.Achievement.html" class="active">Achievement</a></li></ol></li><li class="chapter-item "><a href="../../../src/upgradeability/index.html">❱ upgradeability</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li></ol></li><li class="chapter-item "><a href="../../../src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -177,8 +177,38 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IPowerToken.sol">Git Source</a></p>
+                        <h1 id="achievement"><a class="header" href="#achievement">Achievement</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/misc/Achievement.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+IERC721, AccessControlEnumerableUpgradeable, ERC721Upgradeable, <a href="/src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="/src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, <a href="/src/interfaces/IAchievement.sol/interface.IAchievement.html">IAchievement</a></p>
+<h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
+<h3 id="app_admin_role"><a class="header" href="#app_admin_role">APP_ADMIN_ROLE</a></h3>
+<pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
+</code></pre>
+<h3 id="app_user_role"><a class="header" href="#app_user_role">APP_USER_ROLE</a></h3>
+<pre><code class="language-solidity">bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE");
+</code></pre>
+<h3 id="_counter"><a class="header" href="#_counter">_counter</a></h3>
+<pre><code class="language-solidity">uint256 internal _counter;
+</code></pre>
+<h3 id="_totalsupply"><a class="header" href="#_totalsupply">_totalSupply</a></h3>
+<pre><code class="language-solidity">uint256 internal _totalSupply;
+</code></pre>
+<h3 id="_powertoken"><a class="header" href="#_powertoken">_powerToken</a></h3>
+<pre><code class="language-solidity">address internal _powerToken;
+</code></pre>
+<h3 id="_achievements"><a class="header" href="#_achievements">_achievements</a></h3>
+<pre><code class="language-solidity">EnumerableSet.Bytes32Set internal _achievements;
+</code></pre>
+<h3 id="_achievementdetails"><a class="header" href="#_achievementdetails">_achievementDetails</a></h3>
+<pre><code class="language-solidity">mapping(bytes32 =&gt; AchievementDetails) internal _achievementDetails;
+</code></pre>
+<h3 id="_tokenidtoachievements"><a class="header" href="#_tokenidtoachievements">_tokenIdToAchievements</a></h3>
+<pre><code class="language-solidity">mapping(uint256 =&gt; bytes32) internal _tokenIdToAchievements;
+</code></pre>
+<h3 id="_userachievements"><a class="header" href="#_userachievements">_userAchievements</a></h3>
+<pre><code class="language-solidity">mapping(address =&gt; mapping(bytes32 =&gt; bool)) internal _userAchievements;
+</code></pre>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -186,188 +216,116 @@
     string calldata name_,
     string calldata symbol_,
     address admin_,
-    uint256 dailyMintLimit_
-) external;
+    address powerToken_
+) external override initializer;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>name_</code></td><td><code>string</code></td><td>The name of the token.</td></tr>
 <tr><td><code>symbol_</code></td><td><code>string</code></td><td>The symbol of the token.</td></tr>
 <tr><td><code>admin_</code></td><td><code>address</code></td><td>The account to be granted with APP_ADMIN_ROLE.</td></tr>
-<tr><td><code>dailyMintLimit_</code></td><td><code>uint256</code></td><td>The token limit for daily mint.</td></tr>
+<tr><td><code>powerToken_</code></td><td><code>address</code></td><td>The address of the power token.</td></tr>
 </tbody></table>
 </div>
-<h3 id="setdailymintlimit"><a class="header" href="#setdailymintlimit">setDailyMintLimit</a></h3>
-<p>Sets the token limit for daily mint.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function setDailyMintLimit(uint256 limit) external;
+<h3 id="setachievement"><a class="header" href="#setachievement">setAchievement</a></h3>
+<p>Only the APP_ADMIN_ROLE can set the achievement details.</p>
+<pre><code class="language-solidity">function setAchievement(string calldata name, string calldata description, string calldata imageURL)
+    external
+    override
+    onlyRole(APP_ADMIN_ROLE);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>limit</code></td><td><code>uint256</code></td><td>The new limit to set.</td></tr>
-</tbody></table>
-</div>
-<h3 id="minttotreasury"><a class="header" href="#minttotreasury">mintToTreasury</a></h3>
-<p>Mints tokens to the treasury.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function mintToTreasury(address treasuryAdmin, uint256 amount) external;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>treasuryAdmin</code></td><td><code>address</code></td><td>The account to receive the tokens.</td></tr>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of tokens to mint.</td></tr>
+<tr><td><code>name</code></td><td><code>string</code></td><td>Name of the achievement.</td></tr>
+<tr><td><code>description</code></td><td><code>string</code></td><td>Description of the achievement.</td></tr>
+<tr><td><code>imageURL</code></td><td><code>string</code></td><td>Image URL of the achievement.</td></tr>
 </tbody></table>
 </div>
 <h3 id="mint"><a class="header" href="#mint">mint</a></h3>
-<p>Issues new token points.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function mint(address to, uint256 amount, uint256 taxBasisPoints) external;
+<p>Mints a token to <code>account</code>.</p>
+<pre><code class="language-solidity">function mint(string calldata achievementName) external override returns (uint256 tokenId);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the token points.</td></tr>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to mint.</td></tr>
-<tr><td><code>taxBasisPoints</code></td><td><code>uint256</code></td><td>The tax basis points.</td></tr>
-</tbody></table>
-</div>
-<h3 id="dailymint"><a class="header" href="#dailymint">dailyMint</a></h3>
-<p>Issues new token points to caller.</p>
-<p><em>The caller must have the APP_USER_ROLE.</em></p>
-<pre><code class="language-solidity">function dailyMint(uint256 amount, uint256 taxBasisPoints) external;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to mint.</td></tr>
-<tr><td><code>taxBasisPoints</code></td><td><code>uint256</code></td><td>The tax basis points.</td></tr>
-</tbody></table>
-</div>
-<h3 id="airdrop"><a class="header" href="#airdrop">airdrop</a></h3>
-<p>Airdrops tokens to the users.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function airdrop(address to, uint256 amount, uint256 taxBasisPoints) external;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>to</code></td><td><code>address</code></td><td>The account to receive the tokens.</td></tr>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of tokens to mint.</td></tr>
-<tr><td><code>taxBasisPoints</code></td><td><code>uint256</code></td><td>The tax basis points.</td></tr>
-</tbody></table>
-</div>
-<h3 id="purchase"><a class="header" href="#purchase">purchase</a></h3>
-<p>Purchases with token points. If token points are not enough, it will try the balance.</p>
-<p><em>The to and feedId are optional, but at least one of them must be provided.
-If both are provided, the <code>to</code> will be used.</em></p>
-<pre><code class="language-solidity">function purchase(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints) external;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send.</td></tr>
-<tr><td><code>to</code></td><td><code>address</code></td><td>The address to send the token points. It can be empty.</td></tr>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
-<tr><td><code>taxBasisPoints</code></td><td><code>uint256</code></td><td>The tax basis points.</td></tr>
-</tbody></table>
-</div>
-<h3 id="tip"><a class="header" href="#tip">tip</a></h3>
-<p>Tips with token points. If token points are not enough, it will try the balance.</p>
-<p><em>The to and feedId are optional, but at least one of them must be provided.
-If both are provided, the <code>to</code> will be used.</em></p>
-<pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints) external;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of token points to send.</td></tr>
-<tr><td><code>to</code></td><td><code>address</code></td><td>The address to send the token points. It can be empty.</td></tr>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id. It can be empty.</td></tr>
-<tr><td><code>taxBasisPoints</code></td><td><code>uint256</code></td><td>The tax basis points.</td></tr>
-</tbody></table>
-</div>
-<h3 id="withdrawbyfeedid"><a class="header" href="#withdrawbyfeedid">withdrawByFeedId</a></h3>
-<p>Withdraws tokens by feedId. <code>to</code> is supposed to be the true owner of the feedId.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function withdrawByFeedId(address to, bytes32 feedId) external;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>to</code></td><td><code>address</code></td><td>The address who receives the tokens.</td></tr>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The amount belongs to the feedId.</td></tr>
-</tbody></table>
-</div>
-<h3 id="adduser"><a class="header" href="#adduser">addUser</a></h3>
-<p>Grants the APP_USER_ROLE to the specified account and send native tokens to it.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function addUser(address account) external payable;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>account</code></td><td><code>address</code></td><td>The address to grant the role.</td></tr>
-</tbody></table>
-</div>
-<h3 id="addusers"><a class="header" href="#addusers">addUsers</a></h3>
-<p>Grants the APP_USER_ROLE to the specified accounts.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function addUsers(address[] calldata accounts) external payable;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>accounts</code></td><td><code>address[]</code></td><td>The addresses to grant the role.</td></tr>
-</tbody></table>
-</div>
-<h3 id="removeuser"><a class="header" href="#removeuser">removeUser</a></h3>
-<p>Revokes the APP_USER_ROLE from the specified account.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function removeUser(address account) external;
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>account</code></td><td><code>address</code></td><td>The address from which to revoke the role.</td></tr>
-</tbody></table>
-</div>
-<h3 id="balanceofbyfeed"><a class="header" href="#balanceofbyfeed">balanceOfByFeed</a></h3>
-<p>Return the balance of the feedId</p>
-<pre><code class="language-solidity">function balanceOfByFeed(bytes32 feedId) external view returns (uint256);
-</code></pre>
-<p><strong>Parameters</strong></p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>feedId</code></td><td><code>bytes32</code></td><td>The feed id</td></tr>
+<tr><td><code>achievementName</code></td><td><code>string</code></td><td></td></tr>
 </tbody></table>
 </div>
 <p><strong>Returns</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>The amount of the balance</td></tr>
+<tr><td><code>tokenId</code></td><td><code>uint256</code></td><td>The new minted token id.</td></tr>
 </tbody></table>
 </div>
-<h3 id="balanceofpoints"><a class="header" href="#balanceofpoints">balanceOfPoints</a></h3>
-<p>Return the balance of points, aka the inactive tokens, of the owner</p>
-<pre><code class="language-solidity">function balanceOfPoints(address owner) external view returns (uint256);
+<h3 id="tokenuri"><a class="header" href="#tokenuri">tokenURI</a></h3>
+<p><em>See {IERC721Metadata-tokenURI}.</em></p>
+<pre><code class="language-solidity">function tokenURI(uint256 id) public view override returns (string memory);
+</code></pre>
+<h3 id="totalsupply"><a class="header" href="#totalsupply">totalSupply</a></h3>
+<p>Returns total supply of tokens.</p>
+<pre><code class="language-solidity">function totalSupply() external view override returns (uint256);
+</code></pre>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>Total supply of tokens.</td></tr>
+</tbody></table>
+</div>
+<h3 id="getallachievements"><a class="header" href="#getallachievements">getAllAchievements</a></h3>
+<p>Returns the achievement details of all achievements.</p>
+<pre><code class="language-solidity">function getAllAchievements() external view override returns (AchievementDetails[] memory);
+</code></pre>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>AchievementDetails[]</code></td><td>Achievement details.</td></tr>
+</tbody></table>
+</div>
+<h3 id="hasachievement"><a class="header" href="#hasachievement">hasAchievement</a></h3>
+<p>Returns whether the account has the achievement.</p>
+<pre><code class="language-solidity">function hasAchievement(address account, string calldata achievementName)
+    external
+    view
+    override
+    returns (bool);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>owner</code></td><td><code>address</code></td><td>The address of the owner</td></tr>
+<tr><td><code>account</code></td><td><code>address</code></td><td>The address of the account.</td></tr>
+<tr><td><code>achievementName</code></td><td><code>string</code></td><td>The name of the achievement.</td></tr>
 </tbody></table>
 </div>
 <p><strong>Returns</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>The amount of the balance</td></tr>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bool</code></td><td>Whether the account has the achievement.</td></tr>
 </tbody></table>
 </div>
-<h3 id="getdailymintlimit"><a class="header" href="#getdailymintlimit">getDailyMintLimit</a></h3>
-<p>Returns the token limit for daily mint.</p>
-<pre><code class="language-solidity">function getDailyMintLimit() external view returns (uint256);
+<h3 id="powertoken"><a class="header" href="#powertoken">powerToken</a></h3>
+<p>Returns the address of the PowerToken contract.</p>
+<pre><code class="language-solidity">function powerToken() external view override returns (address);
 </code></pre>
 <p><strong>Returns</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>The token limit for daily mint.</td></tr>
+<tr><td><code>&lt;none&gt;</code></td><td><code>address</code></td><td>Address of the PowerToken contract.</td></tr>
 </tbody></table>
 </div>
+<h3 id="supportsinterface"><a class="header" href="#supportsinterface">supportsInterface</a></h3>
+<pre><code class="language-solidity">function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    virtual
+    override(AccessControlEnumerableUpgradeable, ERC721Upgradeable, IERC165)
+    returns (bool);
+</code></pre>
+<h3 id="_getnamehash"><a class="header" href="#_getnamehash">_getNameHash</a></h3>
+<pre><code class="language-solidity">function _getNameHash(string calldata name) internal pure returns (bytes32);
+</code></pre>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../../src/interfaces/IEvents.sol/interface.IEvents.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../../src/misc/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../../../src/libraries/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../../src/upgradeability/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -377,11 +335,11 @@ If both are provided, the <code>to</code> will be used.</em></p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../../src/interfaces/IEvents.sol/interface.IEvents.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../../src/misc/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../../../src/libraries/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../../src/upgradeability/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

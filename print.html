@@ -90,7 +90,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item "><a href="src/interfaces/index.html">❱ interfaces</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a></li><li class="chapter-item "><a href="src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a></li><li class="chapter-item "><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li></ol></li><li class="chapter-item "><a href="src/upgradeability/index.html">❱ upgradeability</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li></ol></li><li class="chapter-item "><a href="src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item "><a href="src/interfaces/index.html">❱ interfaces</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/interfaces/IAchievement.sol/interface.IAchievement.html">IAchievement</a></li><li class="chapter-item "><a href="src/interfaces/IAchievementErrors.sol/interface.IErrors.html">IErrors</a></li><li class="chapter-item "><a href="src/interfaces/IAchievementEvents.sol/interface.IEvents.html">IEvents</a></li><li class="chapter-item "><a href="src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a></li><li class="chapter-item "><a href="src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a></li><li class="chapter-item "><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li></ol></li><li class="chapter-item "><a href="src/libraries/index.html">❱ libraries</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/libraries/AchievementDataTypes.sol/struct.AchievementDetails.html">AchievementDetails</a></li></ol></li><li class="chapter-item "><a href="src/misc/index.html">❱ misc</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/misc/Achievement.sol/contract.Achievement.html">Achievement</a></li></ol></li><li class="chapter-item "><a href="src/upgradeability/index.html">❱ upgradeability</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li></ol></li><li class="chapter-item "><a href="src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -206,13 +206,127 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="contents"><a class="header" href="#contents">Contents</a></h1>
 <ul>
+<li><a href="src/interfaces/IAchievement.sol/interface.IAchievement.html">IAchievement</a></li>
+<li><a href="src/interfaces/IAchievementErrors.sol/interface.IErrors.html">IErrors</a></li>
+<li><a href="src/interfaces/IAchievementEvents.sol/interface.IEvents.html">IEvents</a></li>
 <li><a href="src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a></li>
 <li><a href="src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a></li>
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors"><a class="header" href="#ierrors">IErrors</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/9bb740f18aa73511762c11df7fada4442fe8c392/src/interfaces/IErrors.sol">Git Source</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="iachievement"><a class="header" href="#iachievement">IAchievement</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IAchievement.sol">Git Source</a></p>
+<h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
+<h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
+<p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
+<pre><code class="language-solidity">function initialize(
+    string calldata name_,
+    string calldata symbol_,
+    address admin_,
+    address powerToken_
+) external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>name_</code></td><td><code>string</code></td><td>The name of the token.</td></tr>
+<tr><td><code>symbol_</code></td><td><code>string</code></td><td>The symbol of the token.</td></tr>
+<tr><td><code>admin_</code></td><td><code>address</code></td><td>The account to be granted with APP_ADMIN_ROLE.</td></tr>
+<tr><td><code>powerToken_</code></td><td><code>address</code></td><td>The address of the power token.</td></tr>
+</tbody></table>
+</div>
+<h3 id="setachievement"><a class="header" href="#setachievement">setAchievement</a></h3>
+<p>Only the APP_ADMIN_ROLE can set the achievement details.</p>
+<pre><code class="language-solidity">function setAchievement(string calldata name, string calldata description, string calldata imageURL)
+    external;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>name</code></td><td><code>string</code></td><td>Name of the achievement.</td></tr>
+<tr><td><code>description</code></td><td><code>string</code></td><td>Description of the achievement.</td></tr>
+<tr><td><code>imageURL</code></td><td><code>string</code></td><td>Image URL of the achievement.</td></tr>
+</tbody></table>
+</div>
+<h3 id="mint"><a class="header" href="#mint">mint</a></h3>
+<p>Mints a token to <code>account</code>.</p>
+<pre><code class="language-solidity">function mint(string calldata achievement) external returns (uint256 tokenId);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>achievement</code></td><td><code>string</code></td><td>Name of the achievement to mint.</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>tokenId</code></td><td><code>uint256</code></td><td>The new minted token id.</td></tr>
+</tbody></table>
+</div>
+<h3 id="totalsupply"><a class="header" href="#totalsupply">totalSupply</a></h3>
+<p>Returns total supply of tokens.</p>
+<pre><code class="language-solidity">function totalSupply() external view returns (uint256);
+</code></pre>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>Total supply of tokens.</td></tr>
+</tbody></table>
+</div>
+<h3 id="getallachievements"><a class="header" href="#getallachievements">getAllAchievements</a></h3>
+<p>Returns the achievement details of all achievements.</p>
+<pre><code class="language-solidity">function getAllAchievements() external view returns (AchievementDetails[] memory);
+</code></pre>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>AchievementDetails[]</code></td><td>Achievement details.</td></tr>
+</tbody></table>
+</div>
+<h3 id="hasachievement"><a class="header" href="#hasachievement">hasAchievement</a></h3>
+<p>Returns whether the account has the achievement.</p>
+<pre><code class="language-solidity">function hasAchievement(address account, string calldata achievementName)
+    external
+    view
+    returns (bool);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>account</code></td><td><code>address</code></td><td>The address of the account.</td></tr>
+<tr><td><code>achievementName</code></td><td><code>string</code></td><td>The name of the achievement.</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bool</code></td><td>Whether the account has the achievement.</td></tr>
+</tbody></table>
+</div>
+<h3 id="powertoken"><a class="header" href="#powertoken">powerToken</a></h3>
+<p>Returns the address of the PowerToken contract.</p>
+<pre><code class="language-solidity">function powerToken() external view returns (address);
+</code></pre>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>address</code></td><td>Address of the PowerToken contract.</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors"><a class="header" href="#ierrors">IErrors</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IAchievementErrors.sol">Git Source</a></p>
 <h2 id="errors"><a class="header" href="#errors">Errors</a></h2>
+<h3 id="unauthorized"><a class="header" href="#unauthorized">Unauthorized</a></h3>
+<p><em>receiver is empty.</em></p>
+<pre><code class="language-solidity">error Unauthorized();
+</code></pre>
+<h3 id="achievementnotset"><a class="header" href="#achievementnotset">AchievementNotSet</a></h3>
+<p><em>achievement is not set.</em></p>
+<pre><code class="language-solidity">error AchievementNotSet();
+</code></pre>
+<h3 id="alreadyminted"><a class="header" href="#alreadyminted">AlreadyMinted</a></h3>
+<p><em>achievement is already mint.</em></p>
+<pre><code class="language-solidity">error AlreadyMinted(string achievementName);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ievents"><a class="header" href="#ievents">IEvents</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IAchievementEvents.sol">Git Source</a></p>
+<h2 id="events"><a class="header" href="#events">Events</a></h2>
+<h3 id="achievementset"><a class="header" href="#achievementset">AchievementSet</a></h3>
+<pre><code class="language-solidity">event AchievementSet(string indexed name, string description, string imageURL);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors-1"><a class="header" href="#ierrors-1">IErrors</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IErrors.sol">Git Source</a></p>
+<h2 id="errors-1"><a class="header" href="#errors-1">Errors</a></h2>
 <h3 id="receiverisempty"><a class="header" href="#receiverisempty">ReceiverIsEmpty</a></h3>
 <p><em>receiver is empty.</em></p>
 <pre><code class="language-solidity">error ReceiverIsEmpty();
@@ -245,9 +359,9 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <p><em>Exceeds daily limit.</em></p>
 <pre><code class="language-solidity">error ExceedsDailyLimit();
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ievents"><a class="header" href="#ievents">IEvents</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/9bb740f18aa73511762c11df7fada4442fe8c392/src/interfaces/IEvents.sol">Git Source</a></p>
-<h2 id="events"><a class="header" href="#events">Events</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ievents-1"><a class="header" href="#ievents-1">IEvents</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IEvents.sol">Git Source</a></p>
+<h2 id="events-1"><a class="header" href="#events-1">Events</a></h2>
 <h3 id="distributepoints"><a class="header" href="#distributepoints">DistributePoints</a></h3>
 <p><em>Emitted when points are distributed to an address.</em></p>
 <pre><code class="language-solidity">event DistributePoints(address indexed to, uint256 indexed amount);
@@ -283,9 +397,9 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <pre><code class="language-solidity">event Withdrawn(address indexed user, address indexed to, uint256 indexed amount);
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/9bb740f18aa73511762c11df7fada4442fe8c392/src/interfaces/IPowerToken.sol">Git Source</a></p>
-<h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
-<h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
+<h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function initialize(
     string calldata name_,
@@ -323,7 +437,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of tokens to mint.</td></tr>
 </tbody></table>
 </div>
-<h3 id="mint"><a class="header" href="#mint">mint</a></h3>
+<h3 id="mint-1"><a class="header" href="#mint-1">mint</a></h3>
 <p>Issues new token points.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function mint(address to, uint256 amount, uint256 taxBasisPoints) external;
@@ -465,10 +579,165 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="contents-1"><a class="header" href="#contents-1">Contents</a></h1>
 <ul>
+<li><a href="src/libraries/AchievementDataTypes.sol/struct.AchievementDetails.html">AchievementDetails</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="achievementdetails"><a class="header" href="#achievementdetails">AchievementDetails</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/libraries/AchievementDataTypes.sol">Git Source</a></p>
+<pre><code class="language-solidity">struct AchievementDetails {
+    string name;
+    string description;
+    string imageURL;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contents-2"><a class="header" href="#contents-2">Contents</a></h1>
+<ul>
+<li><a href="src/misc/Achievement.sol/contract.Achievement.html">Achievement</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="achievement"><a class="header" href="#achievement">Achievement</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/misc/Achievement.sol">Git Source</a></p>
+<p><strong>Inherits:</strong>
+IERC721, AccessControlEnumerableUpgradeable, ERC721Upgradeable, <a href="src/misc/Achievement.sol//src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/misc/Achievement.sol//src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, <a href="src/misc/Achievement.sol//src/interfaces/IAchievement.sol/interface.IAchievement.html">IAchievement</a></p>
+<h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
+<h3 id="app_admin_role"><a class="header" href="#app_admin_role">APP_ADMIN_ROLE</a></h3>
+<pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
+</code></pre>
+<h3 id="app_user_role"><a class="header" href="#app_user_role">APP_USER_ROLE</a></h3>
+<pre><code class="language-solidity">bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE");
+</code></pre>
+<h3 id="_counter"><a class="header" href="#_counter">_counter</a></h3>
+<pre><code class="language-solidity">uint256 internal _counter;
+</code></pre>
+<h3 id="_totalsupply"><a class="header" href="#_totalsupply">_totalSupply</a></h3>
+<pre><code class="language-solidity">uint256 internal _totalSupply;
+</code></pre>
+<h3 id="_powertoken"><a class="header" href="#_powertoken">_powerToken</a></h3>
+<pre><code class="language-solidity">address internal _powerToken;
+</code></pre>
+<h3 id="_achievements"><a class="header" href="#_achievements">_achievements</a></h3>
+<pre><code class="language-solidity">EnumerableSet.Bytes32Set internal _achievements;
+</code></pre>
+<h3 id="_achievementdetails"><a class="header" href="#_achievementdetails">_achievementDetails</a></h3>
+<pre><code class="language-solidity">mapping(bytes32 =&gt; AchievementDetails) internal _achievementDetails;
+</code></pre>
+<h3 id="_tokenidtoachievements"><a class="header" href="#_tokenidtoachievements">_tokenIdToAchievements</a></h3>
+<pre><code class="language-solidity">mapping(uint256 =&gt; bytes32) internal _tokenIdToAchievements;
+</code></pre>
+<h3 id="_userachievements"><a class="header" href="#_userachievements">_userAchievements</a></h3>
+<pre><code class="language-solidity">mapping(address =&gt; mapping(bytes32 =&gt; bool)) internal _userAchievements;
+</code></pre>
+<h2 id="functions-2"><a class="header" href="#functions-2">Functions</a></h2>
+<h3 id="initialize-2"><a class="header" href="#initialize-2">initialize</a></h3>
+<p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
+<pre><code class="language-solidity">function initialize(
+    string calldata name_,
+    string calldata symbol_,
+    address admin_,
+    address powerToken_
+) external override initializer;
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>name_</code></td><td><code>string</code></td><td>The name of the token.</td></tr>
+<tr><td><code>symbol_</code></td><td><code>string</code></td><td>The symbol of the token.</td></tr>
+<tr><td><code>admin_</code></td><td><code>address</code></td><td>The account to be granted with APP_ADMIN_ROLE.</td></tr>
+<tr><td><code>powerToken_</code></td><td><code>address</code></td><td>The address of the power token.</td></tr>
+</tbody></table>
+</div>
+<h3 id="setachievement-1"><a class="header" href="#setachievement-1">setAchievement</a></h3>
+<p>Only the APP_ADMIN_ROLE can set the achievement details.</p>
+<pre><code class="language-solidity">function setAchievement(string calldata name, string calldata description, string calldata imageURL)
+    external
+    override
+    onlyRole(APP_ADMIN_ROLE);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>name</code></td><td><code>string</code></td><td>Name of the achievement.</td></tr>
+<tr><td><code>description</code></td><td><code>string</code></td><td>Description of the achievement.</td></tr>
+<tr><td><code>imageURL</code></td><td><code>string</code></td><td>Image URL of the achievement.</td></tr>
+</tbody></table>
+</div>
+<h3 id="mint-2"><a class="header" href="#mint-2">mint</a></h3>
+<p>Mints a token to <code>account</code>.</p>
+<pre><code class="language-solidity">function mint(string calldata achievementName) external override returns (uint256 tokenId);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>achievementName</code></td><td><code>string</code></td><td></td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>tokenId</code></td><td><code>uint256</code></td><td>The new minted token id.</td></tr>
+</tbody></table>
+</div>
+<h3 id="tokenuri"><a class="header" href="#tokenuri">tokenURI</a></h3>
+<p><em>See {IERC721Metadata-tokenURI}.</em></p>
+<pre><code class="language-solidity">function tokenURI(uint256 id) public view override returns (string memory);
+</code></pre>
+<h3 id="totalsupply-1"><a class="header" href="#totalsupply-1">totalSupply</a></h3>
+<p>Returns total supply of tokens.</p>
+<pre><code class="language-solidity">function totalSupply() external view override returns (uint256);
+</code></pre>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>uint256</code></td><td>Total supply of tokens.</td></tr>
+</tbody></table>
+</div>
+<h3 id="getallachievements-1"><a class="header" href="#getallachievements-1">getAllAchievements</a></h3>
+<p>Returns the achievement details of all achievements.</p>
+<pre><code class="language-solidity">function getAllAchievements() external view override returns (AchievementDetails[] memory);
+</code></pre>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>AchievementDetails[]</code></td><td>Achievement details.</td></tr>
+</tbody></table>
+</div>
+<h3 id="hasachievement-1"><a class="header" href="#hasachievement-1">hasAchievement</a></h3>
+<p>Returns whether the account has the achievement.</p>
+<pre><code class="language-solidity">function hasAchievement(address account, string calldata achievementName)
+    external
+    view
+    override
+    returns (bool);
+</code></pre>
+<p><strong>Parameters</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>account</code></td><td><code>address</code></td><td>The address of the account.</td></tr>
+<tr><td><code>achievementName</code></td><td><code>string</code></td><td>The name of the achievement.</td></tr>
+</tbody></table>
+</div>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>bool</code></td><td>Whether the account has the achievement.</td></tr>
+</tbody></table>
+</div>
+<h3 id="powertoken-1"><a class="header" href="#powertoken-1">powerToken</a></h3>
+<p>Returns the address of the PowerToken contract.</p>
+<pre><code class="language-solidity">function powerToken() external view override returns (address);
+</code></pre>
+<p><strong>Returns</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>&lt;none&gt;</code></td><td><code>address</code></td><td>Address of the PowerToken contract.</td></tr>
+</tbody></table>
+</div>
+<h3 id="supportsinterface"><a class="header" href="#supportsinterface">supportsInterface</a></h3>
+<pre><code class="language-solidity">function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    virtual
+    override(AccessControlEnumerableUpgradeable, ERC721Upgradeable, IERC165)
+    returns (bool);
+</code></pre>
+<h3 id="_getnamehash"><a class="header" href="#_getnamehash">_getNameHash</a></h3>
+<pre><code class="language-solidity">function _getNameHash(string calldata name) internal pure returns (bytes32);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contents-3"><a class="header" href="#contents-3">Contents</a></h1>
+<ul>
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/9bb740f18aa73511762c11df7fada4442fe8c392/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
 <p>*This contract implements a proxy that is upgradeable by an admin.
@@ -497,7 +766,7 @@ Our recommendation is for the dedicated account to be an instance of the {ProxyA
 set up this way,
 you should think of the <code>ProxyAdmin</code> instance as the real administrative interface of your proxy.*</li>
 </ol>
-<h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
+<h2 id="functions-3"><a class="header" href="#functions-3">Functions</a></h2>
 <h3 id="constructor"><a class="header" href="#constructor">constructor</a></h3>
 <p><em>Initializes an upgradeable proxy managed by <code>_admin</code>, backed by the implementation at
 <code>_logic</code>, and
@@ -560,18 +829,18 @@ NOTE: Only the admin can call this function. See <a href="src/upgradeability/Tra
 <p><em>Makes sure the admin cannot access the fallback function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/Proxy.sol/abstract.Proxy.html#_beforefallback">Proxy-_beforeFallback</a>.</em></p>
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken"><a class="header" href="#powertoken">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/9bb740f18aa73511762c11df7fada4442fe8c392/src/PowerToken.sol">Git Source</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken-2"><a class="header" href="#powertoken-2">PowerToken</a></h1>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 <a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, <a href="src/PowerToken.sol//src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/PowerToken.sol//src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
-<h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
+<h2 id="state-variables-1"><a class="header" href="#state-variables-1">State Variables</a></h2>
 <h3 id="version"><a class="header" href="#version">version</a></h3>
 <pre><code class="language-solidity">string public constant version = "1.1.0";
 </code></pre>
-<h3 id="app_admin_role"><a class="header" href="#app_admin_role">APP_ADMIN_ROLE</a></h3>
+<h3 id="app_admin_role-1"><a class="header" href="#app_admin_role-1">APP_ADMIN_ROLE</a></h3>
 <pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
 </code></pre>
-<h3 id="app_user_role"><a class="header" href="#app_user_role">APP_USER_ROLE</a></h3>
+<h3 id="app_user_role-1"><a class="header" href="#app_user_role-1">APP_USER_ROLE</a></h3>
 <pre><code class="language-solidity">bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE");
 </code></pre>
 <h3 id="max_supply"><a class="header" href="#max_supply">MAX_SUPPLY</a></h3>
@@ -598,14 +867,14 @@ Points balances are included in user's balance.</em></p>
 <h3 id="_dailymintlimit"><a class="header" href="#_dailymintlimit">_dailyMintLimit</a></h3>
 <pre><code class="language-solidity">uint256 internal _dailyMintLimit;
 </code></pre>
-<h2 id="functions-2"><a class="header" href="#functions-2">Functions</a></h2>
+<h2 id="functions-4"><a class="header" href="#functions-4">Functions</a></h2>
 <h3 id="onlyadminrole"><a class="header" href="#onlyadminrole">onlyAdminRole</a></h3>
 <pre><code class="language-solidity">modifier onlyAdminRole();
 </code></pre>
 <h3 id="constructor-1"><a class="header" href="#constructor-1">constructor</a></h3>
 <pre><code class="language-solidity">constructor(address admin_);
 </code></pre>
-<h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
+<h3 id="initialize-3"><a class="header" href="#initialize-3">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function initialize(
     string calldata name_,
@@ -643,7 +912,7 @@ Points balances are included in user's balance.</em></p>
 <tr><td><code>amount</code></td><td><code>uint256</code></td><td>The amount of tokens to mint.</td></tr>
 </tbody></table>
 </div>
-<h3 id="mint-1"><a class="header" href="#mint-1">mint</a></h3>
+<h3 id="mint-3"><a class="header" href="#mint-3">mint</a></h3>
 <p>Issues new token points.</p>
 <p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
 <pre><code class="language-solidity">function mint(address to, uint256 amount, uint256 taxBasisPoints) external override onlyAdminRole;
