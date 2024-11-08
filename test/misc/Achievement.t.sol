@@ -48,6 +48,13 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
     }
 
     function testSetAchievement() public {
+        // test setAchievement without APP_ADMIN_ROLE role
+        vm.prank(bob);
+        vm.expectRevert();
+        _achievement.setAchievement(
+            mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL
+        );
+
         vm.prank(_appAdmin);
 
         expectEmit();
@@ -95,6 +102,9 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
         vm.prank(_appAdmin);
         _powerToken.addUser(bob);
 
+        // hasAchievement: false
+        assertEq(_achievement.hasAchievement(bob, mockAchievementName), false);
+
         // Mint achievement: balance of bob should be 1
         vm.prank(bob);
         vm.expectEmit();
@@ -122,6 +132,9 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
         vm.prank(bob);
         vm.expectRevert(abi.encodeWithSelector(AlreadyMinted.selector, mockAchievementName));
         _achievement.mint(mockAchievementName);
+
+        // hasAchievement: true
+        assertEq(_achievement.hasAchievement(bob, mockAchievementName), true);
 
         // Remove Bob and mint achievement: Unauthorized
         vm.prank(_appAdmin);

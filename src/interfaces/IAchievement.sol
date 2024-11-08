@@ -50,6 +50,17 @@ interface IAchievement {
     function getAllAchievements() external view returns (AchievementDetails[] memory);
 
     /**
+     * @notice Returns whether the account has the achievement.
+     * @param account The address of the account.
+     * @param achievementName The name of the achievement.
+     * @return Whether the account has the achievement.
+     */
+    function hasAchievement(address account, string calldata achievementName)
+        external
+        view
+        returns (bool);
+
+    /**
      * @notice  Returns the address of the PowerToken contract.
      * @return Address of the PowerToken contract.
      */

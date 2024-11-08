@@ -69,9 +69,7 @@ contract Achievement is
         string calldata name,
         string calldata description,
         string calldata imageURL
-    ) external override {
-        // convert name to bytes32
-
+    ) external override onlyRole(APP_ADMIN_ROLE) {
         bytes32 nameHash = _getNameHash(name);
         _achievements.add(nameHash);
         _achievementDetails[nameHash] = AchievementDetails(name, description, imageURL);
@@ -138,6 +136,16 @@ contract Achievement is
         }
 
         return result;
+    }
+
+    /// @inheritdoc IAchievement
+    function hasAchievement(address account, string calldata achievementName)
+        external
+        view
+        override
+        returns (bool)
+    {
+        return _userAchievements[account][_getNameHash(achievementName)];
     }
 
     /// @inheritdoc IAchievement
