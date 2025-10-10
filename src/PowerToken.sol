@@ -4,8 +4,9 @@ pragma solidity 0.8.22;
 import {IErrors} from "./interfaces/IErrors.sol";
 import {IEvents} from "./interfaces/IEvents.sol";
 import {IPowerToken} from "./interfaces/IPowerToken.sol";
-import {AccessControlEnumerableUpgradeable} from
-    "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
+import {
+    AccessControlEnumerableUpgradeable
+} from "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
 import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
@@ -55,11 +56,14 @@ contract PowerToken is
         string calldata symbol_,
         address admin_,
         uint256 dailyMintLimit_
-    ) external override reinitializer(4) {
-        super.__ERC20_init(name_, symbol_);
+    ) external override reinitializer(5) {
+        if (bytes(name_).length > 0 && bytes(symbol_).length > 0) {
+            super.__ERC20_init(name_, symbol_);
+        }
 
         if (admin_ != address(0)) {
-            _grantRole(DEFAULT_ADMIN_ROLE, admin_);
+            // for mainnet upgrade, revoke previous admin role
+            _revokeRole(APP_ADMIN_ROLE, 0xf496eEeD857aA4709AC4D5B66b6711975623D355);
             _grantRole(APP_ADMIN_ROLE, admin_);
         }
 
@@ -74,11 +78,7 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function mintToTreasury(address treasuryAdmin, uint256 amount)
-        external
-        override
-        onlyAdminRole
-    {
+    function mintToTreasury(address treasuryAdmin, uint256 amount) external override onlyAdminRole {
         if (amount + totalSupply() > MAX_SUPPLY) revert ExceedsMaxSupply();
         _mint(treasuryAdmin, amount);
     }
@@ -295,11 +295,7 @@ contract PowerToken is
         if (value > balance - points) revert InsufficientBalanceToTransfer();
     }
 
-    function _getTaxAmount(uint256 taxBasisPoints, uint256 amount)
-        internal
-        pure
-        returns (uint256)
-    {
+    function _getTaxAmount(uint256 taxBasisPoints, uint256 amount) internal pure returns (uint256) {
         return (taxBasisPoints * amount) / 10_000;
     }
 }

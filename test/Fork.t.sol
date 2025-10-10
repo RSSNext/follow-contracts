@@ -6,8 +6,9 @@ import {PowerToken} from "../src/PowerToken.sol";
 import {IErrors} from "../src/interfaces/IErrors.sol";
 import {IEvents} from "../src/interfaces/IEvents.sol";
 import {IPowerToken} from "../src/interfaces/IPowerToken.sol";
-import {TransparentUpgradeableProxy as Proxy} from
-    "../src/upgradeability/TransparentUpgradeableProxy.sol";
+import {
+    TransparentUpgradeableProxy as Proxy
+} from "../src/upgradeability/TransparentUpgradeableProxy.sol";
 import {Utils} from "./helpers/Utils.sol";
 
 contract ForkTest is Utils, IErrors, IEvents {
@@ -19,15 +20,15 @@ contract ForkTest is Utils, IErrors, IEvents {
     address public powerProxyAddress = 0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8;
 
     function setUp() public {
-        vm.createSelectFork("https://rpc.rss3.io", 9_376_625);
+        vm.createSelectFork("https://rpc.rss3.io", 25_115_502);
 
         // power token on mainnet
         Proxy powerProxy = Proxy(payable(powerProxyAddress));
 
-        // initializer should be 3 before upgrade
+        // initializer should be 4 before upgrade
         assertEq(
             vm.load(powerProxyAddress, initializerSlot),
-            bytes32(uint256(3)),
+            bytes32(uint256(4)),
             "check initializer before upgrade"
         );
 
@@ -43,10 +44,10 @@ contract ForkTest is Utils, IErrors, IEvents {
     }
 
     function testCheckUpgradeFork() public view {
-        // initializer should be 4 after upgrade
+        // initializer should be 5 after upgrade
         assertEq(
             vm.load(powerProxyAddress, initializerSlot),
-            bytes32(uint256(4)),
+            bytes32(uint256(5)),
             "check initializer after upgrade"
         );
 
