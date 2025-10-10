@@ -8,7 +8,7 @@ all: clean install build foundry-test
 clean  :; forge clean
 
 # Install the Modules
-install :; forge install --no-commit
+install :; forge install
 
 # Update Dependencies
 update:; forge update
