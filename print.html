@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="light" dir="ltr">
+<html lang="en" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 
 
         <!-- Custom HTML head -->
-        
+
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
@@ -25,27 +25,44 @@
         <link rel="stylesheet" href="fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
         <link rel="stylesheet" href="book.css">
 
-    </head>
-    <body class="sidebar-visible no-js">
-    <div id="body-container">
-        <!-- Provide site root to javascript -->
-        <script>
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -59,70 +76,51 @@
 
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script>
-            var theme;
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
+            const html = document.documentElement;
             html.classList.remove('light')
             html.classList.add(theme);
-            var body = document.querySelector('body');
-            body.classList.remove('no-js')
-            body.classList.add('js');
+            html.classList.add("js");
         </script>
 
         <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var body = document.querySelector('body');
-            var sidebar = null;
-            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
+                sidebar_toggle.checked = false;
             }
-            sidebar_toggle.checked = sidebar === 'visible';
-            body.classList.remove('sidebar-visible');
-            body.classList.add("sidebar-" + sidebar);
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="index.html">Home</a></li><li class="chapter-item affix "><li class="part-title">src</li><li class="chapter-item "><a href="src/interfaces/index.html">❱ interfaces</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/interfaces/IAchievement.sol/interface.IAchievement.html">IAchievement</a></li><li class="chapter-item "><a href="src/interfaces/IAchievementErrors.sol/interface.IErrors.html">IErrors</a></li><li class="chapter-item "><a href="src/interfaces/IAchievementEvents.sol/interface.IEvents.html">IEvents</a></li><li class="chapter-item "><a href="src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a></li><li class="chapter-item "><a href="src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a></li><li class="chapter-item "><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li></ol></li><li class="chapter-item "><a href="src/libraries/index.html">❱ libraries</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/libraries/AchievementDataTypes.sol/struct.AchievementDetails.html">AchievementDetails</a></li></ol></li><li class="chapter-item "><a href="src/misc/index.html">❱ misc</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/misc/Achievement.sol/contract.Achievement.html">Achievement</a></li></ol></li><li class="chapter-item "><a href="src/upgradeability/index.html">❱ upgradeability</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li></ol></li><li class="chapter-item "><a href="src/PowerToken.sol/contract.PowerToken.html">PowerToken</a></li></ol>
-            </div>
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <!-- Track and set sidebar scroll position -->
-        <script>
-            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
-            sidebarScrollbox.addEventListener('click', function(e) {
-                if (e.target.tagName === 'A') {
-                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
-                }
-            }, { passive: true });
-            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
-            sessionStorage.removeItem('sidebar-scroll');
-            if (sidebarScrollTop) {
-                // preserve sidebar scroll position when navigating via links within sidebar
-                sidebarScrollbox.scrollTop = sidebarScrollTop;
-            } else {
-                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
-                var activeSection = document.querySelector('#sidebar .active');
-                if (activeSection) {
-                    activeSection.scrollIntoView({ block: 'center' });
-                }
-            }
-        </script>
-
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -132,13 +130,14 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -158,7 +157,12 @@
 
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -214,7 +218,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <li><a href="src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="iachievement"><a class="header" href="#iachievement">IAchievement</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IAchievement.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/41d395e4c5ea50ec3a90ea79d429abfb38a61edc/src/interfaces/IAchievement.sol">Git Source</a></p>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <h3 id="initialize"><a class="header" href="#initialize">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -235,8 +239,11 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </div>
 <h3 id="setachievement"><a class="header" href="#setachievement">setAchievement</a></h3>
 <p>Only the APP_ADMIN_ROLE can set the achievement details.</p>
-<pre><code class="language-solidity">function setAchievement(string calldata name, string calldata description, string calldata imageURL)
-    external;
+<pre><code class="language-solidity">function setAchievement(
+    string calldata name,
+    string calldata description,
+    string calldata imageURL
+) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -304,83 +311,85 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 <tr><td><code>&lt;none&gt;</code></td><td><code>address</code></td><td>Address of the PowerToken contract.</td></tr>
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors"><a class="header" href="#ierrors">IErrors</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IAchievementErrors.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/41d395e4c5ea50ec3a90ea79d429abfb38a61edc/src/interfaces/IAchievementErrors.sol">Git Source</a></p>
 <h2 id="errors"><a class="header" href="#errors">Errors</a></h2>
 <h3 id="unauthorized"><a class="header" href="#unauthorized">Unauthorized</a></h3>
-<p><em>receiver is empty.</em></p>
-<pre><code class="language-solidity">error Unauthorized();
+<p>receiver is empty.</p>
+<pre><code class="language-solidity">error Unauthorized()
 </code></pre>
 <h3 id="achievementnotset"><a class="header" href="#achievementnotset">AchievementNotSet</a></h3>
-<p><em>achievement is not set.</em></p>
-<pre><code class="language-solidity">error AchievementNotSet();
+<p>achievement is not set.</p>
+<pre><code class="language-solidity">error AchievementNotSet()
 </code></pre>
 <h3 id="alreadyminted"><a class="header" href="#alreadyminted">AlreadyMinted</a></h3>
-<p><em>achievement is already mint.</em></p>
-<pre><code class="language-solidity">error AlreadyMinted(string achievementName);
+<p>achievement is already mint.</p>
+<pre><code class="language-solidity">error AlreadyMinted(string achievementName)
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ievents"><a class="header" href="#ievents">IEvents</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IAchievementEvents.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/41d395e4c5ea50ec3a90ea79d429abfb38a61edc/src/interfaces/IAchievementEvents.sol">Git Source</a></p>
 <h2 id="events"><a class="header" href="#events">Events</a></h2>
 <h3 id="achievementset"><a class="header" href="#achievementset">AchievementSet</a></h3>
-<pre><code class="language-solidity">event AchievementSet(string indexed name, string description, string imageURL);
+<pre><code class="language-solidity">event AchievementSet(string indexed name, string description, string imageURL)
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ierrors-1"><a class="header" href="#ierrors-1">IErrors</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IErrors.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/41d395e4c5ea50ec3a90ea79d429abfb38a61edc/src/interfaces/IErrors.sol">Git Source</a></p>
 <h2 id="errors-1"><a class="header" href="#errors-1">Errors</a></h2>
 <h3 id="receiverisempty"><a class="header" href="#receiverisempty">ReceiverIsEmpty</a></h3>
-<p><em>receiver is empty.</em></p>
-<pre><code class="language-solidity">error ReceiverIsEmpty();
+<p>receiver is empty.</p>
+<pre><code class="language-solidity">error ReceiverIsEmpty()
 </code></pre>
 <h3 id="pointsinvalidreceiver"><a class="header" href="#pointsinvalidreceiver">PointsInvalidReceiver</a></h3>
-<p><em>Points receiver is invalid.</em></p>
-<pre><code class="language-solidity">error PointsInvalidReceiver(bytes32);
+<p>Points receiver is invalid.</p>
+<pre><code class="language-solidity">error PointsInvalidReceiver(bytes32)
 </code></pre>
 <h3 id="amountiszero"><a class="header" href="#amountiszero">AmountIsZero</a></h3>
-<p><em>Amount is zero.</em></p>
-<pre><code class="language-solidity">error AmountIsZero();
+<p>Amount is zero.</p>
+<pre><code class="language-solidity">error AmountIsZero()
 </code></pre>
 <h3 id="insufficientbalanceandpoints"><a class="header" href="#insufficientbalanceandpoints">InsufficientBalanceAndPoints</a></h3>
-<p><em>Insufficient balance and points.</em></p>
-<pre><code class="language-solidity">error InsufficientBalanceAndPoints();
+<p>Insufficient balance and points.</p>
+<pre><code class="language-solidity">error InsufficientBalanceAndPoints()
 </code></pre>
 <h3 id="insufficientbalancetotransfer"><a class="header" href="#insufficientbalancetotransfer">InsufficientBalanceToTransfer</a></h3>
-<p><em>Insufficient balance to transfer.</em></p>
-<pre><code class="language-solidity">error InsufficientBalanceToTransfer();
+<p>Insufficient balance to transfer.</p>
+<pre><code class="language-solidity">error InsufficientBalanceToTransfer()
 </code></pre>
 <h3 id="exceedsmaxsupply"><a class="header" href="#exceedsmaxsupply">ExceedsMaxSupply</a></h3>
-<p><em>Exceeds max supply.</em></p>
-<pre><code class="language-solidity">error ExceedsMaxSupply();
+<p>Exceeds max supply.</p>
+<pre><code class="language-solidity">error ExceedsMaxSupply()
 </code></pre>
 <h3 id="alreadymintedtoday"><a class="header" href="#alreadymintedtoday">AlreadyMintedToday</a></h3>
-<p><em>Already minted today.</em></p>
-<pre><code class="language-solidity">error AlreadyMintedToday(address account);
+<p>Already minted today.</p>
+<pre><code class="language-solidity">error AlreadyMintedToday(address account)
 </code></pre>
 <h3 id="exceedsdailylimit"><a class="header" href="#exceedsdailylimit">ExceedsDailyLimit</a></h3>
-<p><em>Exceeds daily limit.</em></p>
-<pre><code class="language-solidity">error ExceedsDailyLimit();
+<p>Exceeds daily limit.</p>
+<pre><code class="language-solidity">error ExceedsDailyLimit()
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ievents-1"><a class="header" href="#ievents-1">IEvents</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IEvents.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/41d395e4c5ea50ec3a90ea79d429abfb38a61edc/src/interfaces/IEvents.sol">Git Source</a></p>
 <h2 id="events-1"><a class="header" href="#events-1">Events</a></h2>
 <h3 id="distributepoints"><a class="header" href="#distributepoints">DistributePoints</a></h3>
-<p><em>Emitted when points are distributed to an address.</em></p>
-<pre><code class="language-solidity">event DistributePoints(address indexed to, uint256 indexed amount);
+<p>Emitted when points are distributed to an address.</p>
+<pre><code class="language-solidity">event DistributePoints(address indexed to, uint256 indexed amount)
 </code></pre>
 <h3 id="tip"><a class="header" href="#tip">Tip</a></h3>
-<p><em>Emitted when points are tipped from one address to another.</em></p>
-<pre><code class="language-solidity">event Tip(address indexed from, address indexed to, bytes32 indexed feedId, uint256 amount);
+<p>Emitted when points are tipped from one address to another.</p>
+<pre><code class="language-solidity">event Tip(address indexed from, address indexed to, bytes32 indexed feedId, uint256 amount)
 </code></pre>
 <h3 id="purchase"><a class="header" href="#purchase">Purchase</a></h3>
-<p><em>Emitted when points are paid from one address to another for some purchase.</em></p>
-<pre><code class="language-solidity">event Purchase(address indexed from, address indexed to, bytes32 indexed feedId, uint256 amount);
+<p>Emitted when points are paid from one address to another for some purchase.</p>
+<pre><code class="language-solidity">event Purchase(
+    address indexed from, address indexed to, bytes32 indexed feedId, uint256 amount
+)
 </code></pre>
 <h3 id="airdroptokens"><a class="header" href="#airdroptokens">AirdropTokens</a></h3>
-<p><em>Emitted when points are airdropped to an address.</em></p>
-<pre><code class="language-solidity">event AirdropTokens(address indexed to, uint256 indexed amount);
+<p>Emitted when points are airdropped to an address.</p>
+<pre><code class="language-solidity">event AirdropTokens(address indexed to, uint256 indexed amount)
 </code></pre>
 <h3 id="taxcollected"><a class="header" href="#taxcollected">TaxCollected</a></h3>
-<p><em>Emitted when tax is collected.</em></p>
-<pre><code class="language-solidity">event TaxCollected(address indexed collector, uint256 indexed amount);
+<p>Emitted when tax is collected.</p>
+<pre><code class="language-solidity">event TaxCollected(address indexed collector, uint256 indexed amount)
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -389,15 +398,15 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </tbody></table>
 </div>
 <h3 id="withdrawnbyfeedid"><a class="header" href="#withdrawnbyfeedid">WithdrawnByFeedId</a></h3>
-<p><em>Emitted when points are withdrawn by feed id.</em></p>
-<pre><code class="language-solidity">event WithdrawnByFeedId(address indexed to, bytes32 indexed feedId, uint256 indexed amount);
+<p>Emitted when points are withdrawn by feed id.</p>
+<pre><code class="language-solidity">event WithdrawnByFeedId(address indexed to, bytes32 indexed feedId, uint256 indexed amount)
 </code></pre>
 <h3 id="withdrawn"><a class="header" href="#withdrawn">Withdrawn</a></h3>
-<p><em>Emitted when tokens are withdrawn from an address.</em></p>
-<pre><code class="language-solidity">event Withdrawn(address indexed user, address indexed to, uint256 indexed amount);
+<p>Emitted when tokens are withdrawn from an address.</p>
+<pre><code class="language-solidity">event Withdrawn(address indexed user, address indexed to, uint256 indexed amount)
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ipowertoken"><a class="header" href="#ipowertoken">IPowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/interfaces/IPowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/41d395e4c5ea50ec3a90ea79d429abfb38a61edc/src/interfaces/IPowerToken.sol">Git Source</a></p>
 <h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
 <h3 id="initialize-1"><a class="header" href="#initialize-1">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -418,7 +427,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </div>
 <h3 id="setdailymintlimit"><a class="header" href="#setdailymintlimit">setDailyMintLimit</a></h3>
 <p>Sets the token limit for daily mint.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function setDailyMintLimit(uint256 limit) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -428,7 +437,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </div>
 <h3 id="minttotreasury"><a class="header" href="#minttotreasury">mintToTreasury</a></h3>
 <p>Mints tokens to the treasury.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function mintToTreasury(address treasuryAdmin, uint256 amount) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -439,7 +448,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </div>
 <h3 id="mint-1"><a class="header" href="#mint-1">mint</a></h3>
 <p>Issues new token points.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function mint(address to, uint256 amount, uint256 taxBasisPoints) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -451,7 +460,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </div>
 <h3 id="dailymint"><a class="header" href="#dailymint">dailyMint</a></h3>
 <p>Issues new token points to caller.</p>
-<p><em>The caller must have the APP_USER_ROLE.</em></p>
+<p>The caller must have the APP_USER_ROLE.</p>
 <pre><code class="language-solidity">function dailyMint(uint256 amount, uint256 taxBasisPoints) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -462,7 +471,7 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </div>
 <h3 id="airdrop"><a class="header" href="#airdrop">airdrop</a></h3>
 <p>Airdrops tokens to the users.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function airdrop(address to, uint256 amount, uint256 taxBasisPoints) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -474,8 +483,8 @@ forge script script/Deploy.s.sol:Deploy --sig 'sync()' --rpc-url $RPC_URL --broa
 </div>
 <h3 id="purchase-1"><a class="header" href="#purchase-1">purchase</a></h3>
 <p>Purchases with token points. If token points are not enough, it will try the balance.</p>
-<p><em>The to and feedId are optional, but at least one of them must be provided.
-If both are provided, the <code>to</code> will be used.</em></p>
+<p>The to and feedId are optional, but at least one of them must be provided.
+If both are provided, the <code>to</code> will be used.</p>
 <pre><code class="language-solidity">function purchase(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -488,8 +497,8 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </div>
 <h3 id="tip-1"><a class="header" href="#tip-1">tip</a></h3>
 <p>Tips with token points. If token points are not enough, it will try the balance.</p>
-<p><em>The to and feedId are optional, but at least one of them must be provided.
-If both are provided, the <code>to</code> will be used.</em></p>
+<p>The to and feedId are optional, but at least one of them must be provided.
+If both are provided, the <code>to</code> will be used.</p>
 <pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -502,7 +511,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </div>
 <h3 id="withdrawbyfeedid"><a class="header" href="#withdrawbyfeedid">withdrawByFeedId</a></h3>
 <p>Withdraws tokens by feedId. <code>to</code> is supposed to be the true owner of the feedId.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function withdrawByFeedId(address to, bytes32 feedId) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -513,7 +522,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </div>
 <h3 id="adduser"><a class="header" href="#adduser">addUser</a></h3>
 <p>Grants the APP_USER_ROLE to the specified account and send native tokens to it.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function addUser(address account) external payable;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -523,7 +532,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </div>
 <h3 id="addusers"><a class="header" href="#addusers">addUsers</a></h3>
 <p>Grants the APP_USER_ROLE to the specified accounts.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function addUsers(address[] calldata accounts) external payable;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -533,7 +542,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </div>
 <h3 id="removeuser"><a class="header" href="#removeuser">removeUser</a></h3>
 <p>Revokes the APP_USER_ROLE from the specified account.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function removeUser(address account) external;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -582,11 +591,11 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <li><a href="src/libraries/AchievementDataTypes.sol/struct.AchievementDetails.html">AchievementDetails</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="achievementdetails"><a class="header" href="#achievementdetails">AchievementDetails</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/libraries/AchievementDataTypes.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/41d395e4c5ea50ec3a90ea79d429abfb38a61edc/src/libraries/AchievementDataTypes.sol">Git Source</a></p>
 <pre><code class="language-solidity">struct AchievementDetails {
-    string name;
-    string description;
-    string imageURL;
+string name;
+string description;
+string imageURL;
 }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="contents-2"><a class="header" href="#contents-2">Contents</a></h1>
@@ -594,36 +603,36 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <li><a href="src/misc/Achievement.sol/contract.Achievement.html">Achievement</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="achievement"><a class="header" href="#achievement">Achievement</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/misc/Achievement.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/41d395e4c5ea50ec3a90ea79d429abfb38a61edc/src/misc/Achievement.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
-IERC721, AccessControlEnumerableUpgradeable, ERC721Upgradeable, <a href="src/misc/Achievement.sol//src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/misc/Achievement.sol//src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, <a href="src/misc/Achievement.sol//src/interfaces/IAchievement.sol/interface.IAchievement.html">IAchievement</a></p>
+IERC721, AccessControlEnumerableUpgradeable, ERC721Upgradeable, <a href="src/misc/Achievement.sol//home/runner/work/follow-contracts/follow-contracts/docs/src/src/interfaces/IAchievementErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/misc/Achievement.sol//home/runner/work/follow-contracts/follow-contracts/docs/src/src/interfaces/IAchievementEvents.sol/interface.IEvents.html">IEvents</a>, <a href="src/misc/Achievement.sol//home/runner/work/follow-contracts/follow-contracts/docs/src/src/interfaces/IAchievement.sol/interface.IAchievement.html">IAchievement</a></p>
 <h2 id="state-variables"><a class="header" href="#state-variables">State Variables</a></h2>
 <h3 id="app_admin_role"><a class="header" href="#app_admin_role">APP_ADMIN_ROLE</a></h3>
-<pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
+<pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE")
 </code></pre>
 <h3 id="app_user_role"><a class="header" href="#app_user_role">APP_USER_ROLE</a></h3>
-<pre><code class="language-solidity">bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE");
+<pre><code class="language-solidity">bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE")
 </code></pre>
 <h3 id="_counter"><a class="header" href="#_counter">_counter</a></h3>
-<pre><code class="language-solidity">uint256 internal _counter;
+<pre><code class="language-solidity">uint256 internal _counter
 </code></pre>
 <h3 id="_totalsupply"><a class="header" href="#_totalsupply">_totalSupply</a></h3>
-<pre><code class="language-solidity">uint256 internal _totalSupply;
+<pre><code class="language-solidity">uint256 internal _totalSupply
 </code></pre>
 <h3 id="_powertoken"><a class="header" href="#_powertoken">_powerToken</a></h3>
-<pre><code class="language-solidity">address internal _powerToken;
+<pre><code class="language-solidity">address internal _powerToken
 </code></pre>
 <h3 id="_achievements"><a class="header" href="#_achievements">_achievements</a></h3>
-<pre><code class="language-solidity">EnumerableSet.Bytes32Set internal _achievements;
+<pre><code class="language-solidity">EnumerableSet.Bytes32Set internal _achievements
 </code></pre>
 <h3 id="_achievementdetails"><a class="header" href="#_achievementdetails">_achievementDetails</a></h3>
-<pre><code class="language-solidity">mapping(bytes32 =&gt; AchievementDetails) internal _achievementDetails;
+<pre><code class="language-solidity">mapping(bytes32 =&gt; AchievementDetails) internal _achievementDetails
 </code></pre>
 <h3 id="_tokenidtoachievements"><a class="header" href="#_tokenidtoachievements">_tokenIdToAchievements</a></h3>
-<pre><code class="language-solidity">mapping(uint256 =&gt; bytes32) internal _tokenIdToAchievements;
+<pre><code class="language-solidity">mapping(uint256 =&gt; bytes32) internal _tokenIdToAchievements
 </code></pre>
 <h3 id="_userachievements"><a class="header" href="#_userachievements">_userAchievements</a></h3>
-<pre><code class="language-solidity">mapping(address =&gt; mapping(bytes32 =&gt; bool)) internal _userAchievements;
+<pre><code class="language-solidity">mapping(address =&gt; mapping(bytes32 =&gt; bool)) internal _userAchievements
 </code></pre>
 <h2 id="functions-2"><a class="header" href="#functions-2">Functions</a></h2>
 <h3 id="initialize-2"><a class="header" href="#initialize-2">initialize</a></h3>
@@ -645,10 +654,11 @@ IERC721, AccessControlEnumerableUpgradeable, ERC721Upgradeable, <a href="src/mis
 </div>
 <h3 id="setachievement-1"><a class="header" href="#setachievement-1">setAchievement</a></h3>
 <p>Only the APP_ADMIN_ROLE can set the achievement details.</p>
-<pre><code class="language-solidity">function setAchievement(string calldata name, string calldata description, string calldata imageURL)
-    external
-    override
-    onlyRole(APP_ADMIN_ROLE);
+<pre><code class="language-solidity">function setAchievement(
+    string calldata name,
+    string calldata description,
+    string calldata imageURL
+) external override onlyRole(APP_ADMIN_ROLE);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -672,7 +682,7 @@ IERC721, AccessControlEnumerableUpgradeable, ERC721Upgradeable, <a href="src/mis
 </tbody></table>
 </div>
 <h3 id="tokenuri"><a class="header" href="#tokenuri">tokenURI</a></h3>
-<p><em>See {IERC721Metadata-tokenURI}.</em></p>
+<p>See {IERC721Metadata-tokenURI}.</p>
 <pre><code class="language-solidity">function tokenURI(uint256 id) public view override returns (string memory);
 </code></pre>
 <h3 id="totalsupply-1"><a class="header" href="#totalsupply-1">totalSupply</a></h3>
@@ -737,10 +747,10 @@ IERC721, AccessControlEnumerableUpgradeable, ERC721Upgradeable, <a href="src/mis
 <li><a href="src/upgradeability/TransparentUpgradeableProxy.sol/contract.TransparentUpgradeableProxy.html">TransparentUpgradeableProxy</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="transparentupgradeableproxy"><a class="header" href="#transparentupgradeableproxy">TransparentUpgradeableProxy</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/41d395e4c5ea50ec3a90ea79d429abfb38a61edc/src/upgradeability/TransparentUpgradeableProxy.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
 ERC1967Proxy</p>
-<p>*This contract implements a proxy that is upgradeable by an admin.
+<p>This contract implements a proxy that is upgradeable by an admin.
 To avoid
 https://medium.com/nomic-labs-blog/malicious-backdoors-in-ethereum-proxies-62629adf3357[proxy
 selector
@@ -762,117 +772,118 @@ the proxy or changing
 the admin, so it's best if it's a dedicated account that is not used for anything else. This will
 avoid headaches due
 to sudden errors when trying to call a function from the proxy implementation.
-Our recommendation is for the dedicated account to be an instance of the {ProxyAdmin} contract. If
+Our recommendation is for the dedicated account to be an instance of the {ProxyAdmin} contract.
+If
 set up this way,
-you should think of the <code>ProxyAdmin</code> instance as the real administrative interface of your proxy.*</li>
+you should think of the <code>ProxyAdmin</code> instance as the real administrative interface of your proxy.</li>
 </ol>
 <h2 id="functions-3"><a class="header" href="#functions-3">Functions</a></h2>
 <h3 id="constructor"><a class="header" href="#constructor">constructor</a></h3>
-<p><em>Initializes an upgradeable proxy managed by <code>_admin</code>, backed by the implementation at
+<p>Initializes an upgradeable proxy managed by <code>_admin</code>, backed by the implementation at
 <code>_logic</code>, and
-optionally initialized with <code>_data</code> as explained in <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/forge-std/test/mocks/MockERC20.t.sol/contract.Token_ERC20.html#constructor">ERC1967Proxy-constructor</a>.</em></p>
+optionally initialized with <code>_data</code> as explained in <a href="src/upgradeability/TransparentUpgradeableProxy.sol///home/runner/work/follow-contracts/follow-contracts/docs/src/src/PowerToken.sol/contract.PowerToken.html#constructor">ERC1967Proxy-constructor</a>.</p>
 <pre><code class="language-solidity">constructor(address _logic, address admin_, bytes memory _data)
     payable
     ERC1967Proxy(_logic, _data);
 </code></pre>
 <h3 id="ifadmin"><a class="header" href="#ifadmin">ifAdmin</a></h3>
-<p><em>Modifier used internally that will delegate the call to the implementation unless the
-sender is the admin.</em></p>
-<pre><code class="language-solidity">modifier ifAdmin();
+<p>Modifier used internally that will delegate the call to the implementation unless the
+sender is the admin.</p>
+<pre><code class="language-solidity">modifier ifAdmin() ;
 </code></pre>
 <h3 id="admin"><a class="header" href="#admin">admin</a></h3>
-<p><em>Returns the current admin.
-NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#getproxyadmin">ProxyAdmin-getProxyAdmin</a>.
+<p>Returns the current admin.
+NOTE: Only the admin can call this function. See {ProxyAdmin-getProxyAdmin}.
 TIP: To get this value clients can read directly from the storage slot shown below (specified
 by EIP1967) using the
 https://eth.wiki/json-rpc/API#eth_getstorageat[<code>eth_getStorageAt</code>] RPC call.
-<code>0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103</code></em></p>
+<code>0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103</code></p>
 <pre><code class="language-solidity">function admin() external ifAdmin returns (address admin_);
 </code></pre>
 <h3 id="implementation"><a class="header" href="#implementation">implementation</a></h3>
-<p><em>Returns the current implementation.
-NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#getproxyimplementation">ProxyAdmin-getProxyImplementation</a>.
+<p>Returns the current implementation.
+NOTE: Only the admin can call this function. See {ProxyAdmin-getProxyImplementation}.
 TIP: To get this value clients can read directly from the storage slot shown below (specified
 by EIP1967) using the
 https://eth.wiki/json-rpc/API#eth_getstorageat[<code>eth_getStorageAt</code>] RPC call.
-<code>0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc</code></em></p>
+<code>0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc</code></p>
 <pre><code class="language-solidity">function implementation() external ifAdmin returns (address implementation_);
 </code></pre>
 <h3 id="changeadmin"><a class="header" href="#changeadmin">changeAdmin</a></h3>
-<p><em>Changes the admin of the proxy.
+<p>Changes the admin of the proxy.
 Emits an {AdminChanged} event.
-NOTE: Only the admin can call this function. See {ProxyAdmin-changeProxyAdmin}.</em></p>
+NOTE: Only the admin can call this function. See {ProxyAdmin-changeProxyAdmin}.</p>
 <pre><code class="language-solidity">function changeAdmin(address newAdmin) external virtual ifAdmin;
 </code></pre>
 <h3 id="upgradeto"><a class="header" href="#upgradeto">upgradeTo</a></h3>
-<p><em>Upgrade the implementation of the proxy.
-NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#upgrade">ProxyAdmin-upgrade</a>.</em></p>
+<p>Upgrade the implementation of the proxy.
+NOTE: Only the admin can call this function. See {ProxyAdmin-upgrade}.</p>
 <pre><code class="language-solidity">function upgradeTo(address newImplementation) external ifAdmin;
 </code></pre>
 <h3 id="upgradetoandcall"><a class="header" href="#upgradetoandcall">upgradeToAndCall</a></h3>
-<p><em>Upgrade the implementation of the proxy, and then call a function from the new
+<p>Upgrade the implementation of the proxy, and then call a function from the new
 implementation as specified
 by <code>data</code>, which should be an encoded function call. This is useful to initialize new storage
 variables in the
 proxied contract.
-NOTE: Only the admin can call this function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol/contract.ProxyAdmin.html#upgradeandcall">ProxyAdmin-upgradeAndCall</a>.</em></p>
+NOTE: Only the admin can call this function. See {ProxyAdmin-upgradeAndCall}.</p>
 <pre><code class="language-solidity">function upgradeToAndCall(address newImplementation, bytes calldata data)
     external
     payable
     ifAdmin;
 </code></pre>
 <h3 id="_admin"><a class="header" href="#_admin">_admin</a></h3>
-<p><em>Returns the current admin.</em></p>
+<p>Returns the current admin.</p>
 <pre><code class="language-solidity">function _admin() internal view virtual returns (address);
 </code></pre>
 <h3 id="_beforefallback"><a class="header" href="#_beforefallback">_beforeFallback</a></h3>
-<p><em>Makes sure the admin cannot access the fallback function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol//lib/openzeppelin-contracts/contracts/proxy/Proxy.sol/abstract.Proxy.html#_beforefallback">Proxy-_beforeFallback</a>.</em></p>
+<p>Makes sure the admin cannot access the fallback function. See <a href="src/upgradeability/TransparentUpgradeableProxy.sol///home/runner/work/follow-contracts/follow-contracts/docs/src/lib/openzeppelin-contracts/contracts/proxy/Proxy.sol/abstract.Proxy.html#_beforefallback">Proxy-_beforeFallback</a>.</p>
 <pre><code class="language-solidity">function _beforeFallback() internal virtual override;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="powertoken-2"><a class="header" href="#powertoken-2">PowerToken</a></h1>
-<p><a href="https://github.com/RSSNext/follow-contracts/blob/5ad63922fe5aaa270085cfbb16c7a67d2a2449d5/src/PowerToken.sol">Git Source</a></p>
+<p><a href="https://github.com/RSSNext/follow-contracts/blob/41d395e4c5ea50ec3a90ea79d429abfb38a61edc/src/PowerToken.sol">Git Source</a></p>
 <p><strong>Inherits:</strong>
-<a href="src/PowerToken.sol//src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, <a href="src/PowerToken.sol//src/interfaces/IErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/PowerToken.sol//src/interfaces/IEvents.sol/interface.IEvents.html">IEvents</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
+<a href="src/PowerToken.sol//home/runner/work/follow-contracts/follow-contracts/docs/src/src/interfaces/IPowerToken.sol/interface.IPowerToken.html">IPowerToken</a>, <a href="src/PowerToken.sol//home/runner/work/follow-contracts/follow-contracts/docs/src/src/interfaces/IAchievementErrors.sol/interface.IErrors.html">IErrors</a>, <a href="src/PowerToken.sol//home/runner/work/follow-contracts/follow-contracts/docs/src/src/interfaces/IAchievementEvents.sol/interface.IEvents.html">IEvents</a>, AccessControlEnumerableUpgradeable, ERC20Upgradeable</p>
 <h2 id="state-variables-1"><a class="header" href="#state-variables-1">State Variables</a></h2>
 <h3 id="version"><a class="header" href="#version">version</a></h3>
-<pre><code class="language-solidity">string public constant version = "1.1.0";
+<pre><code class="language-solidity">string public constant version = "1.1.0"
 </code></pre>
 <h3 id="app_admin_role-1"><a class="header" href="#app_admin_role-1">APP_ADMIN_ROLE</a></h3>
-<pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
+<pre><code class="language-solidity">bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE")
 </code></pre>
 <h3 id="app_user_role-1"><a class="header" href="#app_user_role-1">APP_USER_ROLE</a></h3>
-<pre><code class="language-solidity">bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE");
+<pre><code class="language-solidity">bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE")
 </code></pre>
 <h3 id="max_supply"><a class="header" href="#max_supply">MAX_SUPPLY</a></h3>
-<pre><code class="language-solidity">uint256 public constant MAX_SUPPLY = 10_000_000_000 ether;
+<pre><code class="language-solidity">uint256 public constant MAX_SUPPLY = 10_000_000_000 ether
 </code></pre>
 <h3 id="admin-1"><a class="header" href="#admin-1">ADMIN</a></h3>
-<pre><code class="language-solidity">address public immutable ADMIN;
+<pre><code class="language-solidity">address public immutable ADMIN
 </code></pre>
 <h3 id="_pointsbalancesv1"><a class="header" href="#_pointsbalancesv1">_pointsBalancesV1</a></h3>
-<pre><code class="language-solidity">mapping(address account =&gt; uint256) internal _pointsBalancesV1;
+<pre><code class="language-solidity">mapping(address account =&gt; uint256) internal _pointsBalancesV1
 </code></pre>
 <h3 id="_feedbalances"><a class="header" href="#_feedbalances">_feedBalances</a></h3>
-<p><em>Token balances of the feed, which could be withdrawn to the feed owner.</em></p>
-<pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _feedBalances;
+<p>Token balances of the feed, which could be withdrawn to the feed owner.</p>
+<pre><code class="language-solidity">mapping(bytes32 feedId =&gt; uint256) internal _feedBalances
 </code></pre>
 <h3 id="_pointsbalancesv2"><a class="header" href="#_pointsbalancesv2">_pointsBalancesV2</a></h3>
-<p><em>Points balances of the users, which are non-transferable and can be used to tip others.
-Points balances are included in user's balance.</em></p>
-<pre><code class="language-solidity">mapping(address account =&gt; uint256) internal _pointsBalancesV2;
+<p>Points balances of the users, which are non-transferable and can be used to tip others.
+Points balances are included in user's balance.</p>
+<pre><code class="language-solidity">mapping(address account =&gt; uint256) internal _pointsBalancesV2
 </code></pre>
 <h3 id="_dailyminted"><a class="header" href="#_dailyminted">_dailyMinted</a></h3>
-<pre><code class="language-solidity">mapping(address account =&gt; mapping(uint256 day =&gt; bool hasMinted)) internal _dailyMinted;
+<pre><code class="language-solidity">mapping(address account =&gt; mapping(uint256 day =&gt; bool hasMinted)) internal _dailyMinted
 </code></pre>
 <h3 id="_dailymintlimit"><a class="header" href="#_dailymintlimit">_dailyMintLimit</a></h3>
-<pre><code class="language-solidity">uint256 internal _dailyMintLimit;
+<pre><code class="language-solidity">uint256 internal _dailyMintLimit
 </code></pre>
 <h2 id="functions-4"><a class="header" href="#functions-4">Functions</a></h2>
 <h3 id="onlyadminrole"><a class="header" href="#onlyadminrole">onlyAdminRole</a></h3>
-<pre><code class="language-solidity">modifier onlyAdminRole();
+<pre><code class="language-solidity">modifier onlyAdminRole() ;
 </code></pre>
 <h3 id="constructor-1"><a class="header" href="#constructor-1">constructor</a></h3>
-<pre><code class="language-solidity">constructor(address admin_);
+<pre><code class="language-solidity">constructor(address admin_) ;
 </code></pre>
 <h3 id="initialize-3"><a class="header" href="#initialize-3">initialize</a></h3>
 <p>Initializes the contract. Setup token name, symbol and account with APP_ADMIN_ROLE.</p>
@@ -881,7 +892,7 @@ Points balances are included in user's balance.</em></p>
     string calldata symbol_,
     address admin_,
     uint256 dailyMintLimit_
-) external override reinitializer(4);
+) external override reinitializer(5);
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -893,7 +904,7 @@ Points balances are included in user's balance.</em></p>
 </div>
 <h3 id="setdailymintlimit-1"><a class="header" href="#setdailymintlimit-1">setDailyMintLimit</a></h3>
 <p>Sets the token limit for daily mint.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function setDailyMintLimit(uint256 limit) external override onlyAdminRole;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -903,7 +914,7 @@ Points balances are included in user's balance.</em></p>
 </div>
 <h3 id="minttotreasury-1"><a class="header" href="#minttotreasury-1">mintToTreasury</a></h3>
 <p>Mints tokens to the treasury.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function mintToTreasury(address treasuryAdmin, uint256 amount) external override onlyAdminRole;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -914,8 +925,11 @@ Points balances are included in user's balance.</em></p>
 </div>
 <h3 id="mint-3"><a class="header" href="#mint-3">mint</a></h3>
 <p>Issues new token points.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
-<pre><code class="language-solidity">function mint(address to, uint256 amount, uint256 taxBasisPoints) external override onlyAdminRole;
+<p>The caller must have the APP_ADMIN_ROLE.</p>
+<pre><code class="language-solidity">function mint(address to, uint256 amount, uint256 taxBasisPoints)
+    external
+    override
+    onlyAdminRole;
 </code></pre>
 <p><strong>Parameters</strong></p>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
@@ -926,7 +940,7 @@ Points balances are included in user's balance.</em></p>
 </div>
 <h3 id="dailymint-1"><a class="header" href="#dailymint-1">dailyMint</a></h3>
 <p>Issues new token points to caller.</p>
-<p><em>The caller must have the APP_USER_ROLE.</em></p>
+<p>The caller must have the APP_USER_ROLE.</p>
 <pre><code class="language-solidity">function dailyMint(uint256 amount, uint256 taxBasisPoints)
     external
     override
@@ -940,7 +954,7 @@ Points balances are included in user's balance.</em></p>
 </div>
 <h3 id="airdrop-1"><a class="header" href="#airdrop-1">airdrop</a></h3>
 <p>Airdrops tokens to the users.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function airdrop(address to, uint256 amount, uint256 taxBasisPoints)
     external
     override
@@ -955,8 +969,8 @@ Points balances are included in user's balance.</em></p>
 </div>
 <h3 id="purchase-2"><a class="header" href="#purchase-2">purchase</a></h3>
 <p>Purchases with token points. If token points are not enough, it will try the balance.</p>
-<p><em>The to and feedId are optional, but at least one of them must be provided.
-If both are provided, the <code>to</code> will be used.</em></p>
+<p>The to and feedId are optional, but at least one of them must be provided.
+If both are provided, the <code>to</code> will be used.</p>
 <pre><code class="language-solidity">function purchase(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints)
     external
     override;
@@ -971,8 +985,8 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </div>
 <h3 id="tip-2"><a class="header" href="#tip-2">tip</a></h3>
 <p>Tips with token points. If token points are not enough, it will try the balance.</p>
-<p><em>The to and feedId are optional, but at least one of them must be provided.
-If both are provided, the <code>to</code> will be used.</em></p>
+<p>The to and feedId are optional, but at least one of them must be provided.
+If both are provided, the <code>to</code> will be used.</p>
 <pre><code class="language-solidity">function tip(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints)
     external
     override;
@@ -987,7 +1001,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </div>
 <h3 id="withdrawbyfeedid-1"><a class="header" href="#withdrawbyfeedid-1">withdrawByFeedId</a></h3>
 <p>Withdraws tokens by feedId. <code>to</code> is supposed to be the true owner of the feedId.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function withdrawByFeedId(address to, bytes32 feedId) external override onlyAdminRole;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -998,7 +1012,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </div>
 <h3 id="adduser-1"><a class="header" href="#adduser-1">addUser</a></h3>
 <p>Grants the APP_USER_ROLE to the specified account and send native tokens to it.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function addUser(address account) external payable override onlyAdminRole;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -1008,7 +1022,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </div>
 <h3 id="addusers-1"><a class="header" href="#addusers-1">addUsers</a></h3>
 <p>Grants the APP_USER_ROLE to the specified accounts.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function addUsers(address[] calldata accounts) external payable override onlyAdminRole;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -1018,7 +1032,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 </div>
 <h3 id="removeuser-1"><a class="header" href="#removeuser-1">removeUser</a></h3>
 <p>Revokes the APP_USER_ROLE from the specified account.</p>
-<p><em>The caller must have the APP_ADMIN_ROLE.</em></p>
+<p>The caller must have the APP_ADMIN_ROLE.</p>
 <pre><code class="language-solidity">function removeUser(address account) external override onlyAdminRole;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -1082,7 +1096,7 @@ If both are provided, the <code>to</code> will be used.</em></p>
 ) internal returns (uint256);
 </code></pre>
 <h3 id="_issuepoints"><a class="header" href="#_issuepoints">_issuePoints</a></h3>
-<p><em>Issues points to a specified address by transferring tokens from the token contract.</em></p>
+<p>Issues points to a specified address by transferring tokens from the token contract.</p>
 <pre><code class="language-solidity">function _issuePoints(address to, uint256 amount, uint256 taxBasisPoints) internal;
 </code></pre>
 <h3 id="_setminted"><a class="header" href="#_setminted">_setMinted</a></h3>
@@ -1092,10 +1106,10 @@ If both are provided, the <code>to</code> will be used.</em></p>
 <pre><code class="language-solidity">function _hasMinted(address account, uint256 day) internal view returns (bool);
 </code></pre>
 <h3 id="_checktransferbalance"><a class="header" href="#_checktransferbalance">_checkTransferBalance</a></h3>
-<p><em>Checks if the transfer balance is sufficient.
+<p>Checks if the transfer balance is sufficient.
 This function verifies that the <code>from</code> address has enough balance to cover the transfer
 amount
-after accounting for the points balance.</em></p>
+after accounting for the points balance.</p>
 <pre><code class="language-solidity">function _checkTransferBalance(address from, uint256 value) internal view;
 </code></pre>
 <p><strong>Parameters</strong></p>
@@ -1146,9 +1160,12 @@ after accounting for the points balance.</em></p>
 
         <script>
         window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
         });
         </script>
+
 
     </div>
     </body>
