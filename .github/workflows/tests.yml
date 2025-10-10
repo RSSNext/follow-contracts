@@ -38,9 +38,9 @@ jobs:
         run: sudo apt-get update && sudo apt-get install lcov
       - name: Remove unwanted files
         run: |
-          lcov --remove lcov.info 'test/*' -o lcov.info
-          lcov --remove lcov.info 'src/mocks/*' 'src/upgradeability/*' -o lcov.info
-          lcov --remove lcov.info 'script/*' -o lcov.info
+          lcov --ignore-errors unused --remove lcov.info 'test/*' -o lcov.info
+          lcov --ignore-errors unused --remove lcov.info 'src/mocks/*' 'src/upgradeability/*' -o lcov.info
+          lcov --ignore-errors unused --remove lcov.info 'script/*' -o lcov.info
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
