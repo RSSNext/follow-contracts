@@ -10,7 +10,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 for contract in PowerToken
 do
   file=$(mktemp /tmp/contracts-storage-layout-${contract}.XXXXX) || exit 2
-  forge inspect ${contract} storage-layout --pretty > ${file} || exit 3
+  forge inspect ${contract} storage-layout > ${file} || exit 3
 
   diffResult=$(mktemp /tmp/contracts-storage-layout-${contract}.XXXXX) || exit 4
   diff -bB ./tools/storageLayout/${contract}-storage-layout.txt ${file}  > ${diffResult}
