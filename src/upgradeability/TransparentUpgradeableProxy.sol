@@ -30,7 +30,8 @@ import "@openzeppelin-4/proxy/ERC1967/ERC1967Proxy.sol";
  * avoid headaches due
  * to sudden errors when trying to call a function from the proxy implementation.
  *
- * Our recommendation is for the dedicated account to be an instance of the {ProxyAdmin} contract. If
+ * Our recommendation is for the dedicated account to be an instance of the {ProxyAdmin} contract.
+ * If
  * set up this way,
  * you should think of the `ProxyAdmin` instance as the real administrative interface of your proxy.
  */
@@ -40,10 +41,7 @@ contract TransparentUpgradeableProxy is ERC1967Proxy {
      * `_logic`, and
      * optionally initialized with `_data` as explained in {ERC1967Proxy-constructor}.
      */
-    constructor(address _logic, address admin_, bytes memory _data)
-        payable
-        ERC1967Proxy(_logic, _data)
-    {
+    constructor(address _logic, address admin_, bytes memory _data) payable ERC1967Proxy(_logic, _data) {
         assert(_ADMIN_SLOT == bytes32(uint256(keccak256("eip1967.proxy.admin")) - 1));
         _changeAdmin(admin_);
     }
@@ -117,11 +115,7 @@ contract TransparentUpgradeableProxy is ERC1967Proxy {
      *
      * NOTE: Only the admin can call this function. See {ProxyAdmin-upgradeAndCall}.
      */
-    function upgradeToAndCall(address newImplementation, bytes calldata data)
-        external
-        payable
-        ifAdmin
-    {
+    function upgradeToAndCall(address newImplementation, bytes calldata data) external payable ifAdmin {
         _upgradeToAndCall(newImplementation, data, true);
     }
 
@@ -136,10 +130,7 @@ contract TransparentUpgradeableProxy is ERC1967Proxy {
      * @dev Makes sure the admin cannot access the fallback function. See {Proxy-_beforeFallback}.
      */
     function _beforeFallback() internal virtual override {
-        require(
-            msg.sender != _getAdmin(),
-            "TransparentUpgradeableProxy: admin cannot fallback to proxy target"
-        );
+        require(msg.sender != _getAdmin(), "TransparentUpgradeableProxy: admin cannot fallback to proxy target");
         super._beforeFallback();
     }
 }

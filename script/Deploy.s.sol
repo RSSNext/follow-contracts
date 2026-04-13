@@ -30,8 +30,7 @@ contract Deploy is Deployer {
 
     function setUp() public override {
         super.setUp();
-        string memory path =
-            string.concat(vm.projectRoot(), "/deploy-config/", deploymentContext, ".json");
+        string memory path = string.concat(vm.projectRoot(), "/deploy-config/", deploymentContext, ".json");
         cfg = new DeployConfig(path);
 
         console.log("Deploying from %s", deployScript);
@@ -64,11 +63,8 @@ contract Deploy is Deployer {
 
     function deployProxy(string memory _name) public broadcast returns (address addr_) {
         address logic = mustGetAddress(_stripSemver(_name));
-        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy({
-            _logic: logic,
-            admin_: cfg.proxyAdminOwner(),
-            _data: ""
-        });
+        TransparentUpgradeableProxy proxy =
+            new TransparentUpgradeableProxy({_logic: logic, admin_: cfg.proxyAdminOwner(), _data: ""});
 
         // check states
         address admin = address(uint160(uint256(vm.load(address(proxy), OWNER_KEY))));

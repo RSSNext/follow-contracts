@@ -1,1201 +1,151 @@
-[
-  {
-    "type": "constructor",
-    "inputs": [
-      {
-        "name": "admin_",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "ADMIN",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "APP_ADMIN_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "APP_USER_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "DEFAULT_ADMIN_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "MAX_SUPPLY",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "addUser",
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "addUsers",
-    "inputs": [
-      {
-        "name": "accounts",
-        "type": "address[]",
-        "internalType": "address[]"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "airdrop",
-    "inputs": [
-      {
-        "name": "to",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "taxBasisPoints",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "allowance",
-    "inputs": [
-      {
-        "name": "owner",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "spender",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "approve",
-    "inputs": [
-      {
-        "name": "spender",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "balanceOf",
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "balanceOfByFeed",
-    "inputs": [
-      {
-        "name": "feedId",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "balanceOfPoints",
-    "inputs": [
-      {
-        "name": "owner",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "dailyMint",
-    "inputs": [
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "taxBasisPoints",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "decimals",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint8",
-        "internalType": "uint8"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getDailyMintLimit",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getRoleAdmin",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getRoleMember",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "index",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getRoleMemberCount",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "grantRole",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "hasRole",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "initialize",
-    "inputs": [
-      {
-        "name": "name_",
-        "type": "string",
-        "internalType": "string"
-      },
-      {
-        "name": "symbol_",
-        "type": "string",
-        "internalType": "string"
-      },
-      {
-        "name": "admin_",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "dailyMintLimit_",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "mint",
-    "inputs": [
-      {
-        "name": "to",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "taxBasisPoints",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "mintToTreasury",
-    "inputs": [
-      {
-        "name": "treasuryAdmin",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "name",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "purchase",
-    "inputs": [
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "to",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "feedId",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "taxBasisPoints",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "removeUser",
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "renounceRole",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "callerConfirmation",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "revokeRole",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "setDailyMintLimit",
-    "inputs": [
-      {
-        "name": "limit",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "supportsInterface",
-    "inputs": [
-      {
-        "name": "interfaceId",
-        "type": "bytes4",
-        "internalType": "bytes4"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "symbol",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "tip",
-    "inputs": [
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "to",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "feedId",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "taxBasisPoints",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "totalSupply",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "transfer",
-    "inputs": [
-      {
-        "name": "to",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "transferFrom",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "to",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "version",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "withdrawByFeedId",
-    "inputs": [
-      {
-        "name": "to",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "feedId",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "event",
-    "name": "AirdropTokens",
-    "inputs": [
-      {
-        "name": "to",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Approval",
-    "inputs": [
-      {
-        "name": "owner",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "spender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "DistributePoints",
-    "inputs": [
-      {
-        "name": "to",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Initialized",
-    "inputs": [
-      {
-        "name": "version",
-        "type": "uint64",
-        "indexed": false,
-        "internalType": "uint64"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Purchase",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "to",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "feedId",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "RoleAdminChanged",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "previousAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "newAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "RoleGranted",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "RoleRevoked",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "TaxCollected",
-    "inputs": [
-      {
-        "name": "collector",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Tip",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "to",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "feedId",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Transfer",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "to",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Withdrawn",
-    "inputs": [
-      {
-        "name": "user",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "to",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "WithdrawnByFeedId",
-    "inputs": [
-      {
-        "name": "to",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "feedId",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "error",
-    "name": "AccessControlBadConfirmation",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "AccessControlUnauthorizedAccount",
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "neededRole",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "AddressInsufficientBalance",
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "AlreadyMintedToday",
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "AmountIsZero",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ERC20InsufficientAllowance",
-    "inputs": [
-      {
-        "name": "spender",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "allowance",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "needed",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "ERC20InsufficientBalance",
-    "inputs": [
-      {
-        "name": "sender",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "balance",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "needed",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "ERC20InvalidApprover",
-    "inputs": [
-      {
-        "name": "approver",
-        "type": "address",
-        "internalType": "address"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "ERC20InvalidReceiver",
-    "inputs": [
-      {
-        "name": "receiver",
-        "type": "address",
-        "internalType": "address"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "ERC20InvalidSender",
-    "inputs": [
-      {
-        "name": "sender",
-        "type": "address",
-        "internalType": "address"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "ERC20InvalidSpender",
-    "inputs": [
-      {
-        "name": "spender",
-        "type": "address",
-        "internalType": "address"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "ExceedsDailyLimit",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ExceedsMaxSupply",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "FailedInnerCall",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "InsufficientBalanceAndPoints",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "InsufficientBalanceToTransfer",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "InvalidInitialization",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "NotInitializing",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "PointsInvalidReceiver",
-    "inputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "ReceiverIsEmpty",
-    "inputs": []
-  }
-]
+
+╭-------------+-----------------------------------------------------------------+--------------------------------------------------------------------╮
+| Type        | Signature                                                       | Selector                                                           |
++====================================================================================================================================================+
+| event       | AirdropTokens(address,uint256)                                  | 0x8916d829e7ac1af7b234a0e271d84b641fe64311cc086887b229acbf81bd1647 |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | Approval(address,address,uint256)                               | 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925 |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | DistributePoints(address,uint256)                               | 0xa374292b8d598b429bef952c7c0df115973850be180b70a85a42a9fbfb4c68fc |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | Initialized(uint64)                                             | 0xc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d2 |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | Purchase(address,address,bytes32,uint256)                       | 0xd5115ac264969d51728d07a0c483d82132c5d8b1c8327df0dbc594dbb675e908 |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | RoleAdminChanged(bytes32,bytes32,bytes32)                       | 0xbd79b86ffe0ab8e8776151514217cd7cacd52c909f66475c3af44e129f0b00ff |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | RoleGranted(bytes32,address,address)                            | 0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | RoleRevoked(bytes32,address,address)                            | 0xf6391f5c32d9c69d2a47ea670b442974b53935d1edc7fd64eb21e047a839171b |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | TaxCollected(address,uint256)                                   | 0x7f1b726f82f7a14636a7a5932448f1bce683188520ba3150fd8423989353ebf2 |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | Tip(address,address,bytes32,uint256)                            | 0x3cf09d4df59049b67be58230850738b7da9bcff1997181a0a4c8f379dbbb2f84 |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | Transfer(address,address,uint256)                               | 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | Withdrawn(address,address,uint256)                              | 0xd1c19fbcd4551a5edfb66d43d2e337c04837afda3482b42bdf569a8fccdae5fb |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| event       | WithdrawnByFeedId(address,bytes32,uint256)                      | 0xf106de175d92ca3f8379a4b2a6b14a86c687e946c07663eaceb895076e513d3e |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | AccessControlBadConfirmation()                                  | 0x6697b232                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | AccessControlUnauthorizedAccount(address,bytes32)               | 0xe2517d3f                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | AddressInsufficientBalance(address)                             | 0xcd786059                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | AlreadyMintedToday(address)                                     | 0x4604eb08                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | AmountIsZero()                                                  | 0x43ad20fc                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | ERC20InsufficientAllowance(address,uint256,uint256)             | 0xfb8f41b2                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | ERC20InsufficientBalance(address,uint256,uint256)               | 0xe450d38c                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | ERC20InvalidApprover(address)                                   | 0xe602df05                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | ERC20InvalidReceiver(address)                                   | 0xec442f05                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | ERC20InvalidSender(address)                                     | 0x96c6fd1e                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | ERC20InvalidSpender(address)                                    | 0x94280d62                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | ExceedsDailyLimit()                                             | 0x56020694                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | ExceedsMaxSupply()                                              | 0xc30436e9                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | FailedInnerCall()                                               | 0x1425ea42                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | InsufficientBalanceAndPoints()                                  | 0x7bc6f237                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | InsufficientBalanceToTransfer()                                 | 0x1b0508a4                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | InvalidInitialization()                                         | 0xf92ee8a9                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | NotInitializing()                                               | 0xd7e6bcf8                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | PointsInvalidReceiver(bytes32)                                  | 0x4f1580ac                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| error       | ReceiverIsEmpty()                                               | 0x4eb7a923                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | ADMIN() view returns (address)                                  | 0x2a0acc6a                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | APP_ADMIN_ROLE() view returns (bytes32)                         | 0x92fb9db2                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | APP_USER_ROLE() view returns (bytes32)                          | 0xac5c82f6                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | DEFAULT_ADMIN_ROLE() view returns (bytes32)                     | 0xa217fddf                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | MAX_SUPPLY() view returns (uint256)                             | 0x32cb6b0c                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | addUser(address) payable                                        | 0x421b2d8b                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | addUsers(address[]) payable                                     | 0x700c9474                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | airdrop(address,uint256,uint256) nonpayable                     | 0xe1bc2967                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | allowance(address,address) view returns (uint256)               | 0xdd62ed3e                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | approve(address,uint256) nonpayable returns (bool)              | 0x095ea7b3                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | balanceOf(address) view returns (uint256)                       | 0x70a08231                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | balanceOfByFeed(bytes32) view returns (uint256)                 | 0x7ec6c1b4                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | balanceOfPoints(address) view returns (uint256)                 | 0x5a33918b                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | dailyMint(uint256,uint256) nonpayable                           | 0xd31537b3                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | decimals() view returns (uint8)                                 | 0x313ce567                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | getDailyMintLimit() view returns (uint256)                      | 0xc176a8e3                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | getRoleAdmin(bytes32) view returns (bytes32)                    | 0x248a9ca3                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | getRoleMember(bytes32,uint256) view returns (address)           | 0x9010d07c                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | getRoleMemberCount(bytes32) view returns (uint256)              | 0xca15c873                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | grantRole(bytes32,address) nonpayable                           | 0x2f2ff15d                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | hasRole(bytes32,address) view returns (bool)                    | 0x91d14854                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | initialize(string,string,address,uint256) nonpayable            | 0xf542033f                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | mint(address,uint256,uint256) nonpayable                        | 0x156e29f6                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | mintToTreasury(address,uint256) nonpayable                      | 0x086f6b56                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | name() view returns (string)                                    | 0x06fdde03                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | purchase(uint256,address,bytes32,uint256) nonpayable            | 0x8fe0b4cf                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | removeUser(address) nonpayable                                  | 0x98575188                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | renounceRole(bytes32,address) nonpayable                        | 0x36568abe                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | revokeRole(bytes32,address) nonpayable                          | 0xd547741f                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | setDailyMintLimit(uint256) nonpayable                           | 0xb2d52d27                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | supportsInterface(bytes4) view returns (bool)                   | 0x01ffc9a7                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | symbol() view returns (string)                                  | 0x95d89b41                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | tip(uint256,address,bytes32,uint256) nonpayable                 | 0xa36f104b                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | totalSupply() view returns (uint256)                            | 0x18160ddd                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | transfer(address,uint256) nonpayable returns (bool)             | 0xa9059cbb                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | transferFrom(address,address,uint256) nonpayable returns (bool) | 0x23b872dd                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | version() view returns (string)                                 | 0x54fd4d50                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| function    | withdrawByFeedId(address,bytes32) nonpayable                    | 0xf8d529f8                                                         |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| constructor | constructor(address) nonpayable                                 |                                                                    |
+|-------------+-----------------------------------------------------------------+--------------------------------------------------------------------|
+| receive     | receive() payable                                               |                                                                    |
+╰-------------+-----------------------------------------------------------------+--------------------------------------------------------------------╯
+

@@ -11,13 +11,7 @@ import {ERC20Upgradeable} from "@openzeppelin-upgradeable/token/ERC20/ERC20Upgra
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
-contract PowerToken is
-    IPowerToken,
-    IErrors,
-    IEvents,
-    AccessControlEnumerableUpgradeable,
-    ERC20Upgradeable
-{
+contract PowerToken is IPowerToken, IErrors, IEvents, AccessControlEnumerableUpgradeable, ERC20Upgradeable {
     using Address for address;
 
     string public constant version = "1.1.0";
@@ -50,13 +44,15 @@ contract PowerToken is
         ADMIN = admin_;
     }
 
+    // solhint-disable-next-line comprehensive-interface
+    receive() external payable {}
+
     /// @inheritdoc IPowerToken
-    function initialize(
-        string calldata name_,
-        string calldata symbol_,
-        address admin_,
-        uint256 dailyMintLimit_
-    ) external override reinitializer(5) {
+    function initialize(string calldata name_, string calldata symbol_, address admin_, uint256 dailyMintLimit_)
+        external
+        override
+        reinitializer(5)
+    {
         if (bytes(name_).length > 0 && bytes(symbol_).length > 0) {
             super.__ERC20_init(name_, symbol_);
         }
@@ -84,20 +80,12 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function mint(address to, uint256 amount, uint256 taxBasisPoints)
-        external
-        override
-        onlyAdminRole
-    {
+    function mint(address to, uint256 amount, uint256 taxBasisPoints) external override onlyAdminRole {
         _issuePoints(to, amount, taxBasisPoints);
     }
 
     /// @inheritdoc IPowerToken
-    function dailyMint(uint256 amount, uint256 taxBasisPoints)
-        external
-        override
-        onlyRole(APP_USER_ROLE)
-    {
+    function dailyMint(uint256 amount, uint256 taxBasisPoints) external override onlyRole(APP_USER_ROLE) {
         if (amount > _dailyMintLimit) revert ExceedsDailyLimit();
 
         uint256 currentDay = block.timestamp / 1 days;
@@ -108,11 +96,7 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function airdrop(address to, uint256 amount, uint256 taxBasisPoints)
-        external
-        override
-        onlyAdminRole
-    {
+    function airdrop(address to, uint256 amount, uint256 taxBasisPoints) external override onlyAdminRole {
         if (amount > balanceOf(address(this))) revert InsufficientBalanceToTransfer();
 
         uint256 tax = _getTaxAmount(taxBasisPoints, amount);
@@ -130,20 +114,14 @@ contract PowerToken is
     }
 
     /// @inheritdoc IPowerToken
-    function purchase(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints)
-        external
-        override
-    {
+    function purchase(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints) external override {
         uint256 purchaseAmount = _payWithTax(msg.sender, to, feedId, amount, taxBasisPoints);
 
         emit Purchase(msg.sender, to, feedId, purchaseAmount);
     }
 
     /// @inheritdoc IPowerToken
-    function tip(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints)
-        external
-        override
-    {
+    function tip(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints) external override {
         uint256 tipAmount = _payWithTax(msg.sender, to, feedId, amount, taxBasisPoints);
 
         emit Tip(msg.sender, to, feedId, tipAmount);
@@ -218,13 +196,10 @@ contract PowerToken is
         return super.transferFrom(from, to, value);
     }
 
-    function _payWithTax(
-        address from,
-        address to,
-        bytes32 feedId,
-        uint256 amount,
-        uint256 taxBasisPoints
-    ) internal returns (uint256) {
+    function _payWithTax(address from, address to, bytes32 feedId, uint256 amount, uint256 taxBasisPoints)
+        internal
+        returns (uint256)
+    {
         if (amount == 0) revert AmountIsZero();
 
         if (balanceOf(from) < amount) revert InsufficientBalanceAndPoints();

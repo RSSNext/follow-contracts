@@ -38,7 +38,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         address proxy = deployPowerTokenProxy(cfg);
 
-        _token = PowerToken(proxy);
+        _token = PowerToken(payable(proxy));
     }
 
     function testMintToTreasury(uint256 amount) public {
@@ -58,9 +58,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         // case 1: caller has no `APP_ADMIN_ROLE` permission
         vm.expectRevert(
             abi.encodeWithSelector(
-                AccessControlUnauthorizedAccount.selector,
-                address(this),
-                keccak256("APP_ADMIN_ROLE")
+                AccessControlUnauthorizedAccount.selector, address(this), keccak256("APP_ADMIN_ROLE")
             )
         );
         _token.mintToTreasury(alice, 1);
@@ -98,9 +96,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         // case 1: caller has no `APP_ADMIN_ROLE` permission
         vm.expectRevert(
             abi.encodeWithSelector(
-                AccessControlUnauthorizedAccount.selector,
-                address(this),
-                keccak256("APP_ADMIN_ROLE")
+                AccessControlUnauthorizedAccount.selector, address(this), keccak256("APP_ADMIN_ROLE")
             )
         );
         _token.mint(alice, 1, 0);
@@ -110,11 +106,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.mintToTreasury(address(_token), amount);
 
         // case 2: balance is insufficient
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                ERC20InsufficientBalance.selector, address(_token), amount, amount + 1
-            )
-        );
+        vm.expectRevert(abi.encodeWithSelector(ERC20InsufficientBalance.selector, address(_token), amount, amount + 1));
         vm.prank(appAdmin);
         _token.mint(alice, amount + 1, 0);
     }
@@ -150,9 +142,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         // case 1: caller has no `APP_USER_ROLE` permission
         vm.expectRevert(
             abi.encodeWithSelector(
-                AccessControlUnauthorizedAccount.selector,
-                address(alice),
-                keccak256("APP_USER_ROLE")
+                AccessControlUnauthorizedAccount.selector, address(alice), keccak256("APP_USER_ROLE")
             )
         );
         vm.prank(alice);
@@ -164,11 +154,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         // case 2: balance is insufficient
         _addUser(alice);
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                ERC20InsufficientBalance.selector, address(_token), amount, amount + 1
-            )
-        );
+        vm.expectRevert(abi.encodeWithSelector(ERC20InsufficientBalance.selector, address(_token), amount, amount + 1));
         vm.prank(alice);
         _token.dailyMint(amount + 1, 0);
 
@@ -234,18 +220,14 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         // case 1: caller has no `APP_ADMIN_ROLE` permission
         vm.expectRevert(
             abi.encodeWithSelector(
-                AccessControlUnauthorizedAccount.selector,
-                address(this),
-                keccak256("APP_ADMIN_ROLE")
+                AccessControlUnauthorizedAccount.selector, address(this), keccak256("APP_ADMIN_ROLE")
             )
         );
         _token.addUser(alice);
 
         // alice can't mint daily points
         vm.expectRevert(
-            abi.encodeWithSelector(
-                AccessControlUnauthorizedAccount.selector, alice, keccak256("APP_USER_ROLE")
-            )
+            abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, alice, keccak256("APP_USER_ROLE"))
         );
         vm.prank(alice);
         _token.dailyMint(100 ether, 0);
@@ -272,9 +254,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         vm.expectRevert(
             abi.encodeWithSelector(
-                AccessControlUnauthorizedAccount.selector,
-                address(this),
-                keccak256("APP_ADMIN_ROLE")
+                AccessControlUnauthorizedAccount.selector, address(this), keccak256("APP_ADMIN_ROLE")
             )
         );
         _token.addUsers(users);
@@ -290,9 +270,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
 
         // alice can't mint daily points
         vm.expectRevert(
-            abi.encodeWithSelector(
-                AccessControlUnauthorizedAccount.selector, alice, keccak256("APP_USER_ROLE")
-            )
+            abi.encodeWithSelector(AccessControlUnauthorizedAccount.selector, alice, keccak256("APP_USER_ROLE"))
         );
         vm.prank(alice);
         _token.dailyMint(100 ether, 0);
@@ -302,9 +280,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         // case 1: caller has no `APP_ADMIN_ROLE` permission
         vm.expectRevert(
             abi.encodeWithSelector(
-                AccessControlUnauthorizedAccount.selector,
-                address(this),
-                keccak256("APP_ADMIN_ROLE")
+                AccessControlUnauthorizedAccount.selector, address(this), keccak256("APP_ADMIN_ROLE")
             )
         );
         _token.removeUser(alice);
@@ -590,9 +566,7 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         // case 1: caller has no `APP_ADMIN_ROLE` permission
         vm.expectRevert(
             abi.encodeWithSelector(
-                AccessControlUnauthorizedAccount.selector,
-                address(this),
-                keccak256("APP_ADMIN_ROLE")
+                AccessControlUnauthorizedAccount.selector, address(this), keccak256("APP_ADMIN_ROLE")
             )
         );
         _token.setDailyMintLimit(100 ether);

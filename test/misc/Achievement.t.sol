@@ -40,7 +40,7 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
 
         address powerProxy = deployPowerTokenProxy(cfg);
 
-        _powerToken = PowerToken(powerProxy);
+        _powerToken = PowerToken(payable(powerProxy));
 
         address achievementProxy = deployAchievementProxy(cfg, powerProxy);
 
@@ -51,17 +51,13 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
         // test setAchievement without APP_ADMIN_ROLE role
         vm.prank(bob);
         vm.expectRevert();
-        _achievement.setAchievement(
-            mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL
-        );
+        _achievement.setAchievement(mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL);
 
         vm.prank(_appAdmin);
 
         expectEmit();
         emit AchievementSet(mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL);
-        _achievement.setAchievement(
-            mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL
-        );
+        _achievement.setAchievement(mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL);
 
         AchievementDetails[] memory allAchievements = _achievement.getAllAchievements();
 
@@ -74,9 +70,7 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
     function testMintFail() public {
         // Preparation
         vm.prank(_appAdmin);
-        _achievement.setAchievement(
-            mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL
-        );
+        _achievement.setAchievement(mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL);
 
         // Mint without APP_USER_ROLE role: Unauthorized
         vm.prank(bob);
@@ -95,9 +89,7 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
     function testAddRoleAndMint() public {
         // Preparation
         vm.prank(_appAdmin);
-        _achievement.setAchievement(
-            mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL
-        );
+        _achievement.setAchievement(mockAchievementName, mockAchievemenDescription, mockAchievemenImageURL);
 
         vm.prank(_appAdmin);
         _powerToken.addUser(bob);

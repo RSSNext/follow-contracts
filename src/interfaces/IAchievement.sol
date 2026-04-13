@@ -11,12 +11,7 @@ interface IAchievement {
      * @param admin_ The account to be granted with APP_ADMIN_ROLE.
      * @param powerToken_ The address of the power token.
      */
-    function initialize(
-        string calldata name_,
-        string calldata symbol_,
-        address admin_,
-        address powerToken_
-    ) external;
+    function initialize(string calldata name_, string calldata symbol_, address admin_, address powerToken_) external;
 
     /**
      * @notice Only the APP_ADMIN_ROLE can set the achievement details.
@@ -24,11 +19,7 @@ interface IAchievement {
      * @param description Description of the achievement.
      * @param imageURL Image URL of the achievement.
      */
-    function setAchievement(
-        string calldata name,
-        string calldata description,
-        string calldata imageURL
-    ) external;
+    function setAchievement(string calldata name, string calldata description, string calldata imageURL) external;
 
     /**
      * @notice Mints a token to `account`.
@@ -55,10 +46,7 @@ interface IAchievement {
      * @param achievementName The name of the achievement.
      * @return Whether the account has the achievement.
      */
-    function hasAchievement(address account, string calldata achievementName)
-        external
-        view
-        returns (bool);
+    function hasAchievement(address account, string calldata achievementName) external view returns (bool);
 
     /**
      * @notice  Returns the address of the PowerToken contract.

@@ -28,9 +28,7 @@ contract DeployConfig is Script {
         try vm.readFile(_path) returns (string memory data) {
             _json = data;
         } catch {
-            console.log(
-                "Warning: unable to read config. Do not deploy unless you are not using config."
-            );
+            console.log("Warning: unable to read config. Do not deploy unless you are not using config.");
             return;
         }
 

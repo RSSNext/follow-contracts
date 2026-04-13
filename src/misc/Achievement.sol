@@ -2,8 +2,9 @@
 // solhint-disable quotes
 pragma solidity 0.8.22;
 
-import {AccessControlEnumerableUpgradeable} from
-    "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
+import {
+    AccessControlEnumerableUpgradeable
+} from "@openzeppelin-upgradeable/access/extensions/AccessControlEnumerableUpgradeable.sol";
 import {ERC721Upgradeable} from "@openzeppelin-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
@@ -16,14 +17,7 @@ import {EnumerableSet} from "@openzeppelin/contracts/utils/structs/EnumerableSet
 
 import {AchievementDetails} from "../libraries/AchievementDataTypes.sol";
 
-contract Achievement is
-    IERC721,
-    AccessControlEnumerableUpgradeable,
-    ERC721Upgradeable,
-    IErrors,
-    IEvents,
-    IAchievement
-{
+contract Achievement is IERC721, AccessControlEnumerableUpgradeable, ERC721Upgradeable, IErrors, IEvents, IAchievement {
     using EnumerableSet for EnumerableSet.Bytes32Set;
 
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
@@ -48,12 +42,11 @@ contract Achievement is
     mapping(address => mapping(bytes32 => bool)) internal _userAchievements;
 
     /// @inheritdoc IAchievement
-    function initialize(
-        string calldata name_,
-        string calldata symbol_,
-        address admin_,
-        address powerToken_
-    ) external override initializer {
+    function initialize(string calldata name_, string calldata symbol_, address admin_, address powerToken_)
+        external
+        override
+        initializer
+    {
         __ERC721_init(name_, symbol_);
 
         if (admin_ != address(0)) {
@@ -65,11 +58,11 @@ contract Achievement is
     }
 
     /// @inheritdoc IAchievement
-    function setAchievement(
-        string calldata name,
-        string calldata description,
-        string calldata imageURL
-    ) external override onlyRole(APP_ADMIN_ROLE) {
+    function setAchievement(string calldata name, string calldata description, string calldata imageURL)
+        external
+        override
+        onlyRole(APP_ADMIN_ROLE)
+    {
         bytes32 nameHash = _getNameHash(name);
         _achievements.add(nameHash);
         _achievementDetails[nameHash] = AchievementDetails(name, description, imageURL);
@@ -139,12 +132,7 @@ contract Achievement is
     }
 
     /// @inheritdoc IAchievement
-    function hasAchievement(address account, string calldata achievementName)
-        external
-        view
-        override
-        returns (bool)
-    {
+    function hasAchievement(address account, string calldata achievementName) external view override returns (bool) {
         return _userAchievements[account][_getNameHash(achievementName)];
     }
 

@@ -13,9 +13,7 @@ interface IEvents {
     /**
      * @dev Emitted when points are paid from one address to another for some purchase.
      */
-    event Purchase(
-        address indexed from, address indexed to, bytes32 indexed feedId, uint256 amount
-    );
+    event Purchase(address indexed from, address indexed to, bytes32 indexed feedId, uint256 amount);
 
     /**
      * @dev Emitted when points are airdropped to an address.

@@ -41,32 +41,21 @@ contract Utils is Test {
             address(tokenImpl),
             cfg.proxyAdminOwner(),
             abi.encodeWithSelector(
-                IPowerToken.initialize.selector,
-                cfg.name(),
-                cfg.symbol(),
-                cfg.appAdmin(),
-                cfg.dailyMintLimit()
+                IPowerToken.initialize.selector, cfg.name(), cfg.symbol(), cfg.appAdmin(), cfg.dailyMintLimit()
             )
         );
 
         return address(proxy);
     }
 
-    function deployAchievementProxy(DeployConfig cfg, address powerToken)
-        public
-        returns (address)
-    {
+    function deployAchievementProxy(DeployConfig cfg, address powerToken) public returns (address) {
         Achievement achievementImpl = new Achievement();
 
         TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
             address(achievementImpl),
             cfg.proxyAdminOwner(),
             abi.encodeWithSelector(
-                Achievement.initialize.selector,
-                cfg.nftName(),
-                cfg.nftSymbol(),
-                cfg.appAdmin(),
-                powerToken
+                Achievement.initialize.selector, cfg.nftName(), cfg.nftSymbol(), cfg.appAdmin(), powerToken
             )
         );
 

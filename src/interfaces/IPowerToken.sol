@@ -9,12 +9,8 @@ interface IPowerToken {
      * @param admin_ The account to be granted with APP_ADMIN_ROLE.
      * @param dailyMintLimit_ The token limit for daily mint.
      */
-    function initialize(
-        string calldata name_,
-        string calldata symbol_,
-        address admin_,
-        uint256 dailyMintLimit_
-    ) external;
+    function initialize(string calldata name_, string calldata symbol_, address admin_, uint256 dailyMintLimit_)
+        external;
 
     /**
      * @notice Sets the token limit for daily mint.
@@ -66,8 +62,7 @@ interface IPowerToken {
      * @dev The to and feedId are optional, but at least one of them must be provided.
      * If both are provided, the `to` will be used.
      */
-    function purchase(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints)
-        external;
+    function purchase(uint256 amount, address to, bytes32 feedId, uint256 taxBasisPoints) external;
 
     /**
      * @notice Tips with token points. If token points are not enough, it will try the balance.

@@ -6,18 +6,15 @@ import {PowerToken} from "../src/PowerToken.sol";
 import {IErrors} from "../src/interfaces/IErrors.sol";
 import {IEvents} from "../src/interfaces/IEvents.sol";
 import {IPowerToken} from "../src/interfaces/IPowerToken.sol";
-import {
-    TransparentUpgradeableProxy as Proxy
-} from "../src/upgradeability/TransparentUpgradeableProxy.sol";
+import {TransparentUpgradeableProxy as Proxy} from "../src/upgradeability/TransparentUpgradeableProxy.sol";
 import {Utils} from "./helpers/Utils.sol";
 
 contract ForkTest is Utils, IErrors, IEvents {
     address public appAdmin = 0xf496eEeD857aA4709AC4D5B66b6711975623D355;
     address public proxyAdminOwner = 0x8AC80fa0993D95C9d6B8Cb494E561E6731038941;
-    bytes32 public initializerSlot =
-        0xf0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a00;
+    bytes32 public initializerSlot = 0xf0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a00;
 
-    address public powerProxyAddress = 0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8;
+    address payable public powerProxyAddress = payable(0xE06Af68F0c9e819513a6CD083EF6848E76C28CD8);
 
     function setUp() public {
         vm.createSelectFork("https://rpc.rss3.io", 25_115_502);
@@ -26,30 +23,20 @@ contract ForkTest is Utils, IErrors, IEvents {
         Proxy powerProxy = Proxy(payable(powerProxyAddress));
 
         // initializer should be 4 before upgrade
-        assertEq(
-            vm.load(powerProxyAddress, initializerSlot),
-            bytes32(uint256(4)),
-            "check initializer before upgrade"
-        );
+        assertEq(vm.load(powerProxyAddress, initializerSlot), bytes32(uint256(4)), "check initializer before upgrade");
 
         // upgrade and call initialize
         PowerToken newImpl = new PowerToken(appAdmin);
         vm.prank(proxyAdminOwner);
         powerProxy.upgradeToAndCall(
             address(newImpl),
-            abi.encodeWithSelector(
-                IPowerToken.initialize.selector, "POWER", "POWER", address(0), 10_000 ether
-            )
+            abi.encodeWithSelector(IPowerToken.initialize.selector, "POWER", "POWER", address(0), 10_000 ether)
         );
     }
 
     function testCheckUpgradeFork() public view {
         // initializer should be 5 after upgrade
-        assertEq(
-            vm.load(powerProxyAddress, initializerSlot),
-            bytes32(uint256(5)),
-            "check initializer after upgrade"
-        );
+        assertEq(vm.load(powerProxyAddress, initializerSlot), bytes32(uint256(5)), "check initializer after upgrade");
 
         // check name and symbol
         PowerToken token = PowerToken(powerProxyAddress);
