@@ -31,7 +31,7 @@ jobs:
       - name: Update Modules
         run: yarn sync
       - name: Run Tests
-        run: FOUNDRY_PROFILE=ci yarn test
+        run: yarn test
       - name: Run Coverage
         run: forge coverage --report lcov
       - name: Install lcov
