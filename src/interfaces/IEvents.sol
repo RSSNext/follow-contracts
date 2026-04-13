@@ -33,4 +33,11 @@ interface IEvents {
      * @dev Emitted when tokens are withdrawn from an address.
      */
     event Withdrawn(address indexed user, address indexed to, uint256 indexed amount);
+    /**
+     * @dev Emitted when a user exchanges transferable POWER for native token.
+     * @param user The account whose POWER was moved to the contract.
+     * @param powerAmount The amount of POWER transferred from the user.
+     * @param nativeAmount The amount of native token sent to the user.
+     */
+    event Exchanged(address indexed user, uint256 powerAmount, uint256 nativeAmount);
 }

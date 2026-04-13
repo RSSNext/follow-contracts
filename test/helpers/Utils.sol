@@ -34,8 +34,9 @@ contract Utils is Test {
 
     function deployPowerTokenProxy(DeployConfig cfg) public returns (address) {
         address appAdmin = cfg.appAdmin();
+        uint256 exchangeRate = cfg.exchangeRate();
 
-        PowerToken tokenImpl = new PowerToken(appAdmin);
+        PowerToken tokenImpl = new PowerToken(appAdmin, exchangeRate);
 
         TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
             address(tokenImpl),

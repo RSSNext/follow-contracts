@@ -626,6 +626,88 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.transferFrom(bob, receiver, transferAmount);
     }
 
+    function testExchangeSucceed() public {
+        uint256 redeemable = 230 ether;
+        _fundUserTransferable(alice, redeemable);
+
+        uint256 rate = _token.EXCHANGE_RATE();
+        uint256 nativeOut = redeemable / rate;
+        vm.deal(address(_token), nativeOut);
+
+        uint256 aliceEthBefore = alice.balance;
+        uint256 contractPowerBefore = _token.balanceOf(address(_token));
+
+        expectEmit();
+        emit Exchanged(alice, redeemable, nativeOut);
+        vm.prank(bob);
+        _token.exchange(_singleUserArray(alice));
+
+        assertEq(_token.balanceOf(alice), 0);
+        assertEq(_token.balanceOfPoints(alice), 0);
+        assertEq(alice.balance, aliceEthBefore + nativeOut);
+        assertEq(_token.balanceOf(address(_token)), contractPowerBefore + redeemable);
+    }
+
+    function testExchangeCallableByAnyone() public {
+        uint256 redeemable = 23 ether;
+        _fundUserTransferable(alice, redeemable);
+
+        uint256 nativeOut = redeemable / _token.EXCHANGE_RATE();
+        vm.deal(address(_token), nativeOut);
+
+        vm.prank(charlie);
+        _token.exchange(_singleUserArray(alice));
+
+        assertEq(alice.balance, nativeOut);
+        assertEq(_token.balanceOf(alice), 0);
+    }
+
+    function testExchangeInsufficientNativeBalance() public {
+        uint256 redeemable = 230 ether;
+        _fundUserTransferable(alice, redeemable);
+
+        uint256 nativeNeeded = redeemable / _token.EXCHANGE_RATE();
+        vm.deal(address(_token), nativeNeeded - 1);
+
+        vm.expectRevert();
+        vm.prank(bob);
+        _token.exchange(_singleUserArray(alice));
+    }
+
+    function testExchangeSkipsZeroRedeemable() public {
+        _mintPoints(alice, 100 ether);
+        assertEq(_token.balanceOf(alice) - _token.balanceOfPoints(alice), 0);
+
+        vm.deal(address(_token), 1 ether);
+        vm.prank(bob);
+        _token.exchange(_singleUserArray(alice));
+
+        assertEq(_token.balanceOf(alice), 100 ether);
+    }
+
+    function testExchangeBatch() public {
+        uint256 r1 = 46 ether;
+        uint256 r2 = 23 ether;
+        _fundUserTransferable(alice, r1);
+        _fundUserTransferable(charlie, r2);
+
+        uint256 rate = _token.EXCHANGE_RATE();
+        uint256 totalNative = (r1 / rate) + (r2 / rate);
+        vm.deal(address(_token), totalNative);
+
+        address[] memory users = new address[](2);
+        users[0] = alice;
+        users[1] = charlie;
+
+        vm.prank(bob);
+        _token.exchange(users);
+
+        assertEq(_token.balanceOf(alice), 0);
+        assertEq(_token.balanceOf(charlie), 0);
+        assertEq(alice.balance, r1 / rate);
+        assertEq(charlie.balance, r2 / rate);
+    }
+
     function testTransferFromFail(uint256 amount) public {
         // case 1: InsufficientBalanceToTransfer
         amount = bound(amount, 1, 100 ether);
@@ -659,6 +741,18 @@ contract PowerTokenTest is Utils, IErrors, IEvents, ERC20Upgradeable {
         _token.mint(user, amount, 0);
         _token.addUser(user);
         vm.stopPrank();
+    }
+
+    function _fundUserTransferable(address user, uint256 amount) internal {
+        vm.startPrank(appAdmin);
+        _token.mintToTreasury(appAdmin, amount);
+        _token.transfer(user, amount);
+        vm.stopPrank();
+    }
+
+    function _singleUserArray(address user) internal pure returns (address[] memory users) {
+        users = new address[](1);
+        users[0] = user;
     }
 
     function _addUser(address user) internal {

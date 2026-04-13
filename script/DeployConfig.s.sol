@@ -23,6 +23,8 @@ contract DeployConfig is Script {
     address public appAdmin;
     uint256 public dailyMintLimit;
 
+    uint256 public exchangeRate;
+
     constructor(string memory _path) {
         console.log("DeployConfig: reading file %s", _path);
         try vm.readFile(_path) returns (string memory data) {
@@ -39,5 +41,6 @@ contract DeployConfig is Script {
         proxyAdminOwner = stdJson.readAddress(_json, "$.proxyAdminOwner");
         appAdmin = stdJson.readAddress(_json, "$.appAdmin");
         dailyMintLimit = stdJson.readUint(_json, "$.dailyMintLimit");
+        exchangeRate = stdJson.readUint(_json, "$.exchangeRate");
     }
 }

@@ -137,7 +137,7 @@ contract AchievementTest is Utils, ERC721Upgradeable, IEvents, IErrors {
         _achievement.mint(mockAchievementName);
     }
 
-    function testSetUp() public {
+    function testSetUp() public view {
         assertEq(_achievement.powerToken(), address(_powerToken));
         assertEq(_achievement.totalSupply(), 0);
     }

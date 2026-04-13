@@ -14,7 +14,7 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 contract PowerToken is IPowerToken, IErrors, IEvents, AccessControlEnumerableUpgradeable, ERC20Upgradeable {
     using Address for address;
 
-    string public constant version = "1.1.0";
+    string public constant version = "1.2.0";
 
     bytes32 public constant APP_ADMIN_ROLE = keccak256("APP_ADMIN_ROLE");
     bytes32 public constant APP_USER_ROLE = keccak256("APP_USER_ROLE");
@@ -22,6 +22,7 @@ contract PowerToken is IPowerToken, IErrors, IEvents, AccessControlEnumerableUpg
     uint256 public constant MAX_SUPPLY = 10_000_000_000 ether;
 
     address public immutable ADMIN; // Admin address who will receive the tax
+    uint256 public immutable EXCHANGE_RATE; // Exchange rate for $NATIVE:$POWER
 
     mapping(address account => uint256) internal _pointsBalancesV1;
 
@@ -40,8 +41,9 @@ contract PowerToken is IPowerToken, IErrors, IEvents, AccessControlEnumerableUpg
         _;
     }
 
-    constructor(address admin_) {
+    constructor(address admin_, uint256 exchangeRate_) {
         ADMIN = admin_;
+        EXCHANGE_RATE = exchangeRate_;
     }
 
     // solhint-disable-next-line comprehensive-interface
@@ -165,6 +167,25 @@ contract PowerToken is IPowerToken, IErrors, IEvents, AccessControlEnumerableUpg
     /// @inheritdoc IPowerToken
     function removeUser(address account) external override onlyAdminRole {
         _revokeRole(APP_USER_ROLE, account);
+    }
+
+    /// @inheritdoc IPowerToken
+    function exchange(address[] calldata users) external override {
+        uint256 len = users.length;
+        for (uint256 i = 0; i < len; i++) {
+            address user = users[i];
+
+            uint256 redeemable = balanceOf(user) - _pointsBalancesV2[user];
+            if (redeemable == 0) continue;
+
+            _transfer(user, address(this), redeemable);
+
+            uint256 nativeOut = redeemable / EXCHANGE_RATE;
+            if (nativeOut > 0) {
+                Address.sendValue(payable(user), nativeOut);
+            }
+            emit Exchanged(user, redeemable, nativeOut);
+        }
     }
 
     /// @inheritdoc IPowerToken

@@ -12,3 +12,5 @@ out/
 .env
 broadcast
 query_result_2026-04-10T04_26_21.174545Z.csv
+.cursor/*
+AGENTS.md

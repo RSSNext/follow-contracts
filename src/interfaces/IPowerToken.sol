@@ -123,4 +123,13 @@ interface IPowerToken {
      * @return The token limit for daily mint.
      */
     function getDailyMintLimit() external view returns (uint256);
+
+    /**
+     * @notice Exchanges each user's transferable POWER for native token held by this contract.
+     * @dev Callable by any address. For each user, moves `balanceOf(user) - balanceOfPoints(user)` POWER
+     *      to this contract and sends `power / EXCHANGE_RATE` wei of native token to that user.
+     *      The contract must hold enough native token to cover all payouts in the batch.
+     * @param users The accounts to exchange for.
+     */
+    function exchange(address[] calldata users) external;
 }

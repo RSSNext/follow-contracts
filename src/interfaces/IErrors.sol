@@ -25,4 +25,7 @@ interface IErrors {
 
     /// @dev Exceeds daily limit.
     error ExceedsDailyLimit();
+
+    /// @dev Contract native balance is insufficient to fulfill exchange payouts.
+    error InsufficientNativeBalance();
 }
