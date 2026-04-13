@@ -175,16 +175,16 @@ contract PowerToken is IPowerToken, IErrors, IEvents, AccessControlEnumerableUpg
         for (uint256 i = 0; i < len; i++) {
             address user = users[i];
 
-            uint256 redeemable = balanceOf(user) - _pointsBalancesV2[user];
-            if (redeemable == 0) continue;
+            uint256 transferable = balanceOf(user) - _pointsBalancesV2[user];
+            if (transferable == 0) continue;
 
-            _transfer(user, address(this), redeemable);
+            _transfer(user, address(this), transferable);
 
-            uint256 nativeOut = redeemable / EXCHANGE_RATE;
+            uint256 nativeOut = transferable / EXCHANGE_RATE;
             if (nativeOut > 0) {
                 Address.sendValue(payable(user), nativeOut);
             }
-            emit Exchanged(user, redeemable, nativeOut);
+            emit Exchanged(user, transferable, nativeOut);
         }
     }
 
